@@ -6,12 +6,16 @@ import { History } from "history";
 interface IProps {
   setFromLetterEntry: (langName: string, alphabet: Alphabet) => void;
   history: History;
+  langName: string;
+  alphabet: Alphabet;
 }
 
 export default function LetterEntry(props: IProps) {
-  const [alphabetSize, setAlphabetSize] = useState(26);
-  const [langName, setLangName] = useState("");
-  const [enteredLetters, setEnteredLetters] = useState<Alphabet>(List());
+  const [alphabetSize, setAlphabetSize] = useState(
+    props.alphabet.size > 0 ? props.alphabet.size : 26
+  );
+  const [langName, setLangName] = useState(props.langName);
+  const [enteredLetters, setEnteredLetters] = useState(props.alphabet);
 
   const alphabet = enteredLetters
     .setSize(alphabetSize)
@@ -92,6 +96,9 @@ export default function LetterEntry(props: IProps) {
         <button onClick={saveAndQuit} disabled={!formValid}>
           Save
         </button>
+        {props.alphabet.size > 0 && (
+          <button onClick={props.history.goBack}>Cancel</button>
+        )}
       </div>
     </div>
   );
