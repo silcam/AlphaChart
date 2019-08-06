@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Switch, Route } from "react-router-dom";
-import LetterEntry from "./LetterEntry/LetterEntry";
+import LetterEntry from "./LetterEntry";
 import { Alphabet } from "../alphabet/Alphabet";
 import { List, fromJS } from "immutable";
 import ChartEditor from "./ChartEditor";

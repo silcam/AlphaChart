@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { List } from "immutable";
-import { Alphabet, validAlphabet } from "../../alphabet/Alphabet";
+import { Alphabet, validAlphabet } from "../alphabet/Alphabet";
 import { History } from "history";
-import NumberPicker from "../NumberPicker";
+import NumberPicker from "./NumberPicker";
 
 interface IProps {
   setFromLetterEntry: (langName: string, alphabet: Alphabet) => void;
