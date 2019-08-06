@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { List } from "immutable";
 import { Alphabet, validAlphabet } from "../../alphabet/Alphabet";
 import { History } from "history";
+import NumberPicker from "../NumberPicker";
 
 interface IProps {
   setFromLetterEntry: (langName: string, alphabet: Alphabet) => void;
@@ -42,39 +43,46 @@ export default function LetterEntry(props: IProps) {
   };
 
   return (
-    <div>
-      <div>
-        <label>
-          Language:
+    <div
+      id="page-root"
+      className="LetterEntry"
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: "600px"
+      }}
+    >
+      <div style={{ paddingTop: "80px" }}>
+        <div style={{ margin: "24px" }}>
+          <label>Language:</label>
           <input
             type="text"
             value={langName}
             onChange={e => setLangName(e.target.value)}
           />
-        </label>
+        </div>
+        <div style={{ margin: "24px" }}>
+          <label>Letters:</label>
+          <NumberPicker value={alphabetSize} setValue={setAlphabetSize} />
+        </div>
+        <div style={{ margin: "24px" }}>
+          <button onClick={saveAndQuit} disabled={!formValid}>
+            Save
+          </button>
+          {props.alphabet.size > 0 && (
+            <button onClick={props.history.goBack}>Cancel</button>
+          )}
+        </div>
       </div>
-      <div>
-        Letters:
-        <input
-          type="text"
-          value={alphabetSize === 0 ? "" : alphabetSize.toString()}
-          onChange={e => setAlphabetSize(parseInt(e.target.value) || 0)}
-        />
-        <button onClick={e => setAlphabetSize(alphabetSize + 1)}>^</button>
-        <button
-          onClick={e => setAlphabetSize(alphabetSize - 1)}
-          disabled={alphabetSize <= 1}
-        >
-          v
-        </button>
-      </div>
-      <div>
+
+      <div style={{ overflowY: "auto", padding: "24px" }}>
         <table>
           <tbody>
             {alphabet.map((letters, letterIndex) => (
-              <tr>
+              <tr key={letterIndex}>
                 {letters.map((letter, caseIndex) => (
-                  <td>
+                  <td key={caseIndex}>
                     <input
                       type="text"
                       value={letter}
@@ -84,6 +92,7 @@ export default function LetterEntry(props: IProps) {
                       placeholder={
                         letterIndex === 0 ? (caseIndex === 0 ? "A" : "a") : ""
                       }
+                      size={2}
                     />
                   </td>
                 ))}
@@ -91,14 +100,6 @@ export default function LetterEntry(props: IProps) {
             ))}
           </tbody>
         </table>
-      </div>
-      <div>
-        <button onClick={saveAndQuit} disabled={!formValid}>
-          Save
-        </button>
-        {props.alphabet.size > 0 && (
-          <button onClick={props.history.goBack}>Cancel</button>
-        )}
       </div>
     </div>
   );

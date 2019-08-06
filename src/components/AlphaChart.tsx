@@ -6,7 +6,25 @@ import { List, fromJS } from "immutable";
 import ChartEditor from "./ChartEditor";
 
 const LANG_NAME = "Anglish";
-const ALPHABET = fromJS([["A", "a"], ["B", "b"], ["C", "c"], ["D", "d"]]);
+// const ALPHABET = List();
+const ALPHABET = fromJS([
+  ["A", "a"],
+  ["B", "b"],
+  ["C", "c"],
+  ["D", "d"],
+  ["A", "a"],
+  ["B", "b"],
+  ["C", "c"],
+  ["D", "d"],
+  ["A", "a"],
+  ["B", "b"],
+  ["C", "c"],
+  ["D", "d"],
+  ["A", "a"],
+  ["B", "b"],
+  ["C", "c"],
+  ["D", "d"]
+]);
 
 export default function AlphaChart() {
   const [langName, setLangName] = useState(LANG_NAME);

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Alphabet } from "../alphabet/Alphabet";
 import { Link } from "react-router-dom";
 import { List, fromJS } from "immutable";
+import NumberPicker from "./NumberPicker";
 
 interface IProps {
   langName: string;
@@ -14,30 +15,47 @@ export default function ChartEditor(props: IProps) {
   const alphabetTable = clump(props.alphabet, Math.max(cols, 1));
 
   return (
-    <div>
-      <p>
-        <Link to="/letters">Edit Alphabet</Link>
-      </p>
-      <div>
-        <label>
-          Columns:
-          <input
-            type="text"
-            value={cols > 0 ? cols : ""}
-            onChange={e => setCols(parseInt(e.target.value) || 0)}
-          />
-        </label>
+    <div id="page-root">
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          margin: "24px 0"
+        }}
+      >
+        <div>
+          <label>Columns:</label>
+          <NumberPicker value={cols} setValue={setCols} />
+        </div>
+        <div>
+          <Link to="/letters">Edit Alphabet</Link>
+        </div>
       </div>
+      <h2>{props.langName}</h2>
       <div>
-        {alphabetTable.map(row => (
-          <tr>
-            {row.map(letters => (
-              <td>
-                <h2>{letters.join(", ")}</h2>
-              </td>
+        <table style={{ width: "100%" }}>
+          <tbody>
+            {alphabetTable.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {row.map((letters, letterIndex) => (
+                  <td className="alphacell" key={letterIndex}>
+                    <div className="letter">
+                      <div>{letters.get(0)}</div>
+                      <div>{letters.get(1)}</div>
+                    </div>
+                    <div>
+                      <img src="/apple.png" />
+                    </div>
+                    <div style={{ marginTop: "8px" }}>
+                      <input type="text" placeholder="Example Word" />
+                    </div>
+                  </td>
+                ))}
+              </tr>
             ))}
-          </tr>
-        ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
