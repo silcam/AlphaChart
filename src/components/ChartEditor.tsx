@@ -11,8 +11,14 @@ interface IProps {
 
 export default function ChartEditor(props: IProps) {
   const [cols, setCols] = useState(5);
+  const [alphabet, setAlphabet] = useState(props.alphabet);
+  const setExampleWord = (index: number, word: string) => {
+    setAlphabet(
+      alphabet.set(index, { ...alphabet.get(index)!, exampleWord: word })
+    );
+  };
 
-  const alphabetTable = clump(props.alphabet, Math.max(cols, 1));
+  const alphabetTable = clump(alphabet, Math.max(cols, 1));
 
   return (
     <div id="page-root">
@@ -38,17 +44,27 @@ export default function ChartEditor(props: IProps) {
           <tbody>
             {alphabetTable.map((row, rowIndex) => (
               <tr key={rowIndex}>
-                {row.map((letters, letterIndex) => (
+                {row.map((abletter, letterIndex) => (
                   <td className="alphacell" key={letterIndex}>
                     <div className="letter">
-                      <div>{letters.get(0)}</div>
-                      <div>{letters.get(1)}</div>
+                      <div>{abletter.letter.get(0)}</div>
+                      <div>{abletter.letter.get(1)}</div>
                     </div>
                     <div>
                       <img src="/apple.png" />
                     </div>
                     <div style={{ marginTop: "8px" }}>
-                      <input type="text" placeholder="Example Word" />
+                      <input
+                        type="text"
+                        placeholder="Example Word"
+                        value={abletter.exampleWord}
+                        onChange={e =>
+                          setExampleWord(
+                            rowIndex * cols + letterIndex,
+                            e.target.value
+                          )
+                        }
+                      />
                     </div>
                   </td>
                 ))}
@@ -68,5 +84,5 @@ function clump<T>(list: List<T>, clumpsOf: number): List<List<T>> {
     else table[table.length - 1].push(item);
     return table;
   }, empty);
-  return fromJS(table);
+  return List(table.map(row => List(row)));
 }

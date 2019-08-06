@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { List } from "immutable";
-import { Alphabet, validAlphabet } from "../alphabet/Alphabet";
+import {
+  Alphabet,
+  validAlphabet,
+  setAlphabetLetter,
+  blankAlphabetLetter
+} from "../alphabet/Alphabet";
 import { History } from "history";
 import NumberPicker from "./NumberPicker";
 
@@ -20,7 +25,7 @@ export default function LetterEntry(props: IProps) {
 
   const alphabet = enteredLetters
     .setSize(alphabetSize)
-    .map(letters => letters || List(["", ""]));
+    .map(letters => letters || blankAlphabetLetter());
 
   const setLetter = (
     letterIndex: number,
@@ -30,7 +35,7 @@ export default function LetterEntry(props: IProps) {
     setEnteredLetters(
       enteredLetters.set(
         letterIndex,
-        alphabet.get(letterIndex)!.set(caseIndex, letter)
+        setAlphabetLetter(alphabet.get(letterIndex)!, caseIndex, letter)
       )
     );
   };
@@ -81,7 +86,7 @@ export default function LetterEntry(props: IProps) {
           <tbody>
             {alphabet.map((letters, letterIndex) => (
               <tr key={letterIndex}>
-                {letters.map((letter, caseIndex) => (
+                {letters.letter.map((letter, caseIndex) => (
                   <td key={caseIndex}>
                     <input
                       type="text"

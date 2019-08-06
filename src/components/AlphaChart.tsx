@@ -1,30 +1,13 @@
 import React, { useState } from "react";
 import { Switch, Route } from "react-router-dom";
 import LetterEntry from "./LetterEntry";
-import { Alphabet } from "../alphabet/Alphabet";
+import { Alphabet, demoAlphabet } from "../alphabet/Alphabet";
 import { List, fromJS } from "immutable";
 import ChartEditor from "./ChartEditor";
 
-const LANG_NAME = "Anglish";
+const LANG_NAME = "Ελληνικα";
 // const ALPHABET = List();
-const ALPHABET = fromJS([
-  ["A", "a"],
-  ["B", "b"],
-  ["C", "c"],
-  ["D", "d"],
-  ["A", "a"],
-  ["B", "b"],
-  ["C", "c"],
-  ["D", "d"],
-  ["A", "a"],
-  ["B", "b"],
-  ["C", "c"],
-  ["D", "d"],
-  ["A", "a"],
-  ["B", "b"],
-  ["C", "c"],
-  ["D", "d"]
-]);
+const ALPHABET: Alphabet = demoAlphabet();
 
 export default function AlphaChart() {
   const [langName, setLangName] = useState(LANG_NAME);
