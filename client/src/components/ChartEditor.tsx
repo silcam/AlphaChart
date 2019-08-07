@@ -1,24 +1,31 @@
 import React, { useState } from "react";
-import { Alphabet } from "../alphabet/Alphabet";
+import { AlphabetChart, DraftAlphabet } from "../alphabet/Alphabet";
 import { Link } from "react-router-dom";
-import { List, fromJS } from "immutable";
 import NumberPicker from "./NumberPicker";
+import update from "immutability-helper";
 
 interface IProps {
-  langName: string;
-  alphabet: Alphabet;
+  alphabet: DraftAlphabet;
+  setAlphabetAndDone: (a: DraftAlphabet) => void;
 }
 
 export default function ChartEditor(props: IProps) {
-  const [cols, setCols] = useState(5);
-  const [alphabet, setAlphabet] = useState(props.alphabet);
+  const [chart, setChart] = useState(props.alphabet.chart);
+  const setCols = (cols: number) =>
+    setChart(update(chart, { cols: { $set: cols } }));
   const setExampleWord = (index: number, word: string) => {
-    setAlphabet(
-      alphabet.set(index, { ...alphabet.get(index)!, exampleWord: word })
+    setChart(
+      update(chart, { letters: { [index]: { exampleWord: { $set: word } } } })
     );
   };
 
-  const alphabetTable = clump(alphabet, Math.max(cols, 1));
+  const alphabetTable = clump(chart.letters, Math.max(chart.cols, 1));
+
+  const done = () =>
+    props.setAlphabetAndDone({
+      ...props.alphabet,
+      chart: chart
+    });
 
   return (
     <div id="page-root">
@@ -30,15 +37,16 @@ export default function ChartEditor(props: IProps) {
           margin: "24px 0"
         }}
       >
+        <Link to="/letters">Edit Alphabet</Link>
         <div>
           <label>Columns:</label>
-          <NumberPicker value={cols} setValue={setCols} />
+          <NumberPicker value={chart.cols} setValue={setCols} />
         </div>
-        <div>
-          <Link to="/letters">Edit Alphabet</Link>
-        </div>
+        <button onClick={done} style={{ marginTop: 0 }}>
+          Done
+        </button>
       </div>
-      <h2>{props.langName}</h2>
+      <h2>{props.alphabet.name}</h2>
       <div>
         <table style={{ width: "100%" }}>
           <tbody>
@@ -47,8 +55,8 @@ export default function ChartEditor(props: IProps) {
                 {row.map((abletter, letterIndex) => (
                   <td className="alphacell" key={letterIndex}>
                     <div className="letter">
-                      <div>{abletter.letter.get(0)}</div>
-                      <div>{abletter.letter.get(1)}</div>
+                      <div>{abletter.forms[0]}</div>
+                      <div>{abletter.forms[1]}</div>
                     </div>
                     <div>
                       <img src="/apple.png" />
@@ -60,7 +68,7 @@ export default function ChartEditor(props: IProps) {
                         value={abletter.exampleWord}
                         onChange={e =>
                           setExampleWord(
-                            rowIndex * cols + letterIndex,
+                            rowIndex * chart.cols + letterIndex,
                             e.target.value
                           )
                         }
@@ -77,12 +85,11 @@ export default function ChartEditor(props: IProps) {
   );
 }
 
-function clump<T>(list: List<T>, clumpsOf: number): List<List<T>> {
+function clump<T>(list: T[], clumpsOf: number): T[][] {
   const empty: T[][] = [];
-  const table = list.reduce((table, item, index) => {
+  return list.reduce((table, item, index) => {
     if (index % clumpsOf === 0) table.push([item]);
     else table[table.length - 1].push(item);
     return table;
   }, empty);
-  return List(table.map(row => List(row)));
 }

@@ -1,73 +1,98 @@
-import { List } from "immutable";
-
 interface AlphabetLetter {
-  letter: List<string>;
+  forms: string[];
   exampleWord: string;
   imagePath: string;
 }
 
-export type Alphabet = List<AlphabetLetter>;
+export interface AlphabetChart {
+  letters: AlphabetLetter[];
+  timestamp: number;
+  cols: number;
+}
 
-export function validAlphabet(alphabet: Alphabet) {
+export interface DraftAlphabet {
+  name: string;
+  chart: AlphabetChart;
+}
+
+export interface Alphabet {
+  _id: number;
+  name: string;
+  charts: AlphabetChart[];
+}
+
+export function validDraftAlphabet(alphabet: DraftAlphabet) {
   return (
-    alphabet.size > 0 &&
-    alphabet.every(
-      abletter => ![undefined, ""].includes(abletter.letter.get(0))
-    )
+    alphabet.chart.letters.length > 0 &&
+    alphabet.chart.letters.every(
+      abletter => ![undefined, ""].includes(abletter.forms[0])
+    ) &&
+    alphabet.name.length > 0
   );
+}
+
+export function blankAlphabet(): DraftAlphabet {
+  return {
+    name: "",
+    chart: {
+      timestamp: Date.now().valueOf(),
+      cols: 5,
+      letters: []
+    }
+  };
 }
 
 export function blankAlphabetLetter(): AlphabetLetter {
   return {
-    letter: List(["", ""]),
+    forms: ["", ""],
     exampleWord: "",
     imagePath: ""
   };
 }
 
-export function setAlphabetLetter(
-  abLetter: AlphabetLetter,
-  caseIndex: number,
-  value: string
-): AlphabetLetter {
-  const { letter, ...rest } = abLetter;
-  return {
-    ...rest,
-    letter: letter.set(caseIndex, value)
-  };
-}
+// export function setAlphabetLetter(
+//   abLetter: AlphabetLetter,
+//   caseIndex: number,
+//   value: string
+// ): AlphabetLetter {
+//   const { letter, ...rest } = abLetter;
+//   return {
+//     ...rest,
+//     letter: letter.set(caseIndex, value)
+//   };
+// }
 
-export function demoAlphabet(): Alphabet {
-  return List(
-    [
-      "Α",
-      "Β",
-      "Γ",
-      "Δ",
-      "Ε",
-      "Ζ",
-      "Η",
-      "Θ",
-      "Ι",
-      "Κ",
-      "Λ",
-      "Μ",
-      "Ν",
-      "Ξ",
-      "Ο",
-      "Π",
-      "Ρ",
-      "Σ",
-      "Τ",
-      "Υ",
-      "Φ",
-      "Χ",
-      "Ψ",
-      "Ω"
-    ].map(ucLetter => ({
-      letter: List([ucLetter, ucLetter.toLocaleLowerCase()]),
-      exampleWord: "",
-      imagePath: ""
-    }))
-  );
-}
+// export function demoAlphabetChart(): AlphabetChart {
+//   return List(
+//     [
+//       "Α",
+//       "Β",
+//       "Γ",
+//       "Δ",
+//       "Ε",
+//       "Ζ",
+//       "Η",
+//       "Θ",
+//       "Ι",
+//       "Κ",
+//       "Λ",
+//       "Μ",
+//       "Ν",
+//       "Ξ",
+//       "Ο",
+//       "Π",
+//       "Ρ",
+//       "Σ",
+//       "Τ",
+//       "Υ",
+//       "Φ",
+//       "Χ",
+//       "Ψ",
+//       "Ω"
+//     ].map(ucLetter => ({
+//       letter: List([ucLetter, ucLetter.toLocaleLowerCase()]),
+//       exampleWord: "",
+//       imagePath: ""
+//     }))
+//   );
+// }

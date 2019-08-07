@@ -1,50 +1,57 @@
 import React, { useState } from "react";
-import { List } from "immutable";
 import {
-  Alphabet,
-  validAlphabet,
-  setAlphabetLetter,
-  blankAlphabetLetter
+  blankAlphabetLetter,
+  DraftAlphabet,
+  validDraftAlphabet
 } from "../alphabet/Alphabet";
 import { History } from "history";
 import NumberPicker from "./NumberPicker";
+import { arrayResize } from "../util";
+import update from "immutability-helper";
 
 interface IProps {
-  setFromLetterEntry: (langName: string, alphabet: Alphabet) => void;
+  alphabet: DraftAlphabet;
+  setAlphabet: (a: DraftAlphabet) => void;
   history: History;
-  langName: string;
-  alphabet: Alphabet;
 }
 
 export default function LetterEntry(props: IProps) {
+  const chart = props.alphabet.chart;
   const [alphabetSize, setAlphabetSize] = useState(
-    props.alphabet.size > 0 ? props.alphabet.size : 26
+    chart.letters.length > 0 ? chart.letters.length : 26
   );
-  const [langName, setLangName] = useState(props.langName);
-  const [enteredLetters, setEnteredLetters] = useState(props.alphabet);
-
-  const alphabet = enteredLetters
-    .setSize(alphabetSize)
-    .map(letters => letters || blankAlphabetLetter());
+  const [name, setName] = useState(props.alphabet.name);
+  const [enteredLetters, setEnteredLetters] = useState(chart.letters);
+  const alphabet = arrayResize(
+    enteredLetters,
+    alphabetSize,
+    blankAlphabetLetter
+  );
 
   const setLetter = (
     letterIndex: number,
     caseIndex: number,
     letter: string
   ) => {
+    const newLetter = update(alphabet[letterIndex], {
+      forms: { [caseIndex]: { $set: letter } }
+    });
     setEnteredLetters(
-      enteredLetters.set(
-        letterIndex,
-        setAlphabetLetter(alphabet.get(letterIndex)!, caseIndex, letter)
-      )
+      update(enteredLetters, {
+        [letterIndex]: { $set: newLetter }
+      })
     );
   };
 
-  const formValid = langName.length > 0 && validAlphabet(alphabet);
+  const draftAlphabet: DraftAlphabet = {
+    name,
+    chart: { ...chart, letters: alphabet }
+  };
+  const formValid = validDraftAlphabet(draftAlphabet);
 
   const saveAndQuit = () => {
-    props.setFromLetterEntry(langName, alphabet);
-    props.history.push("/chart");
+    props.setAlphabet(draftAlphabet);
+    props.history.push("/alphabets/new/chart");
   };
 
   return (
@@ -63,8 +70,8 @@ export default function LetterEntry(props: IProps) {
           <label>Language:</label>
           <input
             type="text"
-            value={langName}
-            onChange={e => setLangName(e.target.value)}
+            value={name}
+            onChange={e => setName(e.target.value)}
           />
         </div>
         <div style={{ margin: "24px" }}>
@@ -75,7 +82,7 @@ export default function LetterEntry(props: IProps) {
           <button onClick={saveAndQuit} disabled={!formValid}>
             Save
           </button>
-          {props.alphabet.size > 0 && (
+          {chart.letters.length > 0 && (
             <button onClick={props.history.goBack}>Cancel</button>
           )}
         </div>
@@ -86,7 +93,7 @@ export default function LetterEntry(props: IProps) {
           <tbody>
             {alphabet.map((letters, letterIndex) => (
               <tr key={letterIndex}>
-                {letters.letter.map((letter, caseIndex) => (
+                {letters.forms.map((letter, caseIndex) => (
                   <td key={caseIndex}>
                     <input
                       type="text"
