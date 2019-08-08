@@ -23,7 +23,7 @@ app.get("/api/alphabets", async (req, res) => {
 });
 
 app.get("/api/alphabets/:id", async (req, res) => {
-  const alphabet = await Data.alphabet(parseInt(req.params.id));
+  const alphabet = await Data.alphabet(req.params.id);
   if (alphabet === null) res.status(404).send("404");
   else res.json(alphabet);
 });
@@ -36,7 +36,7 @@ app.post("/api/alphabets", async (req, res) => {
 
 app.post("/api/alphabets/:id/charts", async (req, res) => {
   const newChart: AlphabetChart = req.body;
-  const newAlphabet = await Data.createChart(parseInt(req.params.id), newChart);
+  const newAlphabet = await Data.createChart(req.params.id, newChart);
   res.json(newAlphabet);
 });
 

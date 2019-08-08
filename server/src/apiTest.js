@@ -18,6 +18,6 @@ Axios.post("http://localhost:3001/api/alphabets", {
 
 Axios.post("http://localhost:3001/api/alphabets/1565194266565/charts", {
   timestamp: 0,
-  cols: 3,
+  cols: 30,
   letters: [{ forms: ["A", "a"], exampleWord: "Apple", imagePath: "" }]
 }).then(result => console.log(result.data));

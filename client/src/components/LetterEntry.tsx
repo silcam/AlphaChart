@@ -10,17 +10,17 @@ import { arrayResize } from "../util";
 import update from "immutability-helper";
 
 interface IProps {
-  alphabet: DraftAlphabet;
-  setAlphabet: (a: DraftAlphabet) => void;
+  draftAlphabet: DraftAlphabet;
+  save: (a: DraftAlphabet) => void;
   history: History;
 }
 
 export default function LetterEntry(props: IProps) {
-  const chart = props.alphabet.chart;
+  const chart = props.draftAlphabet.chart;
   const [alphabetSize, setAlphabetSize] = useState(
     chart.letters.length > 0 ? chart.letters.length : 26
   );
-  const [name, setName] = useState(props.alphabet.name);
+  const [name, setName] = useState(props.draftAlphabet.name);
   const [enteredLetters, setEnteredLetters] = useState(chart.letters);
   const alphabet = arrayResize(
     enteredLetters,
@@ -50,7 +50,7 @@ export default function LetterEntry(props: IProps) {
   const formValid = validDraftAlphabet(draftAlphabet);
 
   const saveAndQuit = () => {
-    props.setAlphabet(draftAlphabet);
+    props.save(draftAlphabet);
     props.history.push("/alphabets/new/chart");
   };
 

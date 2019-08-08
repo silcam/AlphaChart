@@ -1,4 +1,4 @@
-import { MongoClient, Db, Cursor, Collection } from "mongodb";
+import { MongoClient, Cursor, Collection, ObjectID } from "mongodb";
 import {
   DraftAlphabet,
   Alphabet,
@@ -34,17 +34,16 @@ async function alphabets(): Promise<Alphabet[]> {
   return alphabets;
 }
 
-async function alphabet(id: number): Promise<Alphabet | null> {
+async function alphabet(id: string): Promise<Alphabet | null> {
   console.log(`[Query] READ Alphabet ${id}`);
   return query("alphabets", async collection => {
-    return collection.findOne({ _id: id });
+    return collection.findOne({ _id: new ObjectID(id) });
   });
 }
 
 async function createAlphabet(draftAlphabet: DraftAlphabet): Promise<Alphabet> {
   console.log("[Query] CREATE Alphabet");
-  const alphabet: Alphabet = {
-    _id: Date.now().valueOf(),
+  const alphabet: Omit<Alphabet, "_id"> = {
     name: draftAlphabet.name,
     charts: [
       update(draftAlphabet.chart, { timestamp: { $set: Date.now().valueOf() } })
@@ -57,7 +56,7 @@ async function createAlphabet(draftAlphabet: DraftAlphabet): Promise<Alphabet> {
 }
 
 async function createChart(
-  abId: number,
+  abId: string,
   chart: AlphabetChart
 ): Promise<Alphabet> {
   console.log(`[Query] Create Chart for Alphabet ${abId}`);
@@ -66,8 +65,15 @@ async function createChart(
   });
   return query("alphabets", async collection => {
     const result = await collection.findOneAndUpdate(
-      { _id: abId },
-      { $push: { charts: finalChart } },
+      { _id: new ObjectID(abId) },
+      {
+        $push: {
+          charts: {
+            $each: [finalChart],
+            $position: 0
+          }
+        }
+      },
       { returnOriginal: false }
     );
     return result.value;

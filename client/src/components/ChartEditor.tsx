@@ -1,31 +1,25 @@
 import React, { useState } from "react";
-import { AlphabetChart, DraftAlphabet } from "../alphabet/Alphabet";
+import { AlphabetChart, Alphabet, AlphabetLetter } from "../alphabet/Alphabet";
 import { Link } from "react-router-dom";
 import NumberPicker from "./NumberPicker";
 import update from "immutability-helper";
+import Chart from "./Chart";
 
 interface IProps {
-  alphabet: DraftAlphabet;
-  setAlphabetAndDone: (a: DraftAlphabet) => void;
+  alphabet: Alphabet;
+  save: (chart: AlphabetChart) => void;
 }
 
 export default function ChartEditor(props: IProps) {
-  const [chart, setChart] = useState(props.alphabet.chart);
+  const originalChart = props.alphabet.charts[0];
+  const [chart, setChart] = useState(originalChart);
   const setCols = (cols: number) =>
     setChart(update(chart, { cols: { $set: cols } }));
-  const setExampleWord = (index: number, word: string) => {
-    setChart(
-      update(chart, { letters: { [index]: { exampleWord: { $set: word } } } })
-    );
+  const updateLetter = (index: number, letter: Partial<AlphabetLetter>) => {
+    setChart(update(chart, { letters: { [index]: { $merge: letter } } }));
   };
 
-  const alphabetTable = clump(chart.letters, Math.max(chart.cols, 1));
-
-  const done = () =>
-    props.setAlphabetAndDone({
-      ...props.alphabet,
-      chart: chart
-    });
+  const done = () => props.save(chart);
 
   return (
     <div id="page-root">
@@ -46,50 +40,12 @@ export default function ChartEditor(props: IProps) {
           Done
         </button>
       </div>
-      <h2>{props.alphabet.name}</h2>
-      <div>
-        <table style={{ width: "100%" }}>
-          <tbody>
-            {alphabetTable.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row.map((abletter, letterIndex) => (
-                  <td className="alphacell" key={letterIndex}>
-                    <div className="letter">
-                      <div>{abletter.forms[0]}</div>
-                      <div>{abletter.forms[1]}</div>
-                    </div>
-                    <div>
-                      <img src="/apple.png" />
-                    </div>
-                    <div style={{ marginTop: "8px" }}>
-                      <input
-                        type="text"
-                        placeholder="Example Word"
-                        value={abletter.exampleWord}
-                        onChange={e =>
-                          setExampleWord(
-                            rowIndex * chart.cols + letterIndex,
-                            e.target.value
-                          )
-                        }
-                      />
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Chart
+        alphabet={props.alphabet}
+        chart={chart}
+        updateLetter={updateLetter}
+        edit
+      />
     </div>
   );
-}
-
-function clump<T>(list: T[], clumpsOf: number): T[][] {
-  const empty: T[][] = [];
-  return list.reduce((table, item, index) => {
-    if (index % clumpsOf === 0) table.push([item]);
-    else table[table.length - 1].push(item);
-    return table;
-  }, empty);
 }

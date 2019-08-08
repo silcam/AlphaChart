@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Loading from "./Loading";
 import { Alphabet } from "../alphabet/Alphabet";
 import Axios from "axios";
+import AlphabetsList from "./AlphabetsList";
 
 export default function HomePage() {
   const [alphabets, setAlphabets] = useState<Alphabet[] | null>(null);
@@ -21,13 +22,7 @@ export default function HomePage() {
           {alphabets === null ? (
             <Loading />
           ) : (
-            alphabets.map(alphabet => (
-              <li key={alphabet._id}>
-                <Link to={`/alphabets/view/${alphabet._id}`}>
-                  {alphabet.name}
-                </Link>
-              </li>
-            ))
+            <AlphabetsList alphabets={alphabets} />
           )}
         </ul>
       </div>

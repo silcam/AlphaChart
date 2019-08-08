@@ -1,4 +1,4 @@
-interface AlphabetLetter {
+export interface AlphabetLetter {
   forms: string[];
   exampleWord: string;
   imagePath: string;
@@ -16,7 +16,7 @@ export interface DraftAlphabet {
 }
 
 export interface Alphabet {
-  _id: number;
+  _id: string;
   name: string;
   charts: AlphabetChart[];
 }

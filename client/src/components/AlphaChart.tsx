@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Switch, Route } from "react-router-dom";
-import LetterEntry from "./LetterEntry";
-import { AlphabetChart } from "../alphabet/Alphabet";
-import ChartEditor from "./ChartEditor";
-import Axios from "axios";
 import HomePage from "./HomePage";
-import NewAlphabetChart from "./NewAlphabetChart";
+import AlphabetsRoute from "./AlphabetsRoute";
+import UsersRoute from "./UsersRoute";
 
 export default function AlphaChart() {
   return (
     <div>
       <Switch>
-        <Route
-          path="/alphabets/new"
-          render={({ history }) => <NewAlphabetChart history={history} />}
-        />
+        <Route path="/alphabets" render={() => <AlphabetsRoute />} />
+        <Route path="/users" render={() => <UsersRoute />} />
         <Route render={() => <HomePage />} />
       </Switch>
     </div>

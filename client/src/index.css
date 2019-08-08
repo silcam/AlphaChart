@@ -122,6 +122,10 @@ td.alphacell input[type=text]:focus::placeholder {
   color: #00000000;
 }
 
+td.alphacell .exampleWord {
+  text-align: center;
+}
+
 /**************************
     COMPONENTS
 ***************************/
