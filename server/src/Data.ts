@@ -1,32 +1,48 @@
-import { MongoClient, Db } from "mongodb";
-import { DraftAlphabet, Alphabet } from "../../client/src/alphabet/Alphabet";
+import { MongoClient, Db, Cursor, Collection } from "mongodb";
+import {
+  DraftAlphabet,
+  Alphabet,
+  AlphabetChart
+} from "../../client/src/alphabet/Alphabet";
 import update from "immutability-helper";
 
-async function query<T>(callback: (db: Db) => Promise<T>) {
+type CollectionName = "alphabets" | "users";
+
+async function query<T>(
+  collectionName: CollectionName,
+  callback: (collection: Collection) => Promise<T>
+) {
   const url = "mongodb://localhost:27017";
   const dbName = "alphachart";
   let client: MongoClient | null = null;
   try {
     client = await MongoClient.connect(url);
     const db = client.db(dbName);
-    return callback(db);
-  } catch (err) {
-    console.error(err);
+    const collection = db.collection(collectionName);
+    return callback(collection);
   } finally {
     if (client) client.close();
   }
 }
 
 async function alphabets(): Promise<Alphabet[]> {
-  const alphabets = await query(async db => {
-    const collection = db.collection("alphabets");
-    return collection.find({}).toArray();
+  console.log("[Query] READ Alphabets");
+  const alphabets = await query("alphabets", async collection => {
+    const abCursor: Cursor<Alphabet> = collection.find({});
+    return abCursor.map(ab => ({ ...ab, charts: [] })).toArray();
   });
-  return alphabets ? alphabets : [];
+  return alphabets;
 }
 
-async function createAlphabet(draftAlphabet: DraftAlphabet) {
-  console.log("[Query] CREATE ALPHABET");
+async function alphabet(id: number): Promise<Alphabet | null> {
+  console.log(`[Query] READ Alphabet ${id}`);
+  return query("alphabets", async collection => {
+    return collection.findOne({ _id: id });
+  });
+}
+
+async function createAlphabet(draftAlphabet: DraftAlphabet): Promise<Alphabet> {
+  console.log("[Query] CREATE Alphabet");
   const alphabet: Alphabet = {
     _id: Date.now().valueOf(),
     name: draftAlphabet.name,
@@ -34,13 +50,33 @@ async function createAlphabet(draftAlphabet: DraftAlphabet) {
       update(draftAlphabet.chart, { timestamp: { $set: Date.now().valueOf() } })
     ]
   };
-  return query(async db => {
-    const collection = db.collection("alphabets");
-    await collection.insertOne(alphabet);
+  return query("alphabets", async collection => {
+    const result = await collection.insertOne(alphabet);
+    return result.ops[0];
+  });
+}
+
+async function createChart(
+  abId: number,
+  chart: AlphabetChart
+): Promise<Alphabet> {
+  console.log(`[Query] Create Chart for Alphabet ${abId}`);
+  const finalChart = update(chart, {
+    timestamp: { $set: Date.now().valueOf() }
+  });
+  return query("alphabets", async collection => {
+    const result = await collection.findOneAndUpdate(
+      { _id: abId },
+      { $push: { charts: finalChart } },
+      { returnOriginal: false }
+    );
+    return result.value;
   });
 }
 
 export default {
   alphabets,
-  createAlphabet
+  alphabet,
+  createAlphabet,
+  createChart
 };

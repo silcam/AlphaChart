@@ -1,6 +1,9 @@
 import express from "express";
 import Data from "./Data";
-import { DraftAlphabet } from "../../client/src/alphabet/Alphabet";
+import {
+  DraftAlphabet,
+  AlphabetChart
+} from "../../client/src/alphabet/Alphabet";
 import bodyParser from "body-parser";
 
 const app = express();
@@ -19,10 +22,22 @@ app.get("/api/alphabets", async (req, res) => {
   res.json(alphabets);
 });
 
-app.post("/api/alphabets/new", async (req, res) => {
+app.get("/api/alphabets/:id", async (req, res) => {
+  const alphabet = await Data.alphabet(parseInt(req.params.id));
+  if (alphabet === null) res.status(404).send("404");
+  else res.json(alphabet);
+});
+
+app.post("/api/alphabets", async (req, res) => {
   const draftAlphabet: DraftAlphabet = req.body;
-  await Data.createAlphabet(draftAlphabet);
-  res.json({});
+  const alphabet = await Data.createAlphabet(draftAlphabet);
+  res.json(alphabet);
+});
+
+app.post("/api/alphabets/:id/charts", async (req, res) => {
+  const newChart: AlphabetChart = req.body;
+  const newAlphabet = await Data.createChart(parseInt(req.params.id), newChart);
+  res.json(newAlphabet);
 });
 
 app.listen(app.get("port"), () => {
