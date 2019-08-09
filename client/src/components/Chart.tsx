@@ -1,5 +1,6 @@
 import React from "react";
 import { Alphabet, AlphabetLetter, AlphabetChart } from "../alphabet/Alphabet";
+import ImageInput from "./ImageInput";
 
 interface IProps {
   alphabet: Alphabet;
@@ -16,41 +17,65 @@ export default function Chart(props: IProps) {
     <div>
       <h2>{props.alphabet.name}</h2>
       <div>
-        <table style={{ width: "100%" }}>
+        <table className="alphatable">
           <tbody>
             {alphabetTable.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row.map((abletter, letterIndex) => (
-                  <td className="alphacell" key={letterIndex}>
-                    <div className="letter">
-                      <div>{abletter.forms[0]}</div>
-                      <div>{abletter.forms[1]}</div>
-                    </div>
-                    <div>
-                      <img src="/apple.png" alt={abletter.exampleWord} />
-                    </div>
-                    <div style={{ marginTop: "8px" }}>
-                      {props.edit ? (
-                        <input
-                          type="text"
-                          placeholder="Example Word"
-                          value={abletter.exampleWord}
-                          onChange={e =>
-                            props.updateLetter(
-                              rowIndex * chart.cols + letterIndex,
-                              { exampleWord: e.target.value }
-                            )
-                          }
-                        />
-                      ) : (
-                        <div className="exampleWord">
-                          {abletter.exampleWord}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                ))}
-              </tr>
+              <React.Fragment key={rowIndex}>
+                <tr>
+                  {row.map((abletter, letterIndex) => (
+                    <td className="alphacell alphacell-upper" key={letterIndex}>
+                      <div className="letter">
+                        <div>{abletter.forms[0]}</div>
+                        <div>{abletter.forms[1]}</div>
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  {row.map((abletter, letterIndex) => (
+                    <td className="alphacell alphacell-lower" key={letterIndex}>
+                      <div>
+                        {props.edit ? (
+                          <ImageInput
+                            alphabet={props.alphabet}
+                            letter={abletter}
+                            setImagePath={imagePath =>
+                              props.updateLetter(
+                                flatIndex(chart.cols, rowIndex, letterIndex),
+                                { imagePath }
+                              )
+                            }
+                          />
+                        ) : (
+                          <img
+                            src={abletter.imagePath}
+                            alt={abletter.exampleWord}
+                          />
+                        )}
+                      </div>
+                      <div style={{ marginTop: "8px" }}>
+                        {props.edit ? (
+                          <input
+                            type="text"
+                            placeholder="Example Word"
+                            value={abletter.exampleWord}
+                            onChange={e =>
+                              props.updateLetter(
+                                flatIndex(chart.cols, rowIndex, letterIndex),
+                                { exampleWord: e.target.value }
+                              )
+                            }
+                          />
+                        ) : (
+                          <div className="exampleWord">
+                            {abletter.exampleWord}
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+              </React.Fragment>
             ))}
           </tbody>
         </table>
@@ -66,4 +91,8 @@ function clump<T>(list: T[], clumpsOf: number): T[][] {
     else table[table.length - 1].push(item);
     return table;
   }, empty);
+}
+
+function flatIndex(cols: number, rowIndex: number, letterIndex: number) {
+  return rowIndex * cols + letterIndex;
 }

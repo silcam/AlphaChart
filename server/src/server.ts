@@ -5,6 +5,8 @@ import {
   AlphabetChart
 } from "../../client/src/alphabet/Alphabet";
 import bodyParser from "body-parser";
+import fileUpload, { UploadedFile } from "express-fileupload";
+import Images from "./Images";
 
 const app = express();
 
@@ -38,6 +40,12 @@ app.post("/api/alphabets/:id/charts", async (req, res) => {
   const newChart: AlphabetChart = req.body;
   const newAlphabet = await Data.createChart(req.params.id, newChart);
   res.json(newAlphabet);
+});
+
+app.post("/api/alphabets/:id/images", fileUpload(), async (req, res) => {
+  const imageFile = req.files!.image as UploadedFile;
+  const imagePath = await Images.save(req.params.id, imageFile);
+  res.json({ path: imagePath });
 });
 
 app.listen(app.get("port"), () => {
