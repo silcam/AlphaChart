@@ -10,6 +10,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
+  font-size: 16px;
 }
 
 div#root {
@@ -90,6 +91,11 @@ input[type=text]:focus {
   border-bottom-color: #1892ef;
 }
 
+input:disabled {
+  color: #aaa;
+  background: none;
+}
+
 /**********
     ALPHA TABLE
 **********/
@@ -116,7 +122,7 @@ td.alphacell-lower {
 }
 
 td.alphacell div.letter {
-  font-size: 32px;
+  font-size: 3em;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -131,7 +137,7 @@ td.alphacell img {
 td.alphacell input[type=text] {
   text-align: center;
   width: 80%;
-  font-size: 12px;
+  font-size: 1em;
 }
 
 td.alphacell input[type=text]:focus::placeholder {
@@ -140,6 +146,7 @@ td.alphacell input[type=text]:focus::placeholder {
 
 td.alphacell .exampleWord {
   text-align: center;
+  font-size: 1em;
 }
 
 p.drop-zone {

@@ -1,0 +1,62 @@
+div.compOptionButton {
+    background-color: #1892ef;
+    border-radius: 8px;
+    margin: 4px;
+    position: relative;
+}
+
+div.compOptionButton>button{
+    background: none;
+    margin: 0;
+    border-radius: 0;
+}
+
+div.compOptionButton>button:active {
+    background-color: #ffffff22;
+}
+
+div.compOptionButton>button:first-child {
+    border-right: 1px solid #ddd;
+}
+
+div.compOptionButton div.contextMenu {
+    position: absolute;
+    right: 0;
+    background-color: white;
+    box-shadow: 5px 5px 20px #999;
+}
+
+div.compChartToImageOptionsMenu {
+    padding: 8px;
+}
+
+div.compChartToImageOptionsMenu div.optMenuHeader {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+div.compChartToImageOptionsMenu table tr td {
+    border: none;
+}
+
+div.compChartToImageOptionsMenu input[type="text"] {
+    text-align: right;
+}
+
+div.compChartToImageOptionsMenu input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+div.compChartToImageOptionsMenu .bgColor {
+    margin: 12px 0;
+}
+
+div.compChartToImageOptionsMenu .bgColor div[data-disabled="true"] {
+    color: #aaa;
+}
+
+div.compChartToImageOptionsMenu .buttonRow {
+    display: flex;
+    justify-content: space-between;
+}
+
