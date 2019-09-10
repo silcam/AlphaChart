@@ -4,6 +4,7 @@ import Axios from "axios";
 import Chart from "./Chart";
 import Loading from "./Loading";
 import { Link } from "react-router-dom";
+import ChartToImage from "./ChartToImage";
 
 interface IProps {
   id: string;
@@ -24,6 +25,7 @@ export default function ViewChartPage(props: IProps) {
       <div>
         <Link to={`/alphabets/edit/${props.id}/chart`}>Edit</Link>
       </div>
+      <ChartToImage />
       <p />
       {alphabet === null ? (
         <Loading />

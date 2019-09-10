@@ -14,7 +14,7 @@ export default function Chart(props: IProps) {
   const alphabetTable = clump(chart.letters, Math.max(chart.cols, 1));
 
   return (
-    <div>
+    <div id="chart">
       <h2>{props.alphabet.name}</h2>
       <div>
         <table className="alphatable">
