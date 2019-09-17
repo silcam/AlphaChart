@@ -21,3 +21,11 @@ Axios.post("http://localhost:3001/api/alphabets/1565194266565/charts", {
   cols: 30,
   letters: [{ forms: ["A", "a"], exampleWord: "Apple", imagePath: "" }]
 }).then(result => console.log(result.data));
+
+Axios.post("http://localhost:3001/api/users", {
+  name: "Bob",
+  email: "bob@gmail.com",
+  password: "bobspassword"
+})
+  .then(result => console.log(result.data))
+  .catch(err => console.log(err.response));

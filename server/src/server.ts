@@ -7,12 +7,16 @@ import {
 import bodyParser from "body-parser";
 import fileUpload, { UploadedFile } from "express-fileupload";
 import Images from "./Images";
+import usersController from "./usersController";
+import cookieSession from "cookie-session";
+import secrets from "./secrets";
 
 const app = express();
 
 app.set("port", process.env.PORT || 3001);
 
 app.use(bodyParser.json());
+app.use(cookieSession({ secret: secrets.cookieSecret }));
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
@@ -47,6 +51,8 @@ app.post("/api/alphabets/:id/images", fileUpload(), async (req, res) => {
   const imagePath = await Images.save(req.params.id, imageFile);
   res.json({ path: imagePath });
 });
+
+usersController(app);
 
 app.listen(app.get("port"), () => {
   console.log(`Find the server at: http://localhost:${app.get("port")}/`);

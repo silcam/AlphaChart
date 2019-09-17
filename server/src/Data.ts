@@ -4,7 +4,9 @@ import {
   Alphabet,
   AlphabetChart
 } from "../../client/src/alphabet/Alphabet";
+import { StoredUser, NewUser } from "../../client/src/alphabet/User";
 import update from "immutability-helper";
+import { createPassword } from "./password";
 
 type CollectionName = "alphabets" | "users";
 
@@ -80,9 +82,34 @@ async function createChart(
   });
 }
 
+async function user(email: string): Promise<StoredUser | null> {
+  console.log(`[Query] READ User ${email}`);
+  return query("users", async collection => {
+    return collection.findOne({ email });
+  });
+}
+
+async function createUser(user: NewUser) {
+  console.log("[Query] CREATE User");
+  const passwordParams = createPassword(user.password);
+  const storedUser: StoredUser = {
+    _id: user.email,
+    name: user.name,
+    email: user.email,
+    passwordHash: passwordParams.hash,
+    passwordSalt: passwordParams.salt
+  };
+  return query("users", async collection => {
+    const result = await collection.insertOne(storedUser);
+    return result.ops[0];
+  });
+}
+
 export default {
   alphabets,
   alphabet,
   createAlphabet,
-  createChart
+  createChart,
+  createUser,
+  user
 };
