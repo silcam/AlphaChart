@@ -28,6 +28,7 @@ export default function LoginForm(props: IProps) {
 
   return (
     <div>
+      <h2>Log In</h2>
       <form
         onSubmit={e => {
           e.preventDefault();

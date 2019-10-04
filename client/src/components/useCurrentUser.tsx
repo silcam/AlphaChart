@@ -1,4 +1,4 @@
-import { CurrentUser, LoginAttempt } from "../alphabet/User";
+import { CurrentUser, LoginAttempt, NewUser } from "../alphabet/User";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 
@@ -8,11 +8,16 @@ export type LogInFunc = (
   handleError: (e: LoginError) => void
 ) => void;
 export type LogOutFunc = (handleError: () => void) => void;
+export type CreateAccountFunc = (
+  newUser: NewUser,
+  handleError: (msg: string) => void
+) => void;
 
 export default function useCurrentUser(): [
   CurrentUser | null,
   LogInFunc,
-  LogOutFunc
+  LogOutFunc,
+  CreateAccountFunc
 ] {
   const [currentUser, setCurrentUser] = useState<null | CurrentUser>(null);
 
@@ -42,7 +47,21 @@ export default function useCurrentUser(): [
     }
   };
 
-  return [currentUser, logIn, logOut];
+  const createAccount = async (
+    newUser: NewUser,
+    handleError: (msg: string) => void
+  ) => {
+    try {
+      const response = await Axios.post("/api/users", newUser);
+      setCurrentUser(response.data);
+    } catch (err) {
+      if (err.response && err.response.status == 422)
+        handleError(err.response.data.error);
+      else handleError("Unknown error");
+    }
+  };
+
+  return [currentUser, logIn, logOut, createAccount];
 }
 
 async function getCurrentUser(setCurrentUser: (u: CurrentUser | null) => void) {

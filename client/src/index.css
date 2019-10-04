@@ -1,4 +1,4 @@
-html {
+html, body, div#root {
   height: 100%;
 }
 
@@ -9,19 +9,23 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100%;
   font-size: 16px;
 }
 
-div#root {
-  height: 100%;
+div {
+  display: flex;
+  flex-direction: column;
 }
 
+.flex-row {
+  flex-direction: row;
+  justify-content: space-between;
+}
 
 div#page-root {
+  width: 100%;
   max-width: 800px;
-  margin: auto;
-  height: 100%;
+  margin: 0 auto;
 }
 
 a, a:visited {

@@ -6,18 +6,21 @@ import UsersRoute from "./UsersRoute";
 import useCurrentUser from "./useCurrentUser";
 
 export default function AlphaChart() {
-  const [currentUser, logIn, logOut] = useCurrentUser();
+  const [currentUser, logIn, logOut, createAccount] = useCurrentUser();
   return (
-    <div>
-      <Switch>
-        <Route path="/alphabets" render={() => <AlphabetsRoute />} />
-        <Route path="/users" render={() => <UsersRoute />} />
-        <Route
-          render={() => (
-            <HomePage currentUser={currentUser} logIn={logIn} logOut={logOut} />
-          )}
-        />
-      </Switch>
-    </div>
+    <Switch>
+      <Route path="/alphabets" render={() => <AlphabetsRoute />} />
+      <Route path="/users" render={() => <UsersRoute />} />
+      <Route
+        render={() => (
+          <HomePage
+            currentUser={currentUser}
+            logIn={logIn}
+            logOut={logOut}
+            createAccount={createAccount}
+          />
+        )}
+      />
+    </Switch>
   );
 }

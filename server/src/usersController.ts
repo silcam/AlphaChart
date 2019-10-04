@@ -1,7 +1,7 @@
 import { Express, Response } from "express";
 import {
   NewUser,
-  publicUser,
+  validationErrors,
   currentUser,
   LoginAttempt
 } from "../../client/src/alphabet/User";
@@ -10,14 +10,20 @@ import { checkPassword } from "./password";
 
 export default function usersController(app: Express) {
   app.post("/api/users", async (req, res) => {
+    const newUser: NewUser = req.body;
     try {
-      const newUser: NewUser = req.body;
-      const user = await Data.createUser(newUser);
-      res.json(publicUser(user));
+      const errors = validationErrors(newUser);
+      if (errors) res.status(422).json({ error: errors.join(" ") });
+      else {
+        const user = await Data.createUser(newUser);
+        res.json(currentUser(user));
+      }
     } catch (err) {
       console.error(JSON.stringify(err));
       if (err.errmsg.includes("duplicate key")) {
-        res.status(422).json({ error: "Duplicate email" });
+        res
+          .status(422)
+          .json({ error: `A user already exists for ${newUser.email}` });
       } else {
         fiveHundred(res);
       }

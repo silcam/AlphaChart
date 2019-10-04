@@ -35,3 +35,13 @@ export function currentUser(user: StoredUser): CurrentUser {
     email: user.email
   };
 }
+
+export function validationErrors(user: NewUser, passwordCheck?: string) {
+  const errors = [];
+  if (user.email.length < 5) errors.push("Email is invalid.");
+  if (user.password.length < 10)
+    errors.push("Please choose a password with at least 10 characters.");
+  if (passwordCheck && passwordCheck !== user.password)
+    errors.push("Passwords do not match.");
+  return errors.length > 0 ? errors : null;
+}

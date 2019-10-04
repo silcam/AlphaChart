@@ -12,17 +12,16 @@ interface IProps {
 export default function ViewChartHeader(props: IProps) {
   return (
     <div
+      className="flex-row"
       style={{
-        display: "flex",
-        margin: "20px 0",
-        justifyContent: "space-between"
+        margin: "20px 0"
       }}
     >
       <div style={{ fontSize: "x-large" }}>
         <Link to={`/`}>Home</Link>
       </div>
       {props.chartLoaded && (
-        <div style={{ display: "flex" }}>
+        <div className="flex-row">
           <div>
             <Link to={`/alphabets/edit/${props.id}/chart`}>
               <button>Edit Chart</button>

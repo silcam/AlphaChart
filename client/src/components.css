@@ -30,13 +30,14 @@ div.compChartToImageOptionsMenu .bgColor div[data-disabled="true"] {
 }
 
 div.compChartToImageOptionsMenu .buttonRow {
-    display: flex;
+    flex-direction: row;
     justify-content: space-between;
 }
 
-/* OptiionButton */
+/* OptionButton */
 
 div.compOptionButton {
+    display: block;
     background-color: #1892ef;
     border-radius: 8px;
     margin: 4px;
@@ -67,7 +68,6 @@ div.compOptionButton div.contextMenu {
 /* PublicHomePage */
 
 div.compPublicHomePage {
-    display: flex;
     align-items: baseline;
 }
 

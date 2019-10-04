@@ -92,6 +92,7 @@ async function user(email: string): Promise<StoredUser | null> {
 async function createUser(user: NewUser) {
   console.log("[Query] CREATE User");
   const passwordParams = createPassword(user.password);
+  if (!user.name) user.name = user.email.replace(/@.*/, ""); // This should be in User.ts
   const storedUser: StoredUser = {
     _id: user.email,
     name: user.name,
