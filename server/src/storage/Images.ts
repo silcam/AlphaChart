@@ -1,5 +1,5 @@
 import { UploadedFile } from "express-fileupload";
-import { mkdirSafe } from "./fsUtils";
+import { mkdirSafe } from "../common/fsUtils";
 import path from "path";
 
 async function save(id: string, file: UploadedFile) {

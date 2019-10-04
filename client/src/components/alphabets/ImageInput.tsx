@@ -1,5 +1,5 @@
 import React from "react";
-import { Alphabet, AlphabetLetter } from "../alphabet/Alphabet";
+import { Alphabet, AlphabetLetter } from "../../models/Alphabet";
 import { useDropzone } from "react-dropzone";
 import Axios from "axios";
 

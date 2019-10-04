@@ -1,5 +1,5 @@
 import React from "react";
-import { Alphabet, AlphabetLetter, AlphabetChart } from "../alphabet/Alphabet";
+import { Alphabet, AlphabetLetter, AlphabetChart } from "../../models/Alphabet";
 import ImageInput from "./ImageInput";
 
 interface IProps {

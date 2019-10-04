@@ -1,5 +1,5 @@
 import React from "react";
-import { Alphabet } from "../alphabet/Alphabet";
+import { Alphabet } from "../../models/Alphabet";
 import { Link } from "react-router-dom";
 
 interface IProps {

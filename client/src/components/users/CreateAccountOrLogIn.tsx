@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { LogInFunc, CreateAccountFunc } from "./useCurrentUser";
 import LoginForm from "./LoginForm";
 import CreateAccountForm from "./CreateAccountForm";
-import LnkBtn from "./LnkBtn";
+import LnkBtn from "../common/LnkBtn";
 
 interface IProps {
   logIn: LogInFunc;

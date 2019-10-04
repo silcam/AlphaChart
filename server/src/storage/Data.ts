@@ -3,10 +3,10 @@ import {
   DraftAlphabet,
   Alphabet,
   AlphabetChart
-} from "../../client/src/alphabet/Alphabet";
-import { StoredUser, NewUser } from "../../client/src/alphabet/User";
+} from "../../../client/src/models/Alphabet";
+import { StoredUser, NewUser } from "../../../client/src/models/User";
 import update from "immutability-helper";
-import { createPassword } from "./password";
+import { createPassword } from "../common/password";
 
 type CollectionName = "alphabets" | "users";
 

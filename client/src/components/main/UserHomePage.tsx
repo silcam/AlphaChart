@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Loading from "./Loading";
-import { Alphabet } from "../alphabet/Alphabet";
+import Loading from "../common/Loading";
+import { Alphabet } from "../../models/Alphabet";
 import Axios from "axios";
-import AlphabetsList from "./AlphabetsList";
-import { LogOutFunc } from "./useCurrentUser";
-import { CurrentUser } from "../alphabet/User";
-import LnkBtn from "./LnkBtn";
+import AlphabetsList from "../alphabets/AlphabetsList";
+import { LogOutFunc } from "../users/useCurrentUser";
+import { CurrentUser } from "../../models/User";
+import LnkBtn from "../common/LnkBtn";
 
 interface IProps {
   logOut: LogOutFunc;

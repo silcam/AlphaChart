@@ -1,15 +1,12 @@
 import express from "express";
-import Data from "./Data";
-import {
-  DraftAlphabet,
-  AlphabetChart
-} from "../../client/src/alphabet/Alphabet";
+import Data from "./storage/Data";
+import { DraftAlphabet, AlphabetChart } from "../../client/src/models/Alphabet";
 import bodyParser from "body-parser";
 import fileUpload, { UploadedFile } from "express-fileupload";
-import Images from "./Images";
-import usersController from "./usersController";
+import Images from "./storage/Images";
+import usersController from "./controllers/usersController";
 import cookieSession from "cookie-session";
-import secrets from "./secrets";
+import secrets from "./common/secrets";
 
 const app = express();
 

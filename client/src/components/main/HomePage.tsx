@@ -1,8 +1,12 @@
 import React from "react";
-import { CurrentUser, currentUser } from "../alphabet/User";
+import { CurrentUser, currentUser } from "../../models/User";
 import UserHomePage from "./UserHomePage";
 import PublicHomePage from "./PublicHomePage";
-import { LogInFunc, LogOutFunc, CreateAccountFunc } from "./useCurrentUser";
+import {
+  LogInFunc,
+  LogOutFunc,
+  CreateAccountFunc
+} from "../users/useCurrentUser";
 
 interface IProps {
   currentUser: CurrentUser | null;

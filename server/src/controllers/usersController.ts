@@ -4,9 +4,9 @@ import {
   validationErrors,
   currentUser,
   LoginAttempt
-} from "../../client/src/alphabet/User";
-import Data from "./Data";
-import { checkPassword } from "./password";
+} from "../../../client/src/models/User";
+import Data from "../storage/Data";
+import { checkPassword } from "../common/password";
 
 export default function usersController(app: Express) {
   app.post("/api/users", async (req, res) => {

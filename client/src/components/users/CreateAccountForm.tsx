@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CreateAccountFunc } from "./useCurrentUser";
-import { NewUser, validationErrors } from "../alphabet/User";
+import { NewUser, validationErrors } from "../../models/User";
 
 interface IProps {
   createAccount: CreateAccountFunc;

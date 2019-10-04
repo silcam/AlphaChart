@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import htmlToImage, { OptionsType } from "html-to-image";
 import { saveAs } from "file-saver";
-import OptionButton from "./OptionButton";
+import OptionButton from "../common/OptionButton";
 import { ChartDimens } from "./ViewChartPage";
 
 const CHART_ID = "chart";

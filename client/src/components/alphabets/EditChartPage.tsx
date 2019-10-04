@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ChartEditor from "./ChartEditor";
-import { Alphabet, AlphabetChart } from "../alphabet/Alphabet";
+import { Alphabet, AlphabetChart } from "../../models/Alphabet";
 import Axios from "axios";
-import Loading from "./Loading";
+import Loading from "../common/Loading";
 import { History } from "history";
 
 interface IProps {

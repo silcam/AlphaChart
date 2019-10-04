@@ -1,6 +1,6 @@
 import React from "react";
 import LetterEntry from "./LetterEntry";
-import { blankAlphabet, DraftAlphabet } from "../alphabet/Alphabet";
+import { blankAlphabet, DraftAlphabet } from "../../models/Alphabet";
 import Axios from "axios";
 import { History } from "history";
 

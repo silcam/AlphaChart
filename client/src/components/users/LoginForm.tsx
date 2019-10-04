@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LoginAttempt } from "../alphabet/User";
+import { LoginAttempt } from "../../models/User";
 import { LogInFunc } from "./useCurrentUser";
 
 interface IProps {

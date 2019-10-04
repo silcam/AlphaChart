@@ -1,4 +1,4 @@
-import { CurrentUser, LoginAttempt, NewUser } from "../alphabet/User";
+import { CurrentUser, LoginAttempt, NewUser } from "../../models/User";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 

@@ -1,6 +1,6 @@
 import React from "react";
-import { LogInFunc, CreateAccountFunc } from "./useCurrentUser";
-import CreateAccountOrLogIn from "./CreateAccountOrLogIn";
+import { LogInFunc, CreateAccountFunc } from "../users/useCurrentUser";
+import CreateAccountOrLogIn from "../users/CreateAccountOrLogIn";
 
 interface IProps {
   logIn: LogInFunc;

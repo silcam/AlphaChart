@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { AlphabetChart, Alphabet, AlphabetLetter } from "../alphabet/Alphabet";
+import { AlphabetChart, Alphabet, AlphabetLetter } from "../../models/Alphabet";
 import { Link } from "react-router-dom";
-import NumberPicker from "./NumberPicker";
+import NumberPicker from "../common/NumberPicker";
 import update from "immutability-helper";
 import Chart from "./Chart";
 

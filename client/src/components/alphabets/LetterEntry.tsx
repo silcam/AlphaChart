@@ -3,10 +3,10 @@ import {
   blankAlphabetLetter,
   DraftAlphabet,
   validDraftAlphabet
-} from "../alphabet/Alphabet";
+} from "../../models/Alphabet";
 import { History } from "history";
-import NumberPicker from "./NumberPicker";
-import { arrayResize } from "../util";
+import NumberPicker from "../common/NumberPicker";
+import { arrayResize } from "../../util";
 import update from "immutability-helper";
 
 interface IProps {

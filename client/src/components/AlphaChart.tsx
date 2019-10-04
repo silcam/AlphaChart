@@ -1,9 +1,9 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import HomePage from "./HomePage";
-import AlphabetsRoute from "./AlphabetsRoute";
-import UsersRoute from "./UsersRoute";
-import useCurrentUser from "./useCurrentUser";
+import HomePage from "./main/HomePage";
+import AlphabetsRoute from "./alphabets/AlphabetsRoute";
+import UsersRoute from "./users/UsersRoute";
+import useCurrentUser from "./users/useCurrentUser";
 
 export default function AlphaChart() {
   const [currentUser, logIn, logOut, createAccount] = useCurrentUser();
