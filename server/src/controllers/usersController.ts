@@ -2,11 +2,12 @@ import { Express, Response } from "express";
 import {
   NewUser,
   validationErrors,
-  currentUser,
+  toCurrentUser,
   LoginAttempt
 } from "../../../client/src/models/User";
 import UserData from "../storage/UserData";
 import { checkPassword } from "../common/password";
+import currentUser from "./currentUser";
 
 export default function usersController(app: Express) {
   app.post("/api/users", async (req, res) => {
@@ -16,7 +17,7 @@ export default function usersController(app: Express) {
       if (errors) res.status(422).json({ error: errors.join(" ") });
       else {
         const user = await UserData.createUser(newUser);
-        res.json(currentUser(user));
+        res.json(toCurrentUser(user));
       }
     } catch (err) {
       console.error(JSON.stringify(err));
@@ -32,17 +33,13 @@ export default function usersController(app: Express) {
 
   app.get("/api/users/current", async (req, res) => {
     try {
-      const currentUserEmail = req.session!.email;
-      if (currentUserEmail) {
-        const user = await UserData.user(currentUserEmail);
-        if (user) {
-          res.json(currentUser(user));
-          return;
-        } else {
-          req.session!.email = undefined;
-        }
+      const user = await currentUser(req);
+      if (user) {
+        res.json(toCurrentUser(user));
+      } else {
+        req.session!.email = undefined;
+        res.json(null);
       }
-      res.json(null);
     } catch (err) {
       fiveHundred(res);
     }
@@ -61,7 +58,7 @@ export default function usersController(app: Express) {
         )
       ) {
         req.session!.email = user.email;
-        res.json(currentUser(user));
+        res.json(toCurrentUser(user));
       } else {
         res.status(401).json({ error: "Invalid login" });
       }

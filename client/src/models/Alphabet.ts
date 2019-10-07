@@ -18,6 +18,7 @@ export interface DraftAlphabet {
 export interface Alphabet {
   _id: string;
   name: string;
+  user: string;
   charts: AlphabetChart[];
 }
 

@@ -23,13 +23,13 @@ export interface LoginAttempt {
   password: string;
 }
 
-export function publicUser(user: StoredUser): User {
+export function toPublicUser(user: StoredUser): User {
   return {
     name: user.name
   };
 }
 
-export function currentUser(user: StoredUser): CurrentUser {
+export function toCurrentUser(user: StoredUser): CurrentUser {
   return {
     name: user.name,
     email: user.email

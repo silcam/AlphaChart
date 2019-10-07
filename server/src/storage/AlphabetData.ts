@@ -7,6 +7,7 @@ import {
 import { Cursor } from "mongodb";
 import { ObjectID } from "bson";
 import update from "immutability-helper";
+import { StoredUser } from "../../../client/src/models/User";
 
 async function alphabets(): Promise<Alphabet[]> {
   console.log("[Query] READ Alphabets");
@@ -21,10 +22,14 @@ async function alphabet(id: string): Promise<Alphabet | null> {
   return collection.findOne({ _id: new ObjectID(id) });
 }
 
-async function createAlphabet(draftAlphabet: DraftAlphabet): Promise<Alphabet> {
+async function createAlphabet(
+  draftAlphabet: DraftAlphabet,
+  user: StoredUser
+): Promise<Alphabet> {
   console.log("[Query] CREATE Alphabet");
   const alphabet: Omit<Alphabet, "_id"> = {
     name: draftAlphabet.name,
+    user: user.email,
     charts: [
       update(draftAlphabet.chart, { timestamp: { $set: Date.now().valueOf() } })
     ]
