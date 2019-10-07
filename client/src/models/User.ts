@@ -41,7 +41,7 @@ export function validationErrors(user: NewUser, passwordCheck?: string) {
   if (user.email.length < 5) errors.push("Email is invalid.");
   if (user.password.length < 10)
     errors.push("Please choose a password with at least 10 characters.");
-  if (passwordCheck && passwordCheck !== user.password)
+  if (passwordCheck !== undefined && passwordCheck !== user.password)
     errors.push("Passwords do not match.");
   return errors.length > 0 ? errors : null;
 }

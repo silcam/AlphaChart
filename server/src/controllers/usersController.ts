@@ -5,7 +5,7 @@ import {
   currentUser,
   LoginAttempt
 } from "../../../client/src/models/User";
-import Data from "../storage/Data";
+import UserData from "../storage/UserData";
 import { checkPassword } from "../common/password";
 
 export default function usersController(app: Express) {
@@ -15,7 +15,7 @@ export default function usersController(app: Express) {
       const errors = validationErrors(newUser);
       if (errors) res.status(422).json({ error: errors.join(" ") });
       else {
-        const user = await Data.createUser(newUser);
+        const user = await UserData.createUser(newUser);
         res.json(currentUser(user));
       }
     } catch (err) {
@@ -34,7 +34,7 @@ export default function usersController(app: Express) {
     try {
       const currentUserEmail = req.session!.email;
       if (currentUserEmail) {
-        const user = await Data.user(currentUserEmail);
+        const user = await UserData.user(currentUserEmail);
         if (user) {
           res.json(currentUser(user));
           return;
@@ -51,7 +51,7 @@ export default function usersController(app: Express) {
   app.post("/api/users/login", async (req, res) => {
     try {
       const loginAttempt: LoginAttempt = req.body;
-      const user = await Data.user(loginAttempt.email);
+      const user = await UserData.user(loginAttempt.email);
       if (
         user &&
         checkPassword(
