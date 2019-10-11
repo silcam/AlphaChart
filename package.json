@@ -15,6 +15,7 @@
     "express": "4.13.3",
     "express-fileupload": "^1.1.5",
     "immutability-helper": "^3.0.1",
+    "memfs": "^2.15.5",
     "mongodb": "^3.3.0-beta2",
     "node-cleanup": "^2.1.2",
     "typescript": "^3.5.3"

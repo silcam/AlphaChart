@@ -2,7 +2,8 @@ import { MongoClient, Db } from "mongodb";
 import nodeCleanup from "node-cleanup";
 import fixtures from "./fixtures";
 
-const URL = "mongodb://localhost:27017";
+const PORT = 27017;
+const URL = `mongodb://localhost:${PORT}`;
 let CLIENT: MongoClient | null = null;
 let DB: Db | null = null;
 
@@ -12,7 +13,7 @@ async function db(): Promise<Db> {
       process.env.NODE_ENV === "test"
         ? `acTest-${Date.now().valueOf()}-${Math.floor(Math.random() * 1000)}`
         : "alphachart";
-    CLIENT = await MongoClient.connect(URL);
+    CLIENT = await MongoClient.connect(URL, { useNewUrlParser: true });
     DB = await CLIENT.db(dbName);
   }
   return DB;

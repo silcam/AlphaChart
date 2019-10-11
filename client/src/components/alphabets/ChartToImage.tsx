@@ -174,6 +174,6 @@ async function makeImage(opts?: OptionsType) {
     const dataUrl = await htmlToImage.toPng(chartNode, opts);
     saveAs(dataUrl, "chart.png");
   } catch (err) {
-    console.error(err);
+    log.error(err);
   }
 }

@@ -7,7 +7,8 @@ import {
 } from "../../../client/src/models/User";
 import UserData from "../storage/UserData";
 import { checkPassword } from "../common/password";
-import currentUser from "./currentUser";
+import { currentUser } from "./controllerHelper";
+import log from "../common/log";
 
 export default function usersController(app: Express) {
   app.post("/api/users", async (req, res) => {
@@ -20,7 +21,7 @@ export default function usersController(app: Express) {
         res.json(toCurrentUser(user));
       }
     } catch (err) {
-      console.error(JSON.stringify(err));
+      log.error(JSON.stringify(err));
       if (err.errmsg.includes("duplicate key")) {
         res
           .status(422)

@@ -1,15 +1,16 @@
 import { StoredUser, NewUser } from "../../../client/src/models/User";
 import { createPassword } from "../common/password";
 import Data from "./Data";
+import log from "../common/log";
 
 async function user(email: string): Promise<StoredUser | null> {
-  console.log(`[Query] READ User ${email}`);
+  log.log(`[Query] READ User ${email}`);
   const collection = await userCollection();
   return collection.findOne({ email });
 }
 
 async function createUser(user: NewUser) {
-  console.log("[Query] CREATE User");
+  log.log("[Query] CREATE User");
   const passwordParams = createPassword(user.password);
   if (!user.name) user.name = user.email.replace(/@.*/, ""); // This should be in User.ts
   const storedUser: StoredUser = {

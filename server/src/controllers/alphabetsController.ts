@@ -7,7 +7,7 @@ import {
 import { UploadedFile } from "express-fileupload";
 import fileUpload = require("express-fileupload");
 import Images from "../storage/Images";
-import currentUser from "./currentUser";
+import { verifyLogin } from "./controllerHelper";
 
 export default function alphabetsController(app: Express) {
   app.get("/api/alphabets", async (req, res) => {
@@ -22,7 +22,7 @@ export default function alphabetsController(app: Express) {
   });
 
   app.post("/api/alphabets", async (req, res) => {
-    const user = await currentUser(req);
+    const user = await verifyLogin(req);
     if (user) {
       const draftAlphabet: DraftAlphabet = req.body;
       const alphabet = await AlphabetData.createAlphabet(draftAlphabet, user);
@@ -33,14 +33,37 @@ export default function alphabetsController(app: Express) {
   });
 
   app.post("/api/alphabets/:id/charts", async (req, res) => {
-    const newChart: AlphabetChart = req.body;
-    const newAlphabet = await AlphabetData.createChart(req.params.id, newChart);
-    res.json(newAlphabet);
+    const newChart: AlphabetChart = req.body; // VALIDATE
+    const alphabet = await AlphabetData.alphabet(req.params.id);
+    if (!alphabet) {
+      res.status(404).send();
+    } else {
+      const user = await verifyLogin(req, alphabet.user);
+      if (user) {
+        const newAlphabet = await AlphabetData.createChart(
+          req.params.id,
+          newChart
+        );
+        res.json(newAlphabet);
+      } else {
+        res.status(401).send();
+      }
+    }
   });
 
   app.post("/api/alphabets/:id/images", fileUpload(), async (req, res) => {
     const imageFile = req.files!.image as UploadedFile;
-    const imagePath = await Images.save(req.params.id, imageFile);
-    res.json({ path: imagePath });
+    const alphabet = await AlphabetData.alphabet(req.params.id);
+    if (!alphabet) {
+      res.status(404).send();
+    } else {
+      const user = await verifyLogin(req, alphabet.user);
+      if (user) {
+        const imagePath = await Images.save(req.params.id, imageFile);
+        res.json({ path: imagePath });
+      } else {
+        res.status(401).send();
+      }
+    }
   });
 }

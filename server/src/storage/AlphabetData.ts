@@ -8,25 +8,30 @@ import { Cursor } from "mongodb";
 import { ObjectID } from "bson";
 import update from "immutability-helper";
 import { StoredUser } from "../../../client/src/models/User";
+import log from "../common/log";
 
 async function alphabets(): Promise<Alphabet[]> {
-  console.log("[Query] READ Alphabets");
+  log.log("[Query] READ Alphabets");
   const collection = await alphabetCollection();
   const abCursor: Cursor<Alphabet> = collection.find({});
   return abCursor.map(ab => ({ ...ab, charts: [] })).toArray();
 }
 
 async function alphabet(id: string): Promise<Alphabet | null> {
-  console.log(`[Query] READ Alphabet ${id}`);
+  log.log(`[Query] READ Alphabet ${id}`);
   const collection = await alphabetCollection();
-  return collection.findOne({ _id: new ObjectID(id) });
+  try {
+    return collection.findOne({ _id: new ObjectID(id) });
+  } catch (err) {
+    return null;
+  }
 }
 
 async function createAlphabet(
   draftAlphabet: DraftAlphabet,
   user: StoredUser
 ): Promise<Alphabet> {
-  console.log("[Query] CREATE Alphabet");
+  log.log("[Query] CREATE Alphabet");
   const alphabet: Omit<Alphabet, "_id"> = {
     name: draftAlphabet.name,
     user: user.email,
@@ -43,7 +48,7 @@ async function createChart(
   abId: string,
   chart: AlphabetChart
 ): Promise<Alphabet> {
-  console.log(`[Query] Create Chart for Alphabet ${abId}`);
+  log.log(`[Query] Create Chart for Alphabet ${abId}`);
   const finalChart = update(chart, {
     timestamp: { $set: Date.now().valueOf() }
   });

@@ -7,6 +7,12 @@ const users = [
     email: "titus@yahoo.com",
     _id: "titus@yahoo.com",
     password: "minecraft"
+  },
+  {
+    name: "Lucy",
+    email: "lucy@me.com",
+    _id: "lucy@me.com",
+    password: "princess"
   }
 ];
 
