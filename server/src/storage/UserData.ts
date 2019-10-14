@@ -6,7 +6,7 @@ import log from "../common/log";
 async function user(email: string): Promise<StoredUser | null> {
   log.log(`[Query] READ User ${email}`);
   const collection = await userCollection();
-  return collection.findOne({ email });
+  return collection.findOne({ _id: email });
 }
 
 async function createUser(user: NewUser) {

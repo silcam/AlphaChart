@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import NumberPicker from "../common/NumberPicker";
 import update from "immutability-helper";
 import Chart from "./Chart";
+import AddLetter from "./AddLetter";
 
 interface IProps {
   alphabet: Alphabet;
@@ -40,6 +41,7 @@ export default function ChartEditor(props: IProps) {
           Done
         </button>
       </div>
+      <AddLetter chart={chart} setChart={setChart} />
       <Chart
         alphabet={props.alphabet}
         chart={chart}

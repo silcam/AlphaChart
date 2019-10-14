@@ -214,13 +214,3 @@ div.NumberPicker button {
   line-height: 1;
   margin: 2px;
 }
-
-div.LetterEntry td {
-  border: none;
-  padding-right: 16px;
-}
-
-div.LetterEntry td input {
-  text-align: center;
-  font-size: 24px;
-}
