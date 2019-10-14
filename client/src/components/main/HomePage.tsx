@@ -1,5 +1,5 @@
 import React from "react";
-import { CurrentUser, toCurrentUser } from "../../models/User";
+import { CurrentUser } from "../../models/User";
 import UserHomePage from "./UserHomePage";
 import PublicHomePage from "./PublicHomePage";
 import {

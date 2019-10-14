@@ -56,7 +56,6 @@ export default function LetterEntry(props: IProps) {
 
   return (
     <div
-      id="page-root"
       className="LetterEntry"
       style={{
         display: "flex",

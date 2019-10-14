@@ -23,7 +23,7 @@ export default function ViewChartPage(props: IProps) {
     );
   }, [props.id]);
   return (
-    <div id="page-root">
+    <div>
       <ViewChartHeader
         id={props.id}
         chartLoaded={!!alphabet}

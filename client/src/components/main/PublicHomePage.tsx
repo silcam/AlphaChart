@@ -9,7 +9,7 @@ interface IProps {
 
 export default function PublicHomePage(props: IProps) {
   return (
-    <div id="page-root" className="flex-row compPublicHomePage">
+    <div className="flex-row compPublicHomePage">
       <div>
         <CreateAccountOrLogIn
           logIn={props.logIn}

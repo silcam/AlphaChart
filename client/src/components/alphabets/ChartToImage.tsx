@@ -62,6 +62,7 @@ function OptionsMenu(props: IOptionsMenuProps) {
     return () => {
       props.setChartDimens(null);
     };
+    // eslint-disable-next-line
   }, []);
   const [bgColor, setBGColor] = useState("ffffff");
   const [enableBGColor, setEnableBGColor] = useState(false);
@@ -170,10 +171,10 @@ function validColor(color: string) {
 async function makeImage(opts?: OptionsType) {
   try {
     const chartNode = document.getElementById(CHART_ID);
-    if (!chartNode) throw "No chart found in makeImage()!";
+    if (!chartNode) throw new Error("No chart found in makeImage()!");
     const dataUrl = await htmlToImage.toPng(chartNode, opts);
     saveAs(dataUrl, "chart.png");
   } catch (err) {
-    log.error(err);
+    console.error(err);
   }
 }

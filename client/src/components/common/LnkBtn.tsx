@@ -7,6 +7,7 @@ interface IProps {
 
 export default function LnkBtn(props: IProps) {
   return (
+    // eslint-disable-next-line
     <a
       href="#"
       onClick={event => {

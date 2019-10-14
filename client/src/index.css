@@ -46,6 +46,7 @@ button {
   padding: 8px;
   color: white;
   cursor: pointer;
+  align-self: flex-start;
 }
 
 button:disabled {
@@ -65,6 +66,20 @@ button:active {
 label {
   font-weight: 200;
   margin-right: 8px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul.list-row > li {
+  display: inline-block;
+  margin: 0 4px;
+}
+
+li {
+  list-style: none;
 }
 
 /******** 

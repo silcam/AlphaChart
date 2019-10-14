@@ -6,7 +6,6 @@ import Axios from "axios";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { LogOutFunc } from "../users/useCurrentUser";
 import { CurrentUser } from "../../models/User";
-import LnkBtn from "../common/LnkBtn";
 
 interface IProps {
   logOut: LogOutFunc;
@@ -23,23 +22,15 @@ export default function UserHomePage(props: IProps) {
   }, []);
 
   return (
-    <div id="page-root" className="HomePage">
+    <div className="HomePage">
       <div>
         <h2>Alphabets</h2>
-        <div className="flex-row">
-          <p>Hi, {props.currentUser.name}</p>
-          <LnkBtn
-            onClick={() => props.logOut(() => console.error("Logout error"))}
-            text="Log out"
-          />
-        </div>
-        <ul>
-          {alphabets === null ? (
-            <Loading />
-          ) : (
-            <AlphabetsList alphabets={alphabets} />
-          )}
-        </ul>
+
+        {alphabets === null ? (
+          <Loading />
+        ) : (
+          <AlphabetsList alphabets={alphabets} />
+        )}
       </div>
       <div>
         <Link to={`/alphabets/new`}>Create new...</Link>

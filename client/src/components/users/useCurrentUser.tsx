@@ -33,7 +33,7 @@ export default function useCurrentUser(): [
       const response = await Axios.post("/api/users/login", loginAttempt);
       setCurrentUser(response.data);
     } catch (err) {
-      if (err.response && err.response.status == 401) handleError("Invalid");
+      if (err.response && err.response.status === 401) handleError("Invalid");
       else handleError("Unknown");
     }
   };
@@ -55,7 +55,7 @@ export default function useCurrentUser(): [
       const response = await Axios.post("/api/users", newUser);
       setCurrentUser(response.data);
     } catch (err) {
-      if (err.response && err.response.status == 422)
+      if (err.response && err.response.status === 422)
         handleError(err.response.data.error);
       else handleError("Unknown error");
     }
