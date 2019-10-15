@@ -12,73 +12,77 @@ interface IProps {
 export default function Chart(props: IProps) {
   const chart = props.chart;
   const alphabetTable = clump(chart.letters, Math.max(chart.cols, 1));
+  const cellWidth = 100 / chart.cols;
 
   return (
     <div id="chart">
       <h2>{props.alphabet.name}</h2>
       <div>
-        <table className="alphatable">
-          <tbody>
-            {alphabetTable.map((row, rowIndex) => (
-              <React.Fragment key={rowIndex}>
-                <tr>
-                  {row.map((abletter, letterIndex) => (
-                    <td className="alphacell alphacell-upper" key={letterIndex}>
-                      <div className="letter">
-                        <div>{abletter.forms[0]}</div>
-                        <div>{abletter.forms[1]}</div>
-                      </div>
-                    </td>
-                  ))}
-                </tr>
-                <tr>
-                  {row.map((abletter, letterIndex) => (
-                    <td className="alphacell alphacell-lower" key={letterIndex}>
-                      <div>
-                        {props.edit ? (
-                          <ImageInput
-                            alphabet={props.alphabet}
-                            letter={abletter}
-                            setImagePath={imagePath =>
-                              props.updateLetter(
-                                flatIndex(chart.cols, rowIndex, letterIndex),
-                                { imagePath }
-                              )
-                            }
-                          />
-                        ) : (
-                          <img
-                            src={abletter.imagePath}
-                            alt={abletter.exampleWord}
-                          />
-                        )}
-                      </div>
-                      <div style={{ marginTop: "8px" }}>
-                        {props.edit ? (
-                          <input
-                            type="text"
-                            placeholder="Example Word"
-                            value={abletter.exampleWord}
-                            onChange={e =>
-                              props.updateLetter(
-                                flatIndex(chart.cols, rowIndex, letterIndex),
-                                { exampleWord: e.target.value }
-                              )
-                            }
-                          />
-                        ) : (
-                          <div className="exampleWord">
-                            {abletter.exampleWord}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                  ))}
-                </tr>
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
+        <div className="alphatable">
+          {alphabetTable.map((row, rowIndex) => (
+            <div className="alpharow" key={rowIndex}>
+              {row.map((abletter, letterIndex) => (
+                <div
+                  className="alphacell"
+                  key={letterIndex}
+                  style={{ width: `${cellWidth}%` }}
+                >
+                  <div className="letter">
+                    <div>{abletter.forms[0]}</div>
+                    <div>{abletter.forms[1]}</div>
+                  </div>
+
+                  <div className="flex-space" />
+
+                  <div>
+                    {props.edit ? (
+                      <ImageInput
+                        alphabet={props.alphabet}
+                        letter={abletter}
+                        setImagePath={imagePath =>
+                          props.updateLetter(
+                            flatIndex(chart.cols, rowIndex, letterIndex),
+                            { imagePath }
+                          )
+                        }
+                      />
+                    ) : (
+                      <img
+                        src={abletter.imagePath}
+                        alt={abletter.exampleWord}
+                      />
+                    )}
+                  </div>
+                  <div style={{ marginTop: "8px" }}>
+                    {props.edit ? (
+                      <input
+                        type="text"
+                        placeholder="Example Word"
+                        value={abletter.exampleWord}
+                        onChange={e =>
+                          props.updateLetter(
+                            flatIndex(chart.cols, rowIndex, letterIndex),
+                            { exampleWord: e.target.value }
+                          )
+                        }
+                      />
+                    ) : (
+                      <div className="exampleWord">{abletter.exampleWord}</div>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {row.length < chart.cols && (
+                <div
+                  className="alphacell"
+                  style={{
+                    width: `${(chart.cols - row.length) * cellWidth}%`
+                  }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

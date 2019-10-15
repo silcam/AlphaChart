@@ -23,7 +23,7 @@ export default function ChartEditor(props: IProps) {
   const done = () => props.save(chart);
 
   return (
-    <div>
+    <div style={{ paddingBottom: "30px" }}>
       <div
         style={{
           display: "flex",

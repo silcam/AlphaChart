@@ -121,55 +121,63 @@ input:disabled {
   color: #c9302c;
 }
 
+.flex-space {
+  flex-grow: 1;
+}
+
 /**********
     ALPHA TABLE
 **********/
 
-table.alphatable {
+div.alphatable {
   width: 100%;
-  table-layout: fixed;
 }
 
-td.alphacell {
+div.alpharow {
+  flex-direction: row;
+  align-items: stretch;
+  border-top: 1px #ddd solid;
+}
+
+div.alpharow:last-child {
+  border-bottom: 1px #ddd solid;
+}
+
+div.alphacell {
   padding: 8px;
-  vertical-align: top;
+  box-sizing: border-box;
+  border-left: 1px #ddd solid;
 }
 
-td.alphacell-upper {
-  border-bottom: none;
-  padding-bottom: 0;
+div.alphacell:last-child {
+  border-right: 1px #ddd solid;
 }
 
-td.alphacell-lower {
-  border-top: none;
-  padding-top: 0;
-  vertical-align: bottom;
-}
-
-td.alphacell div.letter {
+div.alphacell div.letter {
   font-size: 3em;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
 }
 
-td.alphacell img {
+div.alphacell img {
   width: 80%;
   margin: auto;
   display: block;
 }
 
-td.alphacell input[type=text] {
+div.alphacell input[type=text] {
   text-align: center;
   width: 80%;
   font-size: 1em;
+  align-self: center;
 }
 
-td.alphacell input[type=text]:focus::placeholder {
+div.alphacell input[type=text]:focus::placeholder {
   color: #00000000;
 }
 
-td.alphacell .exampleWord {
+div.alphacell .exampleWord {
   text-align: center;
   font-size: 1em;
 }

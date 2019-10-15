@@ -23,7 +23,7 @@ export default function ViewChartPage(props: IProps) {
     );
   }, [props.id]);
   return (
-    <div>
+    <div style={{ paddingBottom: "30px" }}>
       <ViewChartHeader
         id={props.id}
         chartLoaded={!!alphabet}
