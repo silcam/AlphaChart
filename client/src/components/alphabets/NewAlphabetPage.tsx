@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { blankAlphabet, DraftAlphabet } from "../../models/Alphabet";
 import Axios from "axios";
 import { History } from "history";
-import KeyHandler from "../common/KeyHandler";
+import keyHandler from "../common/KeyHandler";
 
 interface IProps {
   history: History;
@@ -25,7 +25,7 @@ export default function NewAlphabetPage(props: IProps) {
   };
 
   return (
-    <KeyHandler onEnter={save}>
+    <div>
       <h2>New Alphabet</h2>
       <label>Language:</label>
       <div style={{ margin: "20px 0" }}>
@@ -33,11 +33,13 @@ export default function NewAlphabetPage(props: IProps) {
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
+          onKeyPress={keyHandler({ Enter: save })}
+          autoFocus
         />
       </div>
       <button onClick={() => save()} disabled={!formIsValid}>
         Save
       </button>
-    </KeyHandler>
+    </div>
   );
 }

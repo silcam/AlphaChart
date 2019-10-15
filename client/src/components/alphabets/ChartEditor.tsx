@@ -41,7 +41,11 @@ export default function ChartEditor(props: IProps) {
           Done
         </button>
       </div>
-      <AddLetter chart={chart} setChart={setChart} />
+      <AddLetter
+        chart={chart}
+        setChart={setChart}
+        autoFocus={chart.letters.length === 0}
+      />
       <Chart
         alphabet={props.alphabet}
         chart={chart}

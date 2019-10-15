@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { AlphabetChart, AlphabetLetter } from "../../models/Alphabet";
 import update from "immutability-helper";
-import KeyHandler from "../common/KeyHandler";
+import keyHandler from "../common/KeyHandler";
 
 interface IProps {
   chart: AlphabetChart;
   setChart: (chart: AlphabetChart) => void;
+  autoFocus?: boolean;
 }
 
 export default function AddLetter(props: IProps) {
@@ -30,16 +31,16 @@ export default function AddLetter(props: IProps) {
   };
 
   return (
-    <KeyHandler onEnter={addLetter} onTab={addLetter}>
-      <div className="flex-row" style={{ justifyContent: "flex-start" }}>
-        <label>Add Letters:</label>
-        <input
-          type="text"
-          value={text}
-          onChange={e => onInput(e.target.value)}
-        />
-      </div>
-    </KeyHandler>
+    <div className="flex-row" style={{ justifyContent: "flex-start" }}>
+      <label>Add Letters:</label>
+      <input
+        type="text"
+        value={text}
+        onChange={e => onInput(e.target.value)}
+        onKeyPress={keyHandler({ Enter: addLetter })}
+        autoFocus={props.autoFocus}
+      />
+    </div>
   );
 }
 

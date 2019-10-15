@@ -1,26 +1,10 @@
-import React from "react";
+type Listeners = { [key: string]: () => void };
 
-interface IProps {
-  onEnter?: () => void;
-  onTab?: () => void;
-  children: JSX.Element | JSX.Element[];
-}
-
-export default function KeyHandler(props: IProps) {
-  return (
-    <div
-      onKeyPress={e => {
-        switch (e.key) {
-          case "Enter":
-            props.onEnter && props.onEnter();
-            break;
-          case "Tab":
-            props.onTab && props.onTab();
-            break;
-        }
-      }}
-    >
-      {props.children}
-    </div>
-  );
+export default function keyHandler(listeners: Listeners) {
+  return (e: React.KeyboardEvent<any>) => {
+    // console.log(`Keypress: ${e.key}`);
+    if (listeners[e.key] !== undefined) {
+      listeners[e.key]();
+    }
+  };
 }
