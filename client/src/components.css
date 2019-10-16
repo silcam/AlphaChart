@@ -34,6 +34,27 @@ div.compChartToImageOptionsMenu .buttonRow {
     justify-content: space-between;
 }
 
+/* NumberPicker */
+
+div.NumberPicker {
+    display: inline-block;
+}
+  
+div.NumberPicker input {
+    font-size: 16px;
+    text-align: end;
+}
+  
+div.NumberPicker button {
+    width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    border-radius: 100%;
+    padding: 0 0 2px;
+    line-height: 1;
+    margin: 2px;
+}
+
 /* OptionButton */
 
 div.compOptionButton {
