@@ -75,7 +75,16 @@ export default function Chart(props: IProps) {
                         />
                       ) : (
                         <div className="exampleWord">
-                          {abletter.exampleWord}
+                          {Array.from(abletter.exampleWord).map(
+                            (char, index) => (
+                              <span
+                                key={index}
+                                data-key-letter={abletter.forms.includes(char)}
+                              >
+                                {char}
+                              </span>
+                            )
+                          )}
                         </div>
                       )}
                     </div>

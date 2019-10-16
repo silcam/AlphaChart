@@ -62,6 +62,11 @@ div.alphacell input[type="text"]:focus::placeholder {
 div.alphacell .exampleWord {
   text-align: center;
   font-size: 1em;
+  display: block;
+}
+
+div.alphacell .exampleWord span[data-key-letter="true"] {
+  font-weight: bold;
 }
 
 div.edit-alpha-image[data-image-set="true"] p.drop-zone {
