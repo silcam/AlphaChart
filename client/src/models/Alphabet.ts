@@ -45,7 +45,7 @@ export function blankAlphabet(): DraftAlphabet {
 
 export function blankAlphabetLetter(): AlphabetLetter {
   return {
-    forms: ["", ""],
+    forms: [],
     exampleWord: "",
     imagePath: ""
   };

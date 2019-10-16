@@ -24,16 +24,29 @@ export default function ImageInput(props: IProps) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+  const dropZoneLabel = props.letter.imagePath ? "Change image" : "Add Image";
+
   return (
-    <div {...getRootProps()}>
-      <input {...getInputProps()} />
-      {isDragActive ? (
-        <p className="drop-zone drop-zone-active">Drop here</p>
-      ) : !!props.letter.imagePath ? (
-        <img src={props.letter.imagePath} alt={props.letter.exampleWord} />
-      ) : (
-        <p className="drop-zone">Add image</p>
-      )}
+    <div onClick={e => e.stopPropagation()}>
+      <div {...getRootProps()} className="drop-zone-root">
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <p className="drop-zone drop-zone-active">Drop here</p>
+        ) : (
+          <div
+            className="edit-alpha-image"
+            data-image-set={!!props.letter.imagePath}
+          >
+            {!!props.letter.imagePath && (
+              <img
+                src={props.letter.imagePath}
+                alt={props.letter.exampleWord}
+              />
+            )}
+            <p className="drop-zone">{dropZoneLabel}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

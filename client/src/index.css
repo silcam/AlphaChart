@@ -63,6 +63,18 @@ button:active {
   background-color: #1892efdd;
 }
 
+button.red {
+  background-color: #c9302c;
+}
+
+button.red:disabled {
+  background-color: #c9302c99;
+}
+
+button.red:active {
+  background-color: #c9302cdd;
+}
+
 label {
   font-weight: 200;
   margin-right: 8px;
@@ -153,6 +165,20 @@ div.alphacell:last-child {
   border-right: 1px #ddd solid;
 }
 
+div.edit-alphacell:hover,
+div.edit-alphacell[data-selected="true"] {
+  -webkit-box-shadow: inset 0px 0px 8px 0px rgba(24,146,239,1);
+  -moz-box-shadow: inset 0px 0px 8px 0px rgba(24,146,239,1);
+  box-shadow: inset 0px 0px 8px 0px rgba(24,146,239,1);
+  cursor: pointer;
+}
+
+
+div.edit-alphacell:hover div.letter,
+div.edit-alphacell[data-selected="true"] div.letter {
+  color: #1892ef
+}
+
 div.alphacell div.letter {
   font-size: 3em;
   display: flex;
@@ -180,6 +206,22 @@ div.alphacell input[type=text]:focus::placeholder {
 div.alphacell .exampleWord {
   text-align: center;
   font-size: 1em;
+}
+
+div.edit-alpha-image[data-image-set="true"] p.drop-zone {
+  display: none;
+} 
+
+div.edit-alpha-image[data-image-set="true"]:hover p.drop-zone {
+  display: block;
+}
+
+div.edit-alpha-image[data-image-set="true"]:hover img {
+  display: none;
+}
+
+div.drop-zone-root:focus {
+  outline: none;
 }
 
 p.drop-zone {

@@ -7,6 +7,8 @@ interface IProps {
   chart: AlphabetChart;
   edit?: boolean;
   updateLetter: (index: number, letter: Partial<AlphabetLetter>) => void;
+  selectedIndex?: number;
+  setSelectedIndex?: (index: number) => void;
 }
 
 export default function Chart(props: IProps) {
@@ -21,57 +23,65 @@ export default function Chart(props: IProps) {
         <div className="alphatable">
           {alphabetTable.map((row, rowIndex) => (
             <div className="alpharow" key={rowIndex}>
-              {row.map((abletter, letterIndex) => (
-                <div
-                  className="alphacell"
-                  key={letterIndex}
-                  style={{ width: `${cellWidth}%` }}
-                >
-                  <div className="letter">
-                    <div>{abletter.forms[0]}</div>
-                    <div>{abletter.forms[1]}</div>
-                  </div>
+              {row.map((abletter, letterIndex) => {
+                const index = flatIndex(chart.cols, rowIndex, letterIndex);
+                return (
+                  <div
+                    className={`alphacell ${
+                      props.edit ? "edit-alphacell" : ""
+                    }`}
+                    key={letterIndex}
+                    style={{ width: `${cellWidth}%` }}
+                    data-selected={index === props.selectedIndex}
+                    onClick={() =>
+                      props.setSelectedIndex &&
+                      props.setSelectedIndex(
+                        props.selectedIndex === index ? -1 : index
+                      )
+                    }
+                  >
+                    <div className="letter">{abletter.forms.join("")}</div>
 
-                  <div className="flex-space" />
+                    <div className="flex-space" />
 
-                  <div>
-                    {props.edit ? (
-                      <ImageInput
-                        alphabet={props.alphabet}
-                        letter={abletter}
-                        setImagePath={imagePath =>
-                          props.updateLetter(
-                            flatIndex(chart.cols, rowIndex, letterIndex),
-                            { imagePath }
-                          )
-                        }
-                      />
-                    ) : (
-                      <img
-                        src={abletter.imagePath}
-                        alt={abletter.exampleWord}
-                      />
-                    )}
+                    <div>
+                      {props.edit ? (
+                        <ImageInput
+                          alphabet={props.alphabet}
+                          letter={abletter}
+                          setImagePath={imagePath =>
+                            props.updateLetter(index, { imagePath })
+                          }
+                        />
+                      ) : (
+                        <img
+                          src={abletter.imagePath}
+                          alt={abletter.exampleWord}
+                        />
+                      )}
+                    </div>
+                    <div style={{ marginTop: "8px" }}>
+                      {props.edit ? (
+                        <input
+                          type="text"
+                          placeholder="Example Word"
+                          value={abletter.exampleWord}
+                          onChange={e =>
+                            props.updateLetter(index, {
+                              exampleWord: e.target.value
+                            })
+                          }
+                          onClick={e => e.stopPropagation()}
+                        />
+                      ) : (
+                        <div className="exampleWord">
+                          {abletter.exampleWord}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div style={{ marginTop: "8px" }}>
-                    {props.edit ? (
-                      <input
-                        type="text"
-                        placeholder="Example Word"
-                        value={abletter.exampleWord}
-                        onChange={e =>
-                          props.updateLetter(
-                            flatIndex(chart.cols, rowIndex, letterIndex),
-                            { exampleWord: e.target.value }
-                          )
-                        }
-                      />
-                    ) : (
-                      <div className="exampleWord">{abletter.exampleWord}</div>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
               {row.length < chart.cols && (
                 <div
                   className="alphacell"
