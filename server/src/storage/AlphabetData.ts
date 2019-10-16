@@ -10,10 +10,11 @@ import update from "immutability-helper";
 import { StoredUser } from "../../../client/src/models/User";
 import log from "../common/log";
 
-async function alphabets(): Promise<Alphabet[]> {
+async function alphabets(user?: StoredUser): Promise<Alphabet[]> {
   log.log("[Query] READ Alphabets");
   const collection = await alphabetCollection();
-  const abCursor: Cursor<Alphabet> = collection.find({});
+  const findParam = user ? { user: user._id } : {};
+  const abCursor: Cursor<Alphabet> = collection.find(findParam);
   return abCursor.map(ab => ({ ...ab, charts: [] })).toArray();
 }
 

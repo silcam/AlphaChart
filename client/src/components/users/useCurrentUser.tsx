@@ -7,7 +7,7 @@ export type LogInFunc = (
   loginAttempt: LoginAttempt,
   handleError: (e: LoginError) => void
 ) => void;
-export type LogOutFunc = (handleError: () => void) => void;
+export type LogOutFunc = (handleError: () => void) => Promise<void>;
 export type CreateAccountFunc = (
   newUser: NewUser,
   handleError: (msg: string) => void

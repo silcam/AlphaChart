@@ -1,3 +1,13 @@
+/* AlphabetsList */
+
+ul.compAlphabetsList {
+    font-size: 1.3em;
+}
+
+ul.compAlphabetsList li {
+    margin: 4px 0;
+}
+
 /* ChartToImageOptionsMenu */
 
 div.compChartToImageOptionsMenu {

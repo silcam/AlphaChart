@@ -7,12 +7,22 @@ import {
 import { UploadedFile } from "express-fileupload";
 import fileUpload = require("express-fileupload");
 import Images from "../storage/Images";
-import { verifyLogin } from "./controllerHelper";
+import { verifyLogin, currentUser } from "./controllerHelper";
 
 export default function alphabetsController(app: Express) {
   app.get("/api/alphabets", async (req, res) => {
     const alphabets = await AlphabetData.alphabets();
     res.json(alphabets);
+  });
+
+  app.get("/api/alphabets/mine", async (req, res) => {
+    const user = await currentUser(req);
+    if (user) {
+      const alphabets = await AlphabetData.alphabets(user);
+      res.json(alphabets);
+    } else {
+      res.json([]);
+    }
   });
 
   app.get("/api/alphabets/:id", async (req, res) => {

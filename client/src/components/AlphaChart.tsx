@@ -12,7 +12,10 @@ export default function AlphaChart() {
     <div id="page-root">
       <NavBar user={currentUser} logOut={logOut} />
       <Switch>
-        <Route path="/alphabets" render={() => <AlphabetsRoute />} />
+        <Route
+          path="/alphabets"
+          render={() => <AlphabetsRoute user={currentUser} />}
+        />
         <Route path="/users" render={() => <UsersRoute />} />
         <Route
           render={() => (

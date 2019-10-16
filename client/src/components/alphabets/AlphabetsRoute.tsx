@@ -4,8 +4,13 @@ import AlphabetsPage from "./AlphabetsPage";
 import NewAlphabetPage from "./NewAlphabetPage";
 import ViewChartPage from "./ViewChartPage";
 import EditChartPage from "./EditChartPage";
+import { CurrentUserOrNot } from "../../models/User";
 
-export default function AlphabetsRoute() {
+interface IProps {
+  user: CurrentUserOrNot;
+}
+
+export default function AlphabetsRoute(props: IProps) {
   return (
     <Switch>
       <Route
@@ -14,7 +19,9 @@ export default function AlphabetsRoute() {
       />
       <Route
         path="/alphabets/view/:id"
-        render={({ match }) => <ViewChartPage id={match.params.id} />}
+        render={({ match }) => (
+          <ViewChartPage id={match.params.id} user={props.user} />
+        )}
       />
       <Route
         path="/alphabets/edit/:id/chart"

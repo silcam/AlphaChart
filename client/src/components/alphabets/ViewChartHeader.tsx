@@ -7,6 +7,7 @@ interface IProps {
   id: string;
   chartLoaded?: boolean;
   setChartDimens: (d: ChartDimens | null) => void;
+  canEdit: boolean;
 }
 
 export default function ViewChartHeader(props: IProps) {
@@ -14,18 +15,18 @@ export default function ViewChartHeader(props: IProps) {
     <div
       className="flex-row"
       style={{
-        margin: "20px 0"
+        margin: "20px 0",
+        justifyContent: "flex-end"
       }}
     >
-      <div style={{ fontSize: "x-large" }}>
-        <Link to={`/`}>Home</Link>
-      </div>
       {props.chartLoaded && (
         <div className="flex-row">
           <div>
-            <Link to={`/alphabets/edit/${props.id}/chart`}>
-              <button>Edit Chart</button>
-            </Link>
+            {props.canEdit && (
+              <Link to={`/alphabets/edit/${props.id}/chart`}>
+                <button>Edit Chart</button>
+              </Link>
+            )}
           </div>
           <ChartToImage setChartDimens={props.setChartDimens} />
         </div>

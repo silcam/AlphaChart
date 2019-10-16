@@ -1,19 +1,22 @@
 import React from "react";
 import { Alphabet } from "../../models/Alphabet";
 import { Link } from "react-router-dom";
+import Loading from "../common/Loading";
 
 interface IProps {
-  alphabets: Alphabet[];
+  alphabets: Alphabet[] | null;
 }
 
 export default function AlphabetsList(props: IProps) {
-  return (
-    <ul>
+  return props.alphabets ? (
+    <ul className="compAlphabetsList">
       {props.alphabets.map(alphabet => (
         <li key={alphabet._id}>
           <Link to={`/alphabets/view/${alphabet._id}`}>{alphabet.name}</Link>
         </li>
       ))}
     </ul>
+  ) : (
+    <Loading />
   );
 }

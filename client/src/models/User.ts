@@ -12,6 +12,8 @@ export interface CurrentUser extends User {
   email: string;
 }
 
+export type CurrentUserOrNot = CurrentUser | null;
+
 export interface StoredUser extends CurrentUser {
   _id: string;
   passwordHash: string;
@@ -44,4 +46,8 @@ export function validationErrors(user: NewUser, passwordCheck?: string) {
   if (passwordCheck !== undefined && passwordCheck !== user.password)
     errors.push("Passwords do not match.");
   return errors.length > 0 ? errors : null;
+}
+
+export function userId(user: CurrentUserOrNot) {
+  return user && user.email;
 }

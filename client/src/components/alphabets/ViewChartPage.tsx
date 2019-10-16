@@ -4,9 +4,11 @@ import Axios from "axios";
 import Chart from "./Chart";
 import Loading from "../common/Loading";
 import ViewChartHeader from "./ViewChartHeader";
+import { CurrentUserOrNot, userId } from "../../models/User";
 
 interface IProps {
   id: string;
+  user: CurrentUserOrNot;
 }
 
 export interface ChartDimens {
@@ -28,6 +30,7 @@ export default function ViewChartPage(props: IProps) {
         id={props.id}
         chartLoaded={!!alphabet}
         setChartDimens={setChartDimens}
+        canEdit={!!alphabet && alphabet.user === userId(props.user)}
       />
       <div
         style={

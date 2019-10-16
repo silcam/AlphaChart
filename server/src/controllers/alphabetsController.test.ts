@@ -14,6 +14,21 @@ test("Get alphabets", async () => {
   expect(response.body[0]._id).toEqual("5d4c38e158e6dbb33d7d7b12");
 });
 
+test("Get my alphabets", async () => {
+  expect.assertions(3);
+  let agent = notLoggedInAgent();
+  let response = await agent.get("/api/alphabets/mine");
+  expect(response.body).toEqual([]);
+
+  agent = await loggedInAgent("Titus");
+  response = await agent.get("/api/alphabets/mine");
+  expect(response.body[0].name).toEqual("Ελληνικα");
+
+  agent = await loggedInAgent("Lucy");
+  response = await agent.get("/api/alphabets/mine");
+  expect(response.body).toEqual([]);
+});
+
 test("Get an alphabet", async () => {
   expect.assertions(2);
   const agent = notLoggedInAgent();

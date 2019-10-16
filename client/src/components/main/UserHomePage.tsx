@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Loading from "../common/Loading";
 import { Alphabet } from "../../models/Alphabet";
 import Axios from "axios";
 import AlphabetsList from "../alphabets/AlphabetsList";
@@ -16,7 +15,7 @@ export default function UserHomePage(props: IProps) {
   const [alphabets, setAlphabets] = useState<Alphabet[] | null>(null);
 
   useEffect(() => {
-    Axios.get("/api/alphabets").then(response => {
+    Axios.get("/api/alphabets/mine").then(response => {
       setAlphabets(response.data);
     });
   }, []);
@@ -24,16 +23,13 @@ export default function UserHomePage(props: IProps) {
   return (
     <div className="HomePage">
       <div>
-        <h2>Alphabets</h2>
-
-        {alphabets === null ? (
-          <Loading />
-        ) : (
-          <AlphabetsList alphabets={alphabets} />
-        )}
+        <Link to={`/alphabets/new`}>
+          <button>New Alphabet</button>
+        </Link>
       </div>
       <div>
-        <Link to={`/alphabets/new`}>Create new...</Link>
+        <h2>My Alphabets</h2>
+        <AlphabetsList alphabets={alphabets} />
       </div>
     </div>
   );
