@@ -1,12 +1,18 @@
 import React from "react";
-import { Alphabet, AlphabetLetter, AlphabetChart } from "../../models/Alphabet";
+import {
+  Alphabet,
+  AlphabetLetter,
+  AlphabetChart,
+  stylesFor
+} from "../../models/Alphabet";
 import ImageInput from "./ImageInput";
+import update from "immutability-helper";
 
 interface IProps {
   alphabet: Alphabet;
   chart: AlphabetChart;
+  setChart: (chart: AlphabetChart) => void;
   edit?: boolean;
-  updateLetter: (index: number, letter: Partial<AlphabetLetter>) => void;
   selectedIndex?: number;
   setSelectedIndex?: (index: number) => void;
 }
@@ -16,9 +22,43 @@ export default function Chart(props: IProps) {
   const alphabetTable = clump(chart.letters, Math.max(chart.cols, 1));
   const cellWidth = 100 / chart.cols;
 
+  const updateLetter = (index: number, letter: Partial<AlphabetLetter>) =>
+    props.setChart(update(chart, { letters: { [index]: { $merge: letter } } }));
+  const updateMeta = (meta: Partial<typeof chart.meta>) =>
+    props.setChart(update(chart, { meta: { $merge: meta } }));
+  const updateStyles = (styles: Partial<typeof chart.styles>) =>
+    props.setChart(update(chart, { styles: { $merge: styles } }));
+
   return (
-    <div id="chart">
-      <h2>{props.alphabet.name}</h2>
+    <div className="compChart" id="compChart">
+      <div className="alphaTitle" style={stylesFor(chart, "title")}>
+        {props.edit ? (
+          <input
+            type="text"
+            value={chart.meta.title || ""}
+            onChange={e => updateMeta({ title: e.target.value })}
+            style={{ fontSize: "1em" }}
+            placeholder="Title"
+          />
+        ) : (
+          chart.meta.title
+        )}
+      </div>
+      {(props.edit || chart.meta.subtitle) && (
+        <div className="alphaSubtitle" style={stylesFor(chart, "subtitle")}>
+          {props.edit ? (
+            <input
+              type="text"
+              value={chart.meta.subtitle || ""}
+              onChange={e => updateMeta({ subtitle: e.target.value })}
+              style={{ fontSize: "1em" }}
+              placeholder="Subtitle"
+            />
+          ) : (
+            chart.meta.subtitle
+          )}
+        </div>
+      )}
       <div>
         <div className="alphatable">
           {alphabetTable.map((row, rowIndex) => (
@@ -50,7 +90,7 @@ export default function Chart(props: IProps) {
                           alphabet={props.alphabet}
                           letter={abletter}
                           setImagePath={imagePath =>
-                            props.updateLetter(index, { imagePath })
+                            updateLetter(index, { imagePath })
                           }
                         />
                       ) : (
@@ -67,7 +107,7 @@ export default function Chart(props: IProps) {
                           placeholder="Example Word"
                           value={abletter.exampleWord}
                           onChange={e =>
-                            props.updateLetter(index, {
+                            updateLetter(index, {
                               exampleWord: e.target.value
                             })
                           }

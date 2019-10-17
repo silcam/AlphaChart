@@ -1,5 +1,12 @@
 import { createPassword } from "../common/password";
 import { ObjectID } from "bson";
+import { StoredUser } from "../../../client/src/models/User";
+import { StoredAlphabet } from "../../../client/src/models/Alphabet";
+
+interface Fixtures {
+  users: StoredUser[];
+  alphabets: StoredAlphabet[];
+}
 
 const users = [
   {
@@ -22,7 +29,7 @@ const dbUsers = users.map(user => {
   return { ...dbUser, passwordHash: hash, passwordSalt: salt };
 });
 
-export default {
+const fixtures: Fixtures = {
   users: dbUsers,
   alphabets: [
     {
@@ -32,6 +39,8 @@ export default {
         {
           timestamp: 1568107634729,
           cols: 5,
+          meta: { title: "Ελληνικα" },
+          styles: {},
           letters: [
             {
               forms: ["Α", "α"],
@@ -96,3 +105,5 @@ export default {
     }
   ]
 };
+
+export default fixtures;

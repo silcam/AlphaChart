@@ -15,8 +15,7 @@ export default function NewAlphabetPage(props: IProps) {
   const save = async () => {
     if (formIsValid) {
       const alphabet: DraftAlphabet = {
-        ...blankAlphabet(),
-        name
+        ...blankAlphabet(name)
       };
       const response = await Axios.post("/api/alphabets", alphabet);
       const id = response.data._id;

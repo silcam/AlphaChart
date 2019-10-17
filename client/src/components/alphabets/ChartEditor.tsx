@@ -23,9 +23,7 @@ export default function ChartEditor(props: IProps) {
   const [chart, setChart, chartModified] = useStateModified(originalChart);
   const setCols = (cols: number) =>
     setChart(update(chart, { cols: { $set: cols } }));
-  const updateLetter = (index: number, letter: Partial<AlphabetLetter>) => {
-    setChart(update(chart, { letters: { [index]: { $merge: letter } } }));
-  };
+
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const done = () => props.save(chart);
@@ -63,7 +61,7 @@ export default function ChartEditor(props: IProps) {
       <Chart
         alphabet={props.alphabet}
         chart={chart}
-        updateLetter={updateLetter}
+        setChart={setChart}
         selectedIndex={selectedIndex}
         setSelectedIndex={setSelectedIndex}
         edit

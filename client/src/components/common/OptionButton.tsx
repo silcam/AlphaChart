@@ -11,7 +11,7 @@ export default function OptionButton(props: IProps) {
   const toggleShowMenu = () => setShowMenu(!showMenu);
 
   return (
-    <div className="compOptionButton" onBlur={() => console.log("Div BLUR")}>
+    <div className="compOptionButton">
       <button onClick={props.onMainClick}>{props.buttonText}</button>
       <button onClick={toggleShowMenu}>▼</button>
       {showMenu && (

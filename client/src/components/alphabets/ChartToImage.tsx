@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 import OptionButton from "../common/OptionButton";
 import { ChartDimens } from "./ViewChartPage";
 
-const CHART_ID = "chart";
+const CHART_ID = "compChart";
 const DEFAULT_FONT_SIZE = 16;
 
 interface IProps {

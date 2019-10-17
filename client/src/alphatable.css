@@ -1,3 +1,42 @@
+@font-face {
+  font-family: "Andika";
+  src: url(/fonts/Andika-R.ttf);
+}
+
+@font-face {
+  font-family: "AndikaNewBasic";
+  src: url(/fonts/AndikaNewBasic-R.ttf);
+}
+
+@font-face {
+  font-family: "AndikaNewBasic";
+  font-weight: bold;
+  src: url(/fonts/AndikaNewBasic-B.ttf);
+}
+
+@font-face {
+  font-family: "CharisSIL-Literacy";
+  src: url(/fonts/CharisSIL-Literacy-R.ttf);
+}
+
+@font-face {
+  font-family: "CharisSIL-Literacy";
+  font-weight: bold;
+  src: url(/fonts/CharisSIL-Literacy-B.ttf);
+}
+
+div.compChart {
+  font-family: "AndikaNewBasic";
+}
+
+div.alphaTitle {
+  margin: 0.8em 0 0.2em;
+}
+
+div.alphaSubtitle {
+  margin: 0 0 0.4em;
+}
+
 div.alphatable {
   width: 100%;
 }
