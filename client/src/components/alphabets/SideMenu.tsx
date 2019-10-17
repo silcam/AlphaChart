@@ -2,14 +2,18 @@ import React from "react";
 import { AlphabetLetter } from "../../models/Alphabet";
 import update from "immutability-helper";
 import LnkBtn from "../common/LnkBtn";
+import NumberPicker from "../common/NumberPicker";
 
 interface IProps {
   letter: AlphabetLetter;
+  index: number;
+  alphabetSize: number;
   close: () => void;
   setLetter: (letter: AlphabetLetter) => void;
   deleteLetter: () => void;
   insertBefore: () => void;
   insertAfter: () => void;
+  moveTo: (position: number) => void;
 }
 
 export default function SideMenu(props: IProps) {
@@ -48,6 +52,15 @@ export default function SideMenu(props: IProps) {
           </li>
         ))}
       </ul>
+      <div className="flex-row" style={{ marginBottom: "12px" }}>
+        <label>Position:</label>
+        <NumberPicker
+          value={props.index + 1}
+          setValue={v => props.moveTo(v - 1)}
+          maximum={props.alphabetSize}
+          noType
+        />
+      </div>
       <button onClick={props.insertBefore}>
         New letter before <b>{props.letter.forms[0]}</b>
       </button>

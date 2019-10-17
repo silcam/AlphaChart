@@ -6,7 +6,8 @@ import path from "path";
 async function save(id: string, file: UploadedFile) {
   const publicPath = path.join(process.cwd(), "client", "public");
   const dirPath = path.join("images", id);
-  const filePath = path.join(dirPath, file.name);
+  const filename = `${Date.now().valueOf()}${path.extname(file.name)}`;
+  const filePath = path.join(dirPath, filename);
 
   if (process.env.NODE_ENV === "test") {
     // Use memfs for testing ... in the future maybe
@@ -16,7 +17,7 @@ async function save(id: string, file: UploadedFile) {
     mkdirSafe(path.join(publicPath, dirPath));
     await file.mv(path.join(publicPath, filePath));
   }
-  return `/images/${id}/${file.name}`;
+  return `/images/${id}/${filename}`;
 }
 
 export default {

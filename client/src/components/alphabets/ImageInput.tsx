@@ -39,7 +39,7 @@ export default function ImageInput(props: IProps) {
           >
             {!!props.letter.imagePath && (
               <img
-                src={props.letter.imagePath}
+                src={encodeURI(props.letter.imagePath)}
                 alt={props.letter.exampleWord}
               />
             )}

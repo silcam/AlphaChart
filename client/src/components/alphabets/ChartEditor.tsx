@@ -71,6 +71,8 @@ export default function ChartEditor(props: IProps) {
       {selectedIndex >= 0 && (
         <SideMenu
           letter={chart.letters[selectedIndex]}
+          index={selectedIndex}
+          alphabetSize={chart.letters.length}
           key={`${selectedIndex}-${chart.letters.length}`}
           close={() => setSelectedIndex(-1)}
           setLetter={letter =>
@@ -102,6 +104,17 @@ export default function ChartEditor(props: IProps) {
               })
             );
             setSelectedIndex(selectedIndex + 1);
+          }}
+          moveTo={position => {
+            const letter = chart.letters[selectedIndex];
+            setChart(
+              update(chart, {
+                letters: {
+                  $splice: [[selectedIndex, 1], [position, 0, letter]]
+                }
+              })
+            );
+            setSelectedIndex(position);
           }}
         />
       )}

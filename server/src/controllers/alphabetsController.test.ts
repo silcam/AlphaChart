@@ -77,9 +77,9 @@ test("Upload image to alphabet chart", async () => {
   const response = await agent
     .post("/api/alphabets/5d4c38e158e6dbb33d7d7b12/images")
     .attach("image", "server/src/storage/test/images/apple.png");
-  expect(response.body).toEqual({
-    path: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
-  });
+  expect(response.body.path).toMatch(
+    /\/images\/5d4c38e158e6dbb33d7d7b12\/\d+\.png/
+  );
 });
 
 test("Update nonexistant chart", async () => {

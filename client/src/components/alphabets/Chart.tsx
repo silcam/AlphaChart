@@ -40,7 +40,7 @@ export default function Chart(props: IProps) {
                       )
                     }
                   >
-                    <div className="letter">{abletter.forms.join("")}</div>
+                    <div className="letter">{abletter.forms.join(" ")}</div>
 
                     <div className="flex-space" />
 
@@ -55,7 +55,7 @@ export default function Chart(props: IProps) {
                         />
                       ) : (
                         <img
-                          src={abletter.imagePath}
+                          src={encodeURI(abletter.imagePath)}
                           alt={abletter.exampleWord}
                         />
                       )}

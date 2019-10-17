@@ -4,6 +4,8 @@ interface IProps {
   value: number;
   setValue: (v: number) => void;
   minimum?: number;
+  maximum?: number;
+  noType?: boolean;
 }
 
 export default function NumberPicker(props: IProps) {
@@ -17,6 +19,7 @@ export default function NumberPicker(props: IProps) {
         value={valueText}
         onChange={e => props.setValue(parseInt(e.target.value) || 0)}
         size={2}
+        disabled={!!props.noType}
       />
       <button
         onClick={e => props.setValue(props.value - 1)}
@@ -24,7 +27,12 @@ export default function NumberPicker(props: IProps) {
       >
         -
       </button>
-      <button onClick={e => props.setValue(props.value + 1)}>+</button>
+      <button
+        onClick={e => props.setValue(props.value + 1)}
+        disabled={props.maximum !== undefined && props.value >= props.maximum}
+      >
+        +
+      </button>
     </div>
   );
 }
