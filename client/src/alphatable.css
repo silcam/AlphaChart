@@ -29,6 +29,16 @@ div.compChart {
   font-family: "AndikaNewBasic";
 }
 
+div.compChart input {
+  font-size: 1em;
+}
+
+div.compChart textarea {
+  font-size: 1em;
+  width: 100%;
+  height: 100%;
+}
+
 div.alphaTitle {
   margin: 0.8em 0 0.2em;
 }
@@ -90,7 +100,6 @@ div.alphacell img {
 div.alphacell input[type="text"] {
   text-align: center;
   width: 80%;
-  font-size: 1em;
   align-self: center;
 }
 
@@ -140,4 +149,8 @@ p.drop-zone.drop-zone-active,
 p.drop-zone:hover {
   border-color: #1892ef;
   color: #1892ef;
+}
+
+div.alphafooter {
+  width: 100%;
 }

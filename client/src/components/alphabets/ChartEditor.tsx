@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   AlphabetChart,
   Alphabet,
-  AlphabetLetter,
   blankAlphabetLetter
 } from "../../models/Alphabet";
 import { Link } from "react-router-dom";

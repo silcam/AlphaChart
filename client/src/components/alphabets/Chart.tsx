@@ -7,6 +7,9 @@ import {
 } from "../../models/Alphabet";
 import ImageInput from "./ImageInput";
 import update from "immutability-helper";
+import WithLineBreaks from "../common/WithLineBreaks";
+import ExampleWord from "./ExampleWord";
+import AlphaFooter from "./AlphaFooter";
 
 interface IProps {
   alphabet: Alphabet;
@@ -26,8 +29,6 @@ export default function Chart(props: IProps) {
     props.setChart(update(chart, { letters: { [index]: { $merge: letter } } }));
   const updateMeta = (meta: Partial<typeof chart.meta>) =>
     props.setChart(update(chart, { meta: { $merge: meta } }));
-  const updateStyles = (styles: Partial<typeof chart.styles>) =>
-    props.setChart(update(chart, { styles: { $merge: styles } }));
 
   return (
     <div className="compChart" id="compChart">
@@ -37,7 +38,6 @@ export default function Chart(props: IProps) {
             type="text"
             value={chart.meta.title || ""}
             onChange={e => updateMeta({ title: e.target.value })}
-            style={{ fontSize: "1em" }}
             placeholder="Title"
           />
         ) : (
@@ -51,7 +51,6 @@ export default function Chart(props: IProps) {
               type="text"
               value={chart.meta.subtitle || ""}
               onChange={e => updateMeta({ subtitle: e.target.value })}
-              style={{ fontSize: "1em" }}
               placeholder="Subtitle"
             />
           ) : (
@@ -93,12 +92,12 @@ export default function Chart(props: IProps) {
                             updateLetter(index, { imagePath })
                           }
                         />
-                      ) : (
+                      ) : abletter.imagePath ? (
                         <img
                           src={encodeURI(abletter.imagePath)}
                           alt={abletter.exampleWord}
                         />
-                      )}
+                      ) : null}
                     </div>
                     <div style={{ marginTop: "8px" }}>
                       {props.edit ? (
@@ -114,18 +113,7 @@ export default function Chart(props: IProps) {
                           onClick={e => e.stopPropagation()}
                         />
                       ) : (
-                        <div className="exampleWord">
-                          {Array.from(abletter.exampleWord).map(
-                            (char, index) => (
-                              <span
-                                key={index}
-                                data-key-letter={abletter.forms.includes(char)}
-                              >
-                                {char}
-                              </span>
-                            )
-                          )}
-                        </div>
+                        <ExampleWord letter={abletter} />
                       )}
                     </div>
                   </div>
@@ -133,14 +121,44 @@ export default function Chart(props: IProps) {
               })}
               {row.length < chart.cols && (
                 <div
-                  className="alphacell"
+                  className="alphacell lastRowFiller"
                   style={{
+                    ...stylesFor(chart, "lastRowFiller"),
                     width: `${(chart.cols - row.length) * cellWidth}%`
                   }}
-                />
+                >
+                  {props.edit ? (
+                    <textarea
+                      value={chart.meta.lastRowFiller}
+                      onChange={e =>
+                        updateMeta({ lastRowFiller: e.target.value })
+                      }
+                      placeholder="Optional Footer"
+                    />
+                  ) : (
+                    <WithLineBreaks text={chart.meta.lastRowFiller || ""} />
+                  )}
+                </div>
               )}
             </div>
           ))}
+          {chart.letters.length % chart.cols === 0 &&
+            (props.edit || chart.meta.lastRowFiller) && (
+              <AlphaFooter
+                edit={props.edit}
+                text={chart.meta.lastRowFiller}
+                setText={lastRowFiller => updateMeta({ lastRowFiller })}
+                styles={stylesFor(chart, "lastRowFiller")}
+              />
+            )}
+          {(props.edit || chart.meta.footer) && (
+            <AlphaFooter
+              edit={props.edit}
+              text={chart.meta.footer}
+              setText={footer => updateMeta({ footer })}
+              styles={stylesFor(chart, "footer")}
+            />
+          )}
         </div>
       </div>
     </div>

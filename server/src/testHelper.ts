@@ -22,6 +22,8 @@ export function vowellybet(): DraftAlphabet {
     name: "Vowelly",
     chart: {
       cols: 2,
+      meta: {},
+      styles: {},
       timestamp: Date.now().valueOf(),
       letters: [
         { forms: ["A", "a"], exampleWord: "Apple", imagePath: "" },
