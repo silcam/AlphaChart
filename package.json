@@ -18,20 +18,24 @@
     "memfs": "^2.15.5",
     "mongodb": "^3.3.0-beta2",
     "node-cleanup": "^2.1.2",
+    "supertest": "^4.0.2",
     "typescript": "^3.5.3"
   },
   "scripts": {
     "start": "concurrently -p \"[{name}]\" -n \"TS,Server,Client\"  -c yellow,green,magenta \"tsc -w\" \"yarn start-server\" \"yarn start-client\"",
     "start-server": "nodemon server/dist/server/src/server.js --watch server/dist/",
     "start-client": "node start-client.js",
-    "test": "NODE_ENV=test jest --watchAll"
+    "test": "NODE_ENV=test jest --watchAll",
+    "deploy": "yarn shipit production deploy"
   },
   "devDependencies": {
     "@types/supertest": "^2.0.8",
     "concurrently": "3.1.0",
     "jest": "24.7.1",
     "nodemon": "^1.19.1",
-    "supertest": "^4.0.2",
+    "shipit-cli": "^5.1.0",
+    "shipit-deploy": "^5.1.0",
+    "shipit-shared": "^4.4.2",
     "ts-jest": "^24.1.0"
   }
 }
