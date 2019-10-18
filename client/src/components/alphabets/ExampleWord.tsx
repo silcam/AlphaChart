@@ -3,6 +3,7 @@ import { AlphabetLetter } from "../../models/Alphabet";
 
 interface IProps {
   letter: AlphabetLetter;
+  keyLetterStyle: any;
 }
 
 export default function ExampleWord(props: IProps) {
@@ -15,7 +16,7 @@ export default function ExampleWord(props: IProps) {
         index % 2 === 0 ? (
           piece
         ) : (
-          <span key={index} data-key-letter={true}>
+          <span key={index} style={props.keyLetterStyle}>
             {piece}
           </span>
         )

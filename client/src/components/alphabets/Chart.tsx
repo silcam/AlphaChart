@@ -3,7 +3,8 @@ import {
   Alphabet,
   AlphabetLetter,
   AlphabetChart,
-  stylesFor
+  stylesFor,
+  alphabetSummaryForm
 } from "../../models/Alphabet";
 import ImageInput from "./ImageInput";
 import update from "immutability-helper";
@@ -31,7 +32,7 @@ export default function Chart(props: IProps) {
     props.setChart(update(chart, { meta: { $merge: meta } }));
 
   return (
-    <div className="compChart" id="compChart">
+    <div className="compChart" id="compChart" style={stylesFor(chart, "chart")}>
       <div className="alphaTitle" style={stylesFor(chart, "title")}>
         {props.edit ? (
           <input
@@ -60,6 +61,16 @@ export default function Chart(props: IProps) {
       )}
       <div>
         <div className="alphatable">
+          <div
+            className="alpharow alphasummary"
+            style={stylesFor(chart, "alphabetSummary")}
+          >
+            {chart.letters.map((letter, index) => (
+              <div key={index}>
+                {letter.forms[alphabetSummaryForm(chart.styles)]}
+              </div>
+            ))}
+          </div>
           {alphabetTable.map((row, rowIndex) => (
             <div className="alpharow" key={rowIndex}>
               {row.map((abletter, letterIndex) => {
@@ -79,7 +90,9 @@ export default function Chart(props: IProps) {
                       )
                     }
                   >
-                    <div className="letter">{abletter.forms.join(" ")}</div>
+                    <div className="letter" style={stylesFor(chart, "letter")}>
+                      {abletter.forms.join(" ")}
+                    </div>
 
                     <div className="flex-space" />
 
@@ -99,7 +112,12 @@ export default function Chart(props: IProps) {
                         />
                       ) : null}
                     </div>
-                    <div style={{ marginTop: "8px" }}>
+                    <div
+                      style={{
+                        ...stylesFor(chart, "exampleWord"),
+                        marginTop: "8px"
+                      }}
+                    >
                       {props.edit ? (
                         <input
                           type="text"
@@ -113,7 +131,13 @@ export default function Chart(props: IProps) {
                           onClick={e => e.stopPropagation()}
                         />
                       ) : (
-                        <ExampleWord letter={abletter} />
+                        <ExampleWord
+                          letter={abletter}
+                          keyLetterStyle={stylesFor(
+                            chart,
+                            "exampleWordKeyLetter"
+                          )}
+                        />
                       )}
                     </div>
                   </div>

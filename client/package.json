@@ -18,6 +18,7 @@
     "react-dropzone": "^10.1.7",
     "react-router-dom": "^5.1.0",
     "react-scripts": "3.0.1",
+    "react-switch": "^5.0.1",
     "typescript": "3.5.3"
   },
   "scripts": {

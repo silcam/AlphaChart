@@ -15,7 +15,7 @@ export default function ChartToImage(props: IProps) {
   return (
     <div>
       <OptionButton
-        onMainClick={makeImage}
+        onMainClick={() => makeImage()}
         buttonText="Save Chart Image"
         renderContextMenu={({ hideMenu }) => (
           <OptionsMenu
@@ -65,7 +65,7 @@ function OptionsMenu(props: IOptionsMenuProps) {
     // eslint-disable-next-line
   }, []);
   const [bgColor, setBGColor] = useState("ffffff");
-  const [enableBGColor, setEnableBGColor] = useState(false);
+  const [enableBGColor, setEnableBGColor] = useState(true);
   const inputValid = !!dimensions[0] && (!enableBGColor || validColor(bgColor));
   const [saving, setSaving] = useState(false);
 
@@ -168,7 +168,7 @@ function validColor(color: string) {
   );
 }
 
-async function makeImage(opts?: OptionsType) {
+async function makeImage(opts: OptionsType = { backgroundColor: "#ffffff" }) {
   try {
     const chartNode = document.getElementById(CHART_ID);
     if (!chartNode) throw new Error("No chart found in makeImage()!");

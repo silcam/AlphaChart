@@ -16,7 +16,7 @@ interface IProps {
   moveTo: (position: number) => void;
 }
 
-export default function SideMenu(props: IProps) {
+export default function LetterSideMenu(props: IProps) {
   const draftForms = [...props.letter.forms, ""];
 
   const setForm = (index: number, form: string) =>
@@ -32,7 +32,7 @@ export default function SideMenu(props: IProps) {
     );
 
   return (
-    <div className="side-menu">
+    <div className="side-menu letter-side-menu">
       <div style={{ alignSelf: "flex-end" }}>
         <LnkBtn onClick={props.close} text="Close" />
       </div>

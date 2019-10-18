@@ -6,15 +6,23 @@ export interface AlphabetLetter {
   imagePath: string;
 }
 
+export const defaultFonts = [
+  "Andika",
+  "AndikaNewBasic",
+  "CharisSIL-Literacy"
+] as const;
+
 export interface ChartStyles {
   chart?: {
     fontFamily?: string;
   };
   title?: {
     fontSize?: string;
+    textAlign?: string;
   };
   subtitle?: {
     fontSize?: string;
+    textAlign?: string;
   };
   letter?: {
     fontSize?: string;
@@ -35,6 +43,10 @@ export interface ChartStyles {
   footer?: {
     fontSize?: string;
   };
+  otherSettings?: {
+    alphabetSummaryForm?: number;
+    display?: string; // Dummy property because TS is hard
+  };
 }
 
 // export type ChartStyles = {
@@ -46,14 +58,15 @@ export interface ChartStyles {
 export function defaultChartStyles(): ChartStyles {
   return {
     chart: { fontFamily: "AndikaNewBasic" },
-    title: { fontSize: "3em" },
-    subtitle: { fontSize: "1.6em" },
+    title: { fontSize: "3em", textAlign: "center" },
+    subtitle: { fontSize: "1.6em", textAlign: "center" },
     letter: { fontSize: "3em" },
     alphabetSummary: { display: "flex", fontSize: "1.6em" },
     exampleWord: { fontSize: "1em" },
     exampleWordKeyLetter: { fontWeight: "bold" },
     lastRowFiller: { fontSize: "1em" },
-    footer: { fontSize: "1em" }
+    footer: { fontSize: "1em" },
+    otherSettings: { alphabetSummaryForm: 1 }
   };
 }
 
@@ -119,6 +132,12 @@ export function stylesFor(chart: AlphabetChart, element: keyof ChartStyles) {
   return chart.styles[element]
     ? { ...defaultChartStyles()[element], ...chart.styles[element] }
     : defaultChartStyles()[element];
+}
+
+export function alphabetSummaryForm(styles: ChartStyles): number {
+  return styles.otherSettings && styles.otherSettings.alphabetSummaryForm
+    ? styles.otherSettings.alphabetSummaryForm
+    : defaultChartStyles().otherSettings!.alphabetSummaryForm!;
 }
 
 // export function setAlphabetLetter(
