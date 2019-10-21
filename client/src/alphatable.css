@@ -29,13 +29,14 @@ div.compChart {
   font-family: "AndikaNewBasic";
 }
 
-div.compChart input {
-  font-size: 1em;
+div.compChart input,
+div.compChart textarea {
+  font-size: inherit;
   text-align: inherit;
+  font-family: inherit;
 }
 
 div.compChart textarea {
-  font-size: 1em;
   width: 100%;
   height: 100%;
 }

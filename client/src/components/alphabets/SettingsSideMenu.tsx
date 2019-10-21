@@ -117,12 +117,16 @@ export default function SettingsSideMenu(props: IProps) {
         <select
           value={styles.otherSettings!.alphabetSummaryForm!}
           onChange={e =>
-            updateStyles("alphabetSummary", { dataForm: e.target.value })
+            updateStyles("otherSettings", {
+              alphabetSummaryForm: e.target.value
+            })
           }
         >
           {props.chart.letters[0] &&
             props.chart.letters[0].forms.map((form, index) => (
-              <option value={index}>{form}</option>
+              <option key={index} value={index}>
+                {form}
+              </option>
             ))}
         </select>
       </div>
