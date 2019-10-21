@@ -18,6 +18,7 @@ export default function usersController(app: Express) {
       if (errors) res.status(422).json({ error: errors.join(" ") });
       else {
         const user = await UserData.createUser(newUser);
+        req.session!.email = newUser.email;
         res.json(toCurrentUser(user));
       }
     } catch (err) {
