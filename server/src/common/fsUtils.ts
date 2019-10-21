@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 export function mkdirSafe(dirPath: string) {
-  if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath);
+  if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { mode: 0o755 });
 }
 
 interface Options {
