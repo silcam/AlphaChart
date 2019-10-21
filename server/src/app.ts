@@ -20,4 +20,9 @@ if (process.env.NODE_ENV === "production") {
 alphabetsController(app);
 usersController(app);
 
+// Handle client-side routes
+app.get("*", (req, res) => {
+  res.sendFile(`${process.cwd()}/client/build/index.html`);
+});
+
 export default app;
