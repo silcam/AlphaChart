@@ -167,7 +167,7 @@ export default function Chart(props: IProps) {
             </div>
           ))}
           {chart.letters.length % chart.cols === 0 &&
-            (props.edit || chart.meta.lastRowFiller) && (
+            chart.meta.lastRowFiller && (
               <AlphaFooter
                 edit={props.edit}
                 text={chart.meta.lastRowFiller}
