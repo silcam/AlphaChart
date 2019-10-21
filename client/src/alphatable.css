@@ -119,16 +119,25 @@ div.alphacell .exampleWord {
   display: block;
 }
 
+div.drop-zone-root {
+  position: relative;
+}
+
 div.edit-alpha-image[data-image-set="true"] p.drop-zone {
   display: none;
 }
 
 div.edit-alpha-image[data-image-set="true"]:hover p.drop-zone {
   display: block;
+  position: absolute;
+  bottom: 0;
+  width: 80%
 }
 
 div.edit-alpha-image[data-image-set="true"]:hover img {
-  display: none;
+  /* display: none; */
+  opacity: 0.2;
+  z-index: -10;
 }
 
 div.drop-zone-root:focus {
