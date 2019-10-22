@@ -58,8 +58,8 @@ export interface ChartStyles {
 export function defaultChartStyles(): ChartStyles {
   return {
     chart: { fontFamily: "AndikaNewBasic" },
-    title: { fontSize: "3em", textAlign: "center" },
-    subtitle: { fontSize: "1.6em", textAlign: "center" },
+    title: { fontSize: "3em", textAlign: "Center" },
+    subtitle: { fontSize: "1.6em", textAlign: "Center" },
     letter: { fontSize: "3em" },
     alphabetSummary: { display: "flex", fontSize: "1.6em" },
     exampleWord: { fontSize: "1em" },
