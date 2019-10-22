@@ -1,5 +1,6 @@
 import React from "react";
 import { AlphabetLetter } from "../../models/Alphabet";
+import regexEscape from "../common/regexEscape";
 
 interface IProps {
   letter: AlphabetLetter;
@@ -8,7 +9,10 @@ interface IProps {
 
 export default function ExampleWord(props: IProps) {
   const letter = props.letter;
-  const keyLetterPtrn = new RegExp(`(${letter.forms.join("|")})`, "g");
+  const keyLetterPtrn = new RegExp(
+    `(${regexEscape(letter.forms.join("|"))})`,
+    "g"
+  );
   const pieces = letter.exampleWord.split(keyLetterPtrn);
   return (
     <div className="exampleWord">
