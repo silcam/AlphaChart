@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { CurrentUser } from "../../models/User";
 import { Link, useHistory } from "react-router-dom";
 import { LogOutFunc } from "../users/useCurrentUser";
 import LnkBtn from "../common/LnkBtn";
+import ErrorContext from "./ErrorContext";
 
 interface IProps {
   user: CurrentUser | null;
@@ -11,6 +12,7 @@ interface IProps {
 
 export default function NavBar(props: IProps) {
   const history = useHistory();
+  const { setErrorMessage } = useContext(ErrorContext);
   return (
     <div className="flex-row" style={{ padding: "8px 0" }}>
       <Link to="/">Home</Link>
@@ -21,7 +23,7 @@ export default function NavBar(props: IProps) {
             <LnkBtn
               onClick={() =>
                 props
-                  .logOut(() => console.error("Logout error"))
+                  .logOut(() => setErrorMessage("Error logging out."))
                   .then(() => history.push("/"))
               }
               text="Log out"

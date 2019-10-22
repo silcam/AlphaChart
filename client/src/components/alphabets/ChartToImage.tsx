@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import htmlToImage, { OptionsType } from "html-to-image";
 import { saveAs } from "file-saver";
 import OptionButton from "../common/OptionButton";
 import { ChartDimens } from "./ViewChartPage";
+import ErrorContext from "../common/ErrorContext";
 
 const CHART_ID = "compChart";
 const DEFAULT_FONT_SIZE = 16;
@@ -12,10 +13,17 @@ interface IProps {
 }
 
 export default function ChartToImage(props: IProps) {
+  const { setErrorMessage } = useContext(ErrorContext);
   return (
     <div>
       <OptionButton
-        onMainClick={() => makeImage()}
+        onMainClick={() => {
+          try {
+            makeImage();
+          } catch (err) {
+            setErrorMessage(err);
+          }
+        }}
         buttonText="Save Chart Image"
         renderContextMenu={({ hideMenu }) => (
           <OptionsMenu
@@ -68,6 +76,7 @@ function OptionsMenu(props: IOptionsMenuProps) {
   const [enableBGColor, setEnableBGColor] = useState(true);
   const inputValid = !!dimensions[0] && (!enableBGColor || validColor(bgColor));
   const [saving, setSaving] = useState(false);
+  const { setErrorMessage } = useContext(ErrorContext);
 
   return (
     <div className="compChartToImageOptionsMenu">
@@ -125,9 +134,13 @@ function OptionsMenu(props: IOptionsMenuProps) {
           disabled={!inputValid || saving}
           onClick={async () => {
             setSaving(true);
-            await makeImage({
-              backgroundColor: enableBGColor ? `#${bgColor}` : undefined
-            });
+            try {
+              await makeImage({
+                backgroundColor: enableBGColor ? `#${bgColor}` : undefined
+              });
+            } catch (err) {
+              setErrorMessage(err);
+            }
             setSaving(false);
           }}
         >
@@ -176,5 +189,6 @@ async function makeImage(opts: OptionsType = { backgroundColor: "#ffffff" }) {
     saveAs(dataUrl, "chart.png");
   } catch (err) {
     console.error(err);
+    throw "There was a problem creating that chart.";
   }
 }

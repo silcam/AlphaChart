@@ -44,6 +44,24 @@ div.compChartToImageOptionsMenu .buttonRow {
     justify-content: space-between;
 }
 
+/* ErrorMessage */
+
+div.compErrorMessage {
+    background-color: #c9302c;
+    color: #fff;
+    border-radius: 4px;
+    padding: 8px;
+    position: sticky;
+    top: 8px;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+div.compErrorMessage a {
+    color: #fff;
+    font-weight: bold;
+}
+
 /* NumberPicker */
 
 div.NumberPicker {

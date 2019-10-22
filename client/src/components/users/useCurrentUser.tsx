@@ -1,6 +1,7 @@
 import { CurrentUser, LoginAttempt, NewUser } from "../../models/User";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Axios from "axios";
+import ErrorContext from "../common/ErrorContext";
 
 type LoginError = "Invalid" | "Unknown";
 export type LogInFunc = (
@@ -21,8 +22,14 @@ export default function useCurrentUser(): [
 ] {
   const [currentUser, setCurrentUser] = useState<null | CurrentUser>(null);
 
+  const { setErrorMessage } = useContext(ErrorContext);
+
   useEffect(() => {
-    getCurrentUser(setCurrentUser);
+    try {
+      getCurrentUser(setCurrentUser);
+    } catch (err) {
+      setErrorMessage("Trouble loading user info...");
+    }
   }, []);
 
   const logIn = async (
@@ -65,10 +72,6 @@ export default function useCurrentUser(): [
 }
 
 async function getCurrentUser(setCurrentUser: (u: CurrentUser | null) => void) {
-  try {
-    const response = await Axios.get("/api/users/current");
-    setCurrentUser(response.data);
-  } catch (err) {
-    console.error(err);
-  }
+  const response = await Axios.get("/api/users/current");
+  setCurrentUser(response.data);
 }
