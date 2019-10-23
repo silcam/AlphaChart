@@ -60,10 +60,13 @@ export default function Chart(props: IProps) {
         </div>
       )}
       <div>
-        <div className="alphatable">
+        <div className="alphatable" style={stylesFor(chart, "table")}>
           <div
             className="alpharow alphasummary"
-            style={stylesFor(chart, "alphabetSummary")}
+            style={{
+              ...stylesFor(chart, "table"),
+              ...stylesFor(chart, "alphabetSummary")
+            }}
           >
             {chart.letters.map((letter, index) => (
               <div key={index}>
@@ -81,7 +84,10 @@ export default function Chart(props: IProps) {
                       props.edit ? "edit-alphacell" : ""
                     }`}
                     key={letterIndex}
-                    style={{ width: `${cellWidth}%` }}
+                    style={{
+                      ...stylesFor(chart, "table"),
+                      width: `${cellWidth}%`
+                    }}
                     data-selected={index === props.selectedIndex}
                     onClick={() =>
                       props.setSelectedIndex &&
@@ -147,6 +153,7 @@ export default function Chart(props: IProps) {
                 <div
                   className="alphacell lastRowFiller"
                   style={{
+                    ...stylesFor(chart, "table"),
                     ...stylesFor(chart, "lastRowFiller"),
                     width: `${(chart.cols - row.length) * cellWidth}%`
                   }}
@@ -166,21 +173,26 @@ export default function Chart(props: IProps) {
               )}
             </div>
           ))}
-          {chart.letters.length % chart.cols === 0 &&
-            chart.meta.lastRowFiller && (
-              <AlphaFooter
-                edit={props.edit}
-                text={chart.meta.lastRowFiller}
-                setText={lastRowFiller => updateMeta({ lastRowFiller })}
-                styles={stylesFor(chart, "lastRowFiller")}
-              />
-            )}
+          {chart.letters.length % chart.cols === 0 && chart.meta.lastRowFiller && (
+            <AlphaFooter
+              edit={props.edit}
+              text={chart.meta.lastRowFiller}
+              setText={lastRowFiller => updateMeta({ lastRowFiller })}
+              styles={{
+                ...stylesFor(chart, "table"),
+                ...stylesFor(chart, "lastRowFiller")
+              }}
+            />
+          )}
           {(props.edit || chart.meta.footer) && (
             <AlphaFooter
               edit={props.edit}
               text={chart.meta.footer}
               setText={footer => updateMeta({ footer })}
-              styles={stylesFor(chart, "footer")}
+              styles={{
+                ...stylesFor(chart, "table"),
+                ...stylesFor(chart, "lastRowFiller")
+              }}
             />
           )}
         </div>

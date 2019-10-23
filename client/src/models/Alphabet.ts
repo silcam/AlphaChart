@@ -24,6 +24,11 @@ export interface ChartStyles {
     fontSize?: string;
     textAlign?: string;
   };
+  table?: {
+    borderStyle?: "solid";
+    borderWidth?: string;
+    borderColor?: string;
+  };
   letter?: {
     fontSize?: string;
   };
@@ -60,6 +65,7 @@ export function defaultChartStyles(): ChartStyles {
     chart: { fontFamily: "AndikaNewBasic" },
     title: { fontSize: "3em", textAlign: "Center" },
     subtitle: { fontSize: "1.6em", textAlign: "Center" },
+    table: { borderStyle: "solid", borderWidth: "1px", borderColor: "#ddd" },
     letter: { fontSize: "3em" },
     alphabetSummary: { display: "flex", fontSize: "1.6em" },
     exampleWord: { fontSize: "1em" },

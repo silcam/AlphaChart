@@ -54,29 +54,18 @@ div.alphatable {
 }
 
 div.alphasummary {
-  border-left: 1px #ddd solid;
-  border-right: 1px #ddd solid;
   justify-content: space-evenly;
 }
 
 div.alpharow {
   flex-direction: row;
   align-items: stretch;
-  border-top: 1px #ddd solid;
 }
 
-div.alpharow:last-child {
-  border-bottom: 1px #ddd solid;
-}
 
 div.alphacell {
   padding: 8px;
   box-sizing: border-box;
-  border-left: 1px #ddd solid;
-}
-
-div.alphacell:last-child {
-  border-right: 1px #ddd solid;
 }
 
 div.edit-alphacell:hover,

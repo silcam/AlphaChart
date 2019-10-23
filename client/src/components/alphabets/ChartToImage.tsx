@@ -4,6 +4,7 @@ import { saveAs } from "file-saver";
 import OptionButton from "../common/OptionButton";
 import { ChartDimens } from "./ViewChartPage";
 import ErrorContext from "../common/ErrorContext";
+import ColorInput from "../common/ColorInput";
 
 const CHART_ID = "compChart";
 const DEFAULT_FONT_SIZE = 16;
@@ -72,9 +73,10 @@ function OptionsMenu(props: IOptionsMenuProps) {
     };
     // eslint-disable-next-line
   }, []);
-  const [bgColor, setBGColor] = useState("ffffff");
+  const [bgColor, setBGColor] = useState("#ffffff");
+  const [bgColorValid, setBGColorValid] = useState(true);
   const [enableBGColor, setEnableBGColor] = useState(true);
-  const inputValid = !!dimensions[0] && (!enableBGColor || validColor(bgColor));
+  const inputValid = !!dimensions[0] && (!enableBGColor || bgColorValid);
   const [saving, setSaving] = useState(false);
   const { setErrorMessage } = useContext(ErrorContext);
 
@@ -113,19 +115,17 @@ function OptionsMenu(props: IOptionsMenuProps) {
       </table>
       <div className="bgColor">
         <label>Background Color:</label>
-        <div data-disabled={!enableBGColor}>
+        <div data-disabled={!enableBGColor} className="flex-row">
           <input
             type="checkbox"
             checked={enableBGColor}
             onChange={e => setEnableBGColor(e.target.checked)}
           />
-          #
-          <input
-            type="text"
-            value={bgColor}
-            onChange={e => setBGColor(e.target.value)}
+          <ColorInput
+            color={bgColor}
+            setColor={setBGColor}
+            setInputValid={setBGColorValid}
             disabled={!enableBGColor}
-            size={8}
           />
         </div>
       </div>
@@ -136,7 +136,7 @@ function OptionsMenu(props: IOptionsMenuProps) {
             setSaving(true);
             try {
               await makeImage({
-                backgroundColor: enableBGColor ? `#${bgColor}` : undefined
+                backgroundColor: enableBGColor ? bgColor : undefined
               });
             } catch (err) {
               setErrorMessage(err);
@@ -149,35 +149,6 @@ function OptionsMenu(props: IOptionsMenuProps) {
         <button onClick={props.hideMenu}>Cancel</button>
       </div>
     </div>
-  );
-}
-
-function validColor(color: string) {
-  const validHexChars = [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "0",
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f"
-  ];
-  return (
-    [6, 8].includes(color.length) &&
-    color
-      .toLowerCase()
-      .split("")
-      .every(char => validHexChars.includes(char))
   );
 }
 

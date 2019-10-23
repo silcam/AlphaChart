@@ -8,6 +8,25 @@ ul.compAlphabetsList li {
     margin: 4px 0;
 }
 
+/* ColorInput */
+
+div.compColorInput {
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+div.compColorInput .color-demo {
+    height: 8px;
+    width: 8px;
+    border: 1px solid #000;
+    margin: 4px;
+    align-self: center;
+}
+
+div.compColorInput input {
+    text-align: end;
+}
+
 /* ChartToImageOptionsMenu */
 
 div.compChartToImageOptionsMenu {

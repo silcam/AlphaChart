@@ -10,6 +10,8 @@ import update from "immutability-helper";
 import FontSizeInput from "./FontSizeInput";
 import LnkBtn from "../common/LnkBtn";
 import Switch from "react-switch";
+import NumberPicker from "../common/NumberPicker";
+import ColorInput from "../common/ColorInput";
 
 interface IProps {
   chart: AlphabetChart;
@@ -168,6 +170,22 @@ export default function SettingsSideMenu(props: IProps) {
         <FontSizeInput
           fontSize={styles.footer!.fontSize!}
           setFontSize={fontSize => updateStyles("footer", { fontSize })}
+        />
+      </div>
+      <div className="input">
+        <label>Border Thickness:</label>
+        <NumberPicker
+          value={parseInt(styles.table!.borderWidth!)}
+          setValue={v => updateStyles("table", { borderWidth: `${v}px` })}
+          noType
+          minimum={0}
+        />
+      </div>
+      <div className="input">
+        <label>Border Color:</label>
+        <ColorInput
+          color={styles.table!.borderColor!}
+          setColor={borderColor => updateStyles("table", { borderColor })}
         />
       </div>
     </div>
