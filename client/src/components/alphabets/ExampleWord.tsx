@@ -10,7 +10,7 @@ interface IProps {
 export default function ExampleWord(props: IProps) {
   const letter = props.letter;
   const keyLetterPtrn = new RegExp(
-    `(${regexEscape(letter.forms.join("|"))})`,
+    `(${letter.forms.map(f => regexEscape(f)).join("|")})`,
     "g"
   );
   const pieces = letter.exampleWord.split(keyLetterPtrn);
