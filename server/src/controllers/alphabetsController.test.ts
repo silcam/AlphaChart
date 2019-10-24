@@ -124,3 +124,37 @@ test("Login required to create/modify", async () => {
     .attach("image", "server/src/storage/test/images/apple.png");
   expect(response.status).toBe(401);
 });
+
+test("Copy Alphabet", async () => {
+  expect.assertions(2);
+  const lucyAgent = await loggedInAgent("Lucy");
+
+  let response = await lucyAgent.post(
+    "/api/alphabets/5d4c38e158e6dbb33d7d7b12/copy"
+  );
+  const id = response.body._id;
+  response = await lucyAgent.get(`/api/alphabets/${id}`);
+  expect(response.body.name).toEqual("Ελληνικα");
+  expect(response.body.user).toEqual("lucy@me.com");
+});
+
+test("Copy Alphabet Errors", async () => {
+  expect.assertions(3);
+  const agent = notLoggedInAgent();
+  const titusAgent = await loggedInAgent();
+  const lucyAgent = await loggedInAgent("Lucy");
+
+  let response = await agent.post(
+    "/api/alphabets/5d4c38e158e6dbb33d7d7b12/copy"
+  );
+  expect(response.status).toBe(401);
+
+  response = await lucyAgent.post("/api/alphabets/123/copy");
+  expect(response.status).toBe(404);
+
+  // Can't copy an alphabet you already own
+  response = await titusAgent.post(
+    "/api/alphabets/5d4c38e158e6dbb33d7d7b12/copy"
+  );
+  expect(response.status).toBe(422);
+});

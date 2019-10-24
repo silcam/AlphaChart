@@ -15,10 +15,15 @@ export default function UserHomePage(props: IProps) {
   const [alphabets, setAlphabets] = useState<Alphabet[] | null>(null);
 
   useEffect(() => {
-    Axios.get("/api/alphabets/mine").then(response => {
+    Axios.get("/api/alphabets").then(response => {
       setAlphabets(response.data);
     });
   }, []);
+
+  const myAlphabets =
+    alphabets && alphabets.filter(a => a.user === props.currentUser.email);
+  const otherAlphabets =
+    alphabets && alphabets.filter(a => a.user !== props.currentUser.email);
 
   return (
     <div className="HomePage">
@@ -27,9 +32,15 @@ export default function UserHomePage(props: IProps) {
           <button>New Alphabet</button>
         </Link>
       </div>
-      <div>
-        <h2>My Alphabets</h2>
-        <AlphabetsList alphabets={alphabets} />
+      <div className="flex-row">
+        <div>
+          <h2>My Alphabets</h2>
+          <AlphabetsList alphabets={myAlphabets} />
+        </div>
+        <div>
+          <h2>Other Alphabets</h2>
+          <AlphabetsList alphabets={otherAlphabets} />
+        </div>
       </div>
     </div>
   );

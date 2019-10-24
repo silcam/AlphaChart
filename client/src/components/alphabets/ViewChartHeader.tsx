@@ -2,6 +2,7 @@ import React from "react";
 import ChartToImage from "./ChartToImage";
 import { Link } from "react-router-dom";
 import { ChartDimens } from "./ViewChartPage";
+import CopyAlphabetButton from "./CopyAlphabetButton";
 
 interface IProps {
   id: string;
@@ -22,10 +23,12 @@ export default function ViewChartHeader(props: IProps) {
       {props.chartLoaded && (
         <div className="flex-row">
           <div>
-            {props.canEdit && (
+            {props.canEdit ? (
               <Link to={`/alphabets/edit/${props.id}/chart`}>
                 <button>Edit Chart</button>
               </Link>
+            ) : (
+              <CopyAlphabetButton id={props.id} />
             )}
           </div>
           <ChartToImage setChartDimens={props.setChartDimens} />

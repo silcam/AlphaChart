@@ -69,6 +69,20 @@ async function createChart(
   return result.value;
 }
 
+async function copyAlphabet(
+  alphabet: Alphabet,
+  user: StoredUser
+): Promise<Alphabet> {
+  log.log(`[Query] Copy chart ${alphabet._id} to user ${user._id}`);
+  const newAlphabet: Omit<Alphabet, "_id"> = update(alphabet, {
+    user: { $set: user._id },
+    $unset: ["_id"]
+  });
+  const collection = await alphabetCollection();
+  const result = await collection.insertOne(newAlphabet);
+  return result.ops[0];
+}
+
 async function alphabetCollection() {
   return (await Data.db()).collection("alphabets");
 }
@@ -77,5 +91,6 @@ export default {
   alphabet,
   alphabets,
   createAlphabet,
-  createChart
+  createChart,
+  copyAlphabet
 };

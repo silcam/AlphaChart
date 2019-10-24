@@ -31,6 +31,24 @@ export default function alphabetsController(app: Express) {
     else res.json(alphabet);
   });
 
+  app.post("/api/alphabets/:id/copy", async (req, res) => {
+    try {
+      const alphabet = await AlphabetData.alphabet(req.params.id);
+      const user = await currentUser(req);
+      if (alphabet === null) throw { status: 404 };
+      if (user === null) throw { status: 401 };
+      if (alphabet.user === user._id) throw { status: 422 };
+      const newAlphabet = await AlphabetData.copyAlphabet(alphabet, user);
+      res.json({ _id: newAlphabet._id });
+    } catch (err) {
+      if (err.status) res.status(err.status).send();
+      else {
+        console.error(err);
+        res.status(500).send();
+      }
+    }
+  });
+
   app.post("/api/alphabets", async (req, res) => {
     const user = await verifyLogin(req);
     if (user) {
