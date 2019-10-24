@@ -121,12 +121,13 @@ function OptionsMenu(props: IOptionsMenuProps) {
             checked={enableBGColor}
             onChange={e => setEnableBGColor(e.target.checked)}
           />
-          <ColorInput
-            color={bgColor}
-            setColor={setBGColor}
-            setInputValid={setBGColorValid}
-            disabled={!enableBGColor}
-          />
+          {enableBGColor && (
+            <ColorInput
+              color={bgColor}
+              setColor={setBGColor}
+              setInputValid={setBGColorValid}
+            />
+          )}
         </div>
       </div>
       <div className="buttonRow">

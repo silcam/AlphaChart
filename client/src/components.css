@@ -10,12 +10,20 @@ ul.compAlphabetsList li {
 
 /* ColorInput */
 
-div.compColorInput {
+div.compColorInput .color-picker-preview {
+    height: 24px;
+    width: 24px;
+    border: 2px #999 solid;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+div.compSimpleColorInput {
     flex-direction: row;
     justify-content: flex-start;
 }
 
-div.compColorInput .color-demo {
+div.compSimpleColorInput .color-demo {
     height: 8px;
     width: 8px;
     border: 1px solid #000;
@@ -23,7 +31,7 @@ div.compColorInput .color-demo {
     align-self: center;
 }
 
-div.compColorInput input {
+div.compSimpleColorInput input {
     text-align: end;
 }
 
@@ -179,6 +187,12 @@ div.letter-side-menu input[type="text"]::placeholder {
 div.letter-side-menu div.NumberPicker input {
     font-size: 1.2em;
     color: black;
+}
+
+div.side-menu.settings-side-menu {
+    top: 0;
+    height: 100vh;
+    overflow: scroll;
 }
 
 div.settings-side-menu div.input {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ChromePicker } from "react-color";
 
 interface IProps {
   color: string;
@@ -8,6 +9,29 @@ interface IProps {
 }
 
 export default function ColorInput(props: IProps) {
+  const [expanded, setExpanded] = useState(false);
+  const toggleExpanded = () => setExpanded(!expanded);
+
+  return (
+    <div className="compColorInput" onBlur={() => setExpanded(false)}>
+      <div
+        className="color-picker-preview"
+        style={{ backgroundColor: props.color }}
+        onClick={toggleExpanded}
+      />
+      {expanded && (
+        <div className="color-picker">
+          <ChromePicker
+            color={props.color}
+            onChange={color => props.setColor(color.hex)}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function SimpleColorInput(props: IProps) {
   const [text, setText] = useState(props.color.replace(/^#/, ""));
   const inputValid = validColor(text);
 
@@ -17,7 +41,7 @@ export default function ColorInput(props: IProps) {
   }, [text]);
 
   return (
-    <div className="compColorInput">
+    <div className="compSimpleColorInput">
       #
       <input
         type="text"
