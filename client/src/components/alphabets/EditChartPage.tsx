@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ChartEditor from "./ChartEditor";
 import { Alphabet, AlphabetChart } from "../../models/Alphabet";
-import Axios from "axios";
 import Loading from "../common/Loading";
 import { History } from "history";
+import useNetwork from "../common/useNetwork";
 
 interface IProps {
   id: string;
@@ -12,14 +12,17 @@ interface IProps {
 
 export default function EditChartPage(props: IProps) {
   const [alphabet, setAlphabet] = useState<Alphabet | null>(null);
+  const [, request] = useNetwork();
   useEffect(() => {
-    Axios.get(`/api/alphabets/${props.id}`).then(response =>
-      setAlphabet(response.data)
-    );
+    request(axios => axios.get(`/api/alphabets/${props.id}`))
+      .then(response => response && setAlphabet(response.data))
+      .catch(err => console.error(err));
   }, [props.id]);
 
   const save = async (chart: AlphabetChart) => {
-    await Axios.post(`/api/alphabets/${props.id}/charts`, chart);
+    await request(axios =>
+      axios.post(`/api/alphabets/${props.id}/charts`, chart)
+    );
     props.history.push(`/alphabets/view/${props.id}`);
   };
 

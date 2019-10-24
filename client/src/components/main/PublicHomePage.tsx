@@ -3,7 +3,7 @@ import { LogInFunc, CreateAccountFunc } from "../users/useCurrentUser";
 import CreateAccountOrLogIn from "../users/CreateAccountOrLogIn";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { Alphabet } from "../../models/Alphabet";
-import Axios from "axios";
+import useNetwork from "../common/useNetwork";
 
 interface IProps {
   logIn: LogInFunc;
@@ -12,11 +12,14 @@ interface IProps {
 
 export default function PublicHomePage(props: IProps) {
   const [alphabets, setAlphabets] = useState<Alphabet[] | null>(null);
+  const [loading, request] = useNetwork();
 
   useEffect(() => {
-    Axios.get("/api/alphabets").then(response => {
-      setAlphabets(response.data);
-    });
+    request(axios => axios.get("/api/alphabets"))
+      .then(response => {
+        response && setAlphabets(response.data);
+      })
+      .catch(err => console.error(err));
   }, []);
 
   return (

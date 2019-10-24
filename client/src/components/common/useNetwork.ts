@@ -4,10 +4,17 @@ import Axios, { AxiosInstance } from "axios";
 
 const TROUBLE_CONNECTING = "Trouble connecting to server, trying to reconnect";
 type Request = <T>(
-  cb: (axios: AxiosInstance) => Promise<T>
+  cb: (axios: AxiosInstance) => Promise<T>,
+  errorMessages?: { [key: number]: string }
 ) => Promise<T | null>;
 
-export default function useNetwork(): [boolean, Request] {
+interface UseNetworkOpts {
+  throwErrorsWithResponse?: boolean;
+}
+
+export default function useNetwork(
+  opts: UseNetworkOpts = {}
+): [boolean, Request] {
   const { setErrorMessage } = useContext(ErrorContext);
   const [loading, setLoading] = useState(false);
   const [tryingToReconnect, setTryingToReconnect] = useState(false);
@@ -28,14 +35,18 @@ export default function useNetwork(): [boolean, Request] {
     }
   }, [tryingToReconnect, dots]);
 
-  const request: Request = async cb => {
+  const request: Request = async (cb, errorMessages = {}) => {
     try {
       setLoading(true);
       return await cb(Axios.create({ timeout: 5000 }));
     } catch (err) {
       console.error(err);
       if (err.response) {
-        setErrorMessage(`App Error (Code ${err.response.status})`);
+        if (opts.throwErrorsWithResponse) throw err;
+        setErrorMessage(
+          errorMessages[err.response.status] ||
+            `App Error (Code ${err.response.status})`
+        );
         return null;
       } else if (err.request) {
         setErrorMessage(`${TROUBLE_CONNECTING}${dots}`);

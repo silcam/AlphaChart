@@ -21,11 +21,7 @@ export default function NavBar(props: IProps) {
           <li>{props.user.name}</li>
           <li>
             <LnkBtn
-              onClick={() =>
-                props
-                  .logOut(() => setErrorMessage("Error logging out."))
-                  .then(() => history.push("/"))
-              }
+              onClick={() => props.logOut().then(() => history.push("/"))}
               text="Log out"
             />
           </li>

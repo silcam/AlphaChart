@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Alphabet } from "../../models/Alphabet";
-import Axios from "axios";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { LogOutFunc } from "../users/useCurrentUser";
 import { CurrentUser } from "../../models/User";
+import useNetwork from "../common/useNetwork";
 
 interface IProps {
   logOut: LogOutFunc;
@@ -13,11 +13,12 @@ interface IProps {
 
 export default function UserHomePage(props: IProps) {
   const [alphabets, setAlphabets] = useState<Alphabet[] | null>(null);
+  const [loading, request] = useNetwork();
 
   useEffect(() => {
-    Axios.get("/api/alphabets").then(response => {
-      setAlphabets(response.data);
-    });
+    request(axios => axios.get("/api/alphabets"))
+      .then(response => response && setAlphabets(response.data))
+      .catch(err => console.error(err));
   }, []);
 
   const myAlphabets =

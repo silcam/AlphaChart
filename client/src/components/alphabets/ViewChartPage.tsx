@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Alphabet } from "../../models/Alphabet";
-import Axios from "axios";
 import Chart from "./Chart";
 import Loading from "../common/Loading";
 import ViewChartHeader from "./ViewChartHeader";
 import { CurrentUserOrNot, userId } from "../../models/User";
+import useNetwork from "../common/useNetwork";
 
 interface IProps {
   id: string;
@@ -19,10 +19,12 @@ export interface ChartDimens {
 export default function ViewChartPage(props: IProps) {
   const [alphabet, setAlphabet] = useState<Alphabet | null>(null);
   const [chartDimens, setChartDimens] = useState<ChartDimens | null>(null);
+  const [, request] = useNetwork();
+
   useEffect(() => {
-    Axios.get(`/api/alphabets/${props.id}`).then(response =>
-      setAlphabet(response.data)
-    );
+    request(axios => axios.get(`/api/alphabets/${props.id}`))
+      .then(response => response && setAlphabet(response.data))
+      .catch(err => console.error(err));
   }, [props.id]);
   return (
     <div style={{ paddingBottom: "30px" }}>

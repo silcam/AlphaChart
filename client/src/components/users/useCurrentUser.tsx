@@ -1,14 +1,14 @@
 import { CurrentUser, LoginAttempt, NewUser } from "../../models/User";
 import { useState, useEffect, useContext } from "react";
-import Axios from "axios";
 import ErrorContext from "../common/ErrorContext";
+import useNetwork from "../common/useNetwork";
 
 type LoginError = "Invalid" | "Unknown";
 export type LogInFunc = (
   loginAttempt: LoginAttempt,
   handleError: (e: LoginError) => void
 ) => void;
-export type LogOutFunc = (handleError: () => void) => Promise<void>;
+export type LogOutFunc = () => Promise<void>;
 export type CreateAccountFunc = (
   newUser: NewUser,
   handleError: (msg: string) => void
@@ -21,8 +21,19 @@ export default function useCurrentUser(): [
   CreateAccountFunc
 ] {
   const [currentUser, setCurrentUser] = useState<null | CurrentUser>(null);
+  const [, request] = useNetwork();
+  const [, requestThrowsErrorResponses] = useNetwork({
+    throwErrorsWithResponse: true
+  });
 
   const { setErrorMessage } = useContext(ErrorContext);
+
+  const getCurrentUser = async (
+    setCurrentUser: (u: CurrentUser | null) => void
+  ) => {
+    const response = await request(axios => axios.get("/api/users/current"));
+    response && setCurrentUser(response.data);
+  };
 
   useEffect(() => {
     try {
@@ -37,21 +48,19 @@ export default function useCurrentUser(): [
     handleError: (e: LoginError) => void
   ) => {
     try {
-      const response = await Axios.post("/api/users/login", loginAttempt);
-      setCurrentUser(response.data);
+      const response = await requestThrowsErrorResponses(axios =>
+        axios.post("/api/users/login", loginAttempt)
+      );
+      response && setCurrentUser(response.data);
     } catch (err) {
       if (err.response && err.response.status === 401) handleError("Invalid");
       else handleError("Unknown");
     }
   };
 
-  const logOut = async (handleError: () => void) => {
-    try {
-      await Axios.post("/api/users/logout");
-      setCurrentUser(null);
-    } catch (err) {
-      handleError();
-    }
+  const logOut = async () => {
+    const response = await request(axios => axios.post("/api/users/logout"));
+    if (response) setCurrentUser(null);
   };
 
   const createAccount = async (
@@ -59,8 +68,10 @@ export default function useCurrentUser(): [
     handleError: (msg: string) => void
   ) => {
     try {
-      const response = await Axios.post("/api/users", newUser);
-      setCurrentUser(response.data);
+      const response = await requestThrowsErrorResponses(axios =>
+        axios.post("/api/users", newUser)
+      );
+      response && setCurrentUser(response.data);
     } catch (err) {
       if (err.response && err.response.status === 422)
         handleError(err.response.data.error);
@@ -69,9 +80,4 @@ export default function useCurrentUser(): [
   };
 
   return [currentUser, logIn, logOut, createAccount];
-}
-
-async function getCurrentUser(setCurrentUser: (u: CurrentUser | null) => void) {
-  const response = await Axios.get("/api/users/current");
-  setCurrentUser(response.data);
 }
