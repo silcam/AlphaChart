@@ -59,7 +59,7 @@ test("Invalid new users", async () => {
   });
   expect(response.status).toBe(422);
   expect(response.body).toEqual({
-    error: "Email is invalid."
+    error: "Invalid_email"
   });
 
   response = await agent.post("/api/users").send({
@@ -69,7 +69,7 @@ test("Invalid new users", async () => {
   });
   expect(response.status).toBe(422);
   expect(response.body).toEqual({
-    error: "Please choose a password with at least 10 characters."
+    error: "Password_too_short"
   });
 });
 
