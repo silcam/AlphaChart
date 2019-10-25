@@ -13,6 +13,7 @@ import LetterSideMenu from "./LetterSideMenu";
 import useStateModified from "../common/useStateModified";
 import LnkBtn from "../common/LnkBtn";
 import SettingsSideMenu from "./SettingsSideMenu";
+import { useTranslation } from "../common/I18nContext";
 
 interface IProps {
   alphabet: Alphabet;
@@ -20,6 +21,7 @@ interface IProps {
 }
 
 export default function ChartEditor(props: IProps) {
+  const t = useTranslation();
   const originalChart = props.alphabet.charts[0];
   const [chart, setChart, chartModified] = useStateModified(originalChart);
   const setCols = (cols: number) =>
@@ -40,11 +42,11 @@ export default function ChartEditor(props: IProps) {
         }}
       >
         <button onClick={done} disabled={!chartModified}>
-          Save and Quit
+          {t("Save_and_quit")}
         </button>
         <Link to={`/alphabets/view/${props.alphabet._id}`}>
           <button onClick={() => {}} className="red">
-            Cancel
+            {t("Cancel")}
           </button>
         </Link>
       </div>
@@ -56,11 +58,11 @@ export default function ChartEditor(props: IProps) {
         />
 
         <div className="flex-space" />
-        <label>Columns:</label>
+        <label>{t("Columns")}:</label>
         <NumberPicker value={chart.cols} setValue={setCols} />
         <div style={{ width: "20px" }} />
         <LnkBtn
-          text="Chart Settings"
+          text={t("Chart_settings")}
           onClick={() => setShowSettingsMenu(!showSettingsMenu)}
         />
       </div>

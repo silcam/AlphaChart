@@ -1,12 +1,14 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import useNetwork from "../common/useNetwork";
+import { useTranslation } from "../common/I18nContext";
 
 interface IProps {
   id: string;
 }
 
 export default function CopyAlphabetButton(props: IProps) {
+  const t = useTranslation();
   const history = useHistory();
   const [loading, request] = useNetwork();
 
@@ -21,7 +23,7 @@ export default function CopyAlphabetButton(props: IProps) {
 
   return (
     <button onClick={copyAlphabet} disabled={loading}>
-      {loading ? "Loading..." : "Copy to my alphabets"}
+      {loading ? t("Loading") : t("Copy_to_my_alphabets")}
     </button>
   );
 }

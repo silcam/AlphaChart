@@ -5,6 +5,7 @@ import OptionButton from "../common/OptionButton";
 import { ChartDimens } from "./ViewChartPage";
 import ErrorContext from "../common/ErrorContext";
 import ColorInput from "../common/ColorInput";
+import { useTranslation } from "../common/I18nContext";
 
 const CHART_ID = "compChart";
 const DEFAULT_FONT_SIZE = 16;
@@ -14,6 +15,7 @@ interface IProps {
 }
 
 export default function ChartToImage(props: IProps) {
+  const t = useTranslation();
   const { setErrorMessage } = useContext(ErrorContext);
   return (
     <div>
@@ -25,7 +27,7 @@ export default function ChartToImage(props: IProps) {
             setErrorMessage(err);
           }
         }}
-        buttonText="Save Chart Image"
+        buttonText={t("Save_chart_image")}
         renderContextMenu={({ hideMenu }) => (
           <OptionsMenu
             hideMenu={hideMenu}
@@ -42,6 +44,7 @@ interface IOptionsMenuProps extends IProps {
 }
 
 function OptionsMenu(props: IOptionsMenuProps) {
+  const t = useTranslation();
   const chartNode = document.getElementById(CHART_ID);
   const chartNodeDimensions = chartNode
     ? [chartNode.offsetWidth, chartNode.offsetHeight]
@@ -82,12 +85,12 @@ function OptionsMenu(props: IOptionsMenuProps) {
 
   return (
     <div className="compChartToImageOptionsMenu">
-      <div className="optMenuHeader">Image Options</div>
+      <div className="optMenuHeader">{t("Image_options")}</div>
       <table>
         <tbody>
           <tr>
             <td>
-              <label>Width:</label>
+              <label>{t("Width")}:</label>
             </td>
             <td>
               <input
@@ -100,7 +103,7 @@ function OptionsMenu(props: IOptionsMenuProps) {
           </tr>
           <tr>
             <td>
-              <label>Height:</label>
+              <label>{t("Height")}:</label>
             </td>
             <td>
               <input
@@ -114,7 +117,7 @@ function OptionsMenu(props: IOptionsMenuProps) {
         </tbody>
       </table>
       <div className="bgColor">
-        <label>Background Color:</label>
+        <label>{t("Background_color")}: </label>
         <div data-disabled={!enableBGColor} className="flex-row">
           <input
             type="checkbox"
@@ -145,7 +148,7 @@ function OptionsMenu(props: IOptionsMenuProps) {
             setSaving(false);
           }}
         >
-          {saving ? "Saving..." : "Save"}
+          {saving ? t("Saving") : t("Save")}
         </button>
         <button onClick={props.hideMenu}>Cancel</button>
       </div>

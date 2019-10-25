@@ -7,13 +7,18 @@ import useCurrentUser from "./users/useCurrentUser";
 import NavBar from "./common/NavBar";
 import ErrorContext from "./common/ErrorContext";
 import ErrorMessage from "./common/ErrorMessage";
+import I18nContext, { Locale } from "./common/I18nContext";
 
 export default function AlphaChart() {
   const [errorMessage, setErrorMessage] = useState("");
+  const [locale, setLocale] = useState<Locale>("en");
+
   return (
     <div id="page-root">
       <ErrorContext.Provider value={{ errorMessage, setErrorMessage }}>
-        <AlphaChartInner />
+        <I18nContext.Provider value={{ locale, setLocale }}>
+          <AlphaChartInner />
+        </I18nContext.Provider>
       </ErrorContext.Provider>
     </div>
   );

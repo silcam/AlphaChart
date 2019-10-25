@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { CreateAccountFunc } from "./useCurrentUser";
 import { NewUser, validationErrors } from "../../models/User";
+import { useTranslation } from "../common/I18nContext";
+import { TKey } from "../../locales/en";
 
 interface IProps {
   createAccount: CreateAccountFunc;
 }
 
 export default function CreateAccountForm(props: IProps) {
+  const t = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<TKey[]>([]);
 
   const createAccount = () => {
     const newUser: NewUser = {
@@ -31,13 +34,13 @@ export default function CreateAccountForm(props: IProps) {
         createAccount();
       }}
     >
-      <h2>Create New Account</h2>
+      <h2>{t("Create_new_account")}</h2>
       <p>
         <input
           type="text"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder={t("Email")}
         />
       </p>
       <p>
@@ -45,7 +48,7 @@ export default function CreateAccountForm(props: IProps) {
           type="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
-          placeholder="Password"
+          placeholder={t("Password")}
         />
       </p>
       <p>
@@ -53,7 +56,7 @@ export default function CreateAccountForm(props: IProps) {
           type="password"
           value={passwordCheck}
           onChange={e => setPasswordCheck(e.target.value)}
-          placeholder="Verify Password"
+          placeholder={t("Verify_password")}
         />
       </p>
       <p>
@@ -61,17 +64,17 @@ export default function CreateAccountForm(props: IProps) {
           type="text"
           value={displayName}
           onChange={e => setDisplayName(e.target.value)}
-          placeholder="Display Name"
+          placeholder={t("Display_name")}
         />
       </p>
       <p className="error">
         {errors.map(err => (
           <span style={{ display: "block" }} key={err}>
-            {err}
+            {t(err)}
           </span>
         ))}
       </p>
-      <button type="submit">Create Account</button>
+      <button type="submit">{t("Create_the_account")}</button>
     </form>
   );
 }

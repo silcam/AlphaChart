@@ -1,3 +1,5 @@
+import { TKey } from "../locales/en";
+
 export interface NewUser {
   email: string;
   name: string;
@@ -39,12 +41,11 @@ export function toCurrentUser(user: StoredUser): CurrentUser {
 }
 
 export function validationErrors(user: NewUser, passwordCheck?: string) {
-  const errors = [];
-  if (user.email.length < 5) errors.push("Email is invalid.");
-  if (user.password.length < 10)
-    errors.push("Please choose a password with at least 10 characters.");
+  const errors: TKey[] = [];
+  if (user.email.length < 5) errors.push("Invalid_email");
+  if (user.password.length < 10) errors.push("Password_too_short");
   if (passwordCheck !== undefined && passwordCheck !== user.password)
-    errors.push("Passwords do not match.");
+    errors.push("Passwords_do_not_match");
   return errors.length > 0 ? errors : null;
 }
 

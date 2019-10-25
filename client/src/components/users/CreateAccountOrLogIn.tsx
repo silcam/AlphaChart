@@ -3,6 +3,7 @@ import { LogInFunc, CreateAccountFunc } from "./useCurrentUser";
 import LoginForm from "./LoginForm";
 import CreateAccountForm from "./CreateAccountForm";
 import LnkBtn from "../common/LnkBtn";
+import { useTranslation } from "../common/I18nContext";
 
 interface IProps {
   logIn: LogInFunc;
@@ -10,6 +11,7 @@ interface IProps {
 }
 
 export default function CreateAccountOrLogIn(props: IProps) {
+  const t = useTranslation();
   const [showLogin, setShowLogin] = useState(true);
   const toggleShowLogin = () => setShowLogin(!showLogin);
   return (
@@ -22,7 +24,7 @@ export default function CreateAccountOrLogIn(props: IProps) {
       <p>
         <LnkBtn
           onClick={toggleShowLogin}
-          text={showLogin ? "Create Account" : "Cancel"}
+          text={showLogin ? t("Create_account") : t("Cancel")}
         />
       </p>
     </div>

@@ -3,6 +3,7 @@ import { AlphabetLetter } from "../../models/Alphabet";
 import update from "immutability-helper";
 import LnkBtn from "../common/LnkBtn";
 import NumberPicker from "../common/NumberPicker";
+import { useTranslation } from "../common/I18nContext";
 
 interface IProps {
   letter: AlphabetLetter;
@@ -17,6 +18,7 @@ interface IProps {
 }
 
 export default function LetterSideMenu(props: IProps) {
+  const t = useTranslation();
   const draftForms = [...props.letter.forms, ""];
 
   const setForm = (index: number, form: string) =>
@@ -34,7 +36,7 @@ export default function LetterSideMenu(props: IProps) {
   return (
     <div className="side-menu letter-side-menu">
       <div style={{ alignSelf: "flex-end" }}>
-        <LnkBtn onClick={props.close} text="Close" />
+        <LnkBtn onClick={props.close} text={t("Close")} />
       </div>
       <h1>{props.letter.forms.join("")}</h1>
       <ul style={{ marginBottom: "30px" }}>
@@ -45,7 +47,7 @@ export default function LetterSideMenu(props: IProps) {
               value={form}
               onChange={e => setForm(index, e.target.value)}
               onBlur={clearEmptyForms}
-              placeholder="Add form"
+              placeholder={t("Add_form")}
               size={8}
               autoFocus={index === 0}
             />
@@ -53,7 +55,7 @@ export default function LetterSideMenu(props: IProps) {
         ))}
       </ul>
       <div className="flex-row" style={{ marginBottom: "12px" }}>
-        <label>Position:</label>
+        <label>{t("Position")}:</label>
         <NumberPicker
           value={props.index + 1}
           setValue={v => props.moveTo(v - 1)}
@@ -62,13 +64,16 @@ export default function LetterSideMenu(props: IProps) {
         />
       </div>
       <button onClick={props.insertBefore}>
-        New letter before <b>{props.letter.forms[0]}</b>
+        {t("New_letter_before")}
+        <b>{props.letter.forms[0]}</b>
       </button>
       <button onClick={props.insertAfter}>
-        New letter after <b>{props.letter.forms[0]}</b>
+        {t("New_letter_after")}
+        <b>{props.letter.forms[0]}</b>
       </button>
       <button className="red" onClick={props.deleteLetter}>
-        Delete <b>{props.letter.forms[0]}</b>
+        {t("Delete_letter")}
+        <b>{props.letter.forms[0]}</b>
       </button>
     </div>
   );

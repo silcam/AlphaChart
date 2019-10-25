@@ -2,6 +2,8 @@ import { CurrentUser, LoginAttempt, NewUser } from "../../models/User";
 import { useState, useEffect, useContext } from "react";
 import ErrorContext from "../common/ErrorContext";
 import useNetwork from "../common/useNetwork";
+import { useTranslation } from "../common/I18nContext";
+import { TKey } from "../../locales/en";
 
 type LoginError = "Invalid" | "Unknown";
 export type LogInFunc = (
@@ -11,7 +13,7 @@ export type LogInFunc = (
 export type LogOutFunc = () => Promise<void>;
 export type CreateAccountFunc = (
   newUser: NewUser,
-  handleError: (msg: string) => void
+  handleError: (msg: TKey) => void
 ) => void;
 
 export default function useCurrentUser(): [
@@ -20,6 +22,7 @@ export default function useCurrentUser(): [
   LogOutFunc,
   CreateAccountFunc
 ] {
+  const t = useTranslation();
   const [currentUser, setCurrentUser] = useState<null | CurrentUser>(null);
   const [, request] = useNetwork();
   const [, requestThrowsErrorResponses] = useNetwork({
@@ -39,7 +42,7 @@ export default function useCurrentUser(): [
     try {
       getCurrentUser(setCurrentUser);
     } catch (err) {
-      setErrorMessage("Trouble loading user info...");
+      setErrorMessage(t("Trouble_loading_user_info"));
     }
   }, []);
 
@@ -65,7 +68,7 @@ export default function useCurrentUser(): [
 
   const createAccount = async (
     newUser: NewUser,
-    handleError: (msg: string) => void
+    handleError: (msg: TKey) => void
   ) => {
     try {
       const response = await requestThrowsErrorResponses(axios =>
@@ -75,7 +78,7 @@ export default function useCurrentUser(): [
     } catch (err) {
       if (err.response && err.response.status === 422)
         handleError(err.response.data.error);
-      else handleError("Unknown error");
+      else handleError("Unknown_error");
     }
   };
 

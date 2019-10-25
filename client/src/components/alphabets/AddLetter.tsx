@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AlphabetChart, AlphabetLetter } from "../../models/Alphabet";
 import update from "immutability-helper";
 import keyHandler from "../common/KeyHandler";
+import { useTranslation } from "../common/I18nContext";
 
 interface IProps {
   chart: AlphabetChart;
@@ -10,6 +11,7 @@ interface IProps {
 }
 
 export default function AddLetter(props: IProps) {
+  const t = useTranslation();
   const [text, setText] = useState("");
 
   const addLetter = () => {
@@ -32,7 +34,7 @@ export default function AddLetter(props: IProps) {
 
   return (
     <div className="flex-row" style={{ justifyContent: "flex-start" }}>
-      <label>Add Letters:</label>
+      <label>{t("Add_letters")}:</label>
       <input
         type="text"
         value={text}

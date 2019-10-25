@@ -4,6 +4,7 @@ import CreateAccountOrLogIn from "../users/CreateAccountOrLogIn";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { Alphabet } from "../../models/Alphabet";
 import useNetwork from "../common/useNetwork";
+import { useTranslation } from "../common/I18nContext";
 
 interface IProps {
   logIn: LogInFunc;
@@ -11,6 +12,7 @@ interface IProps {
 }
 
 export default function PublicHomePage(props: IProps) {
+  const t = useTranslation();
   const [alphabets, setAlphabets] = useState<Alphabet[] | null>(null);
   const [loading, request] = useNetwork();
 
@@ -31,7 +33,7 @@ export default function PublicHomePage(props: IProps) {
         />
       </div>
       <div>
-        <h2>View Alphabets</h2>
+        <h2>{t("Alphabet_charts")}</h2>
         <AlphabetsList alphabets={alphabets} />
       </div>
     </div>

@@ -89,6 +89,13 @@ div.compErrorMessage a {
     font-weight: bold;
 }
 
+/* LocalePicker */
+
+div.compLocalePicker {
+    flex-direction: row;
+    padding: 0 8px;
+}
+
 /* NumberPicker */
 
 div.NumberPicker {

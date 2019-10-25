@@ -1,22 +1,24 @@
 import React, { useState } from "react";
 import { LoginAttempt } from "../../models/User";
 import { LogInFunc } from "./useCurrentUser";
+import { useTranslation } from "../common/I18nContext";
 
 interface IProps {
   logIn: LogInFunc;
 }
 
 export default function LoginForm(props: IProps) {
+  const t = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const handleError = (e: "Invalid" | "Unknown") => {
     switch (e) {
       case "Invalid":
-        setErrorMessage("Invalid login");
+        setErrorMessage(t("Invalid_login"));
         break;
       case "Unknown":
-        setErrorMessage("Unkown error");
+        setErrorMessage(t("Unknown_error"));
         break;
     }
   };
@@ -28,7 +30,7 @@ export default function LoginForm(props: IProps) {
 
   return (
     <div>
-      <h2>Log In</h2>
+      <h2>{t("Log_in")}</h2>
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -40,7 +42,7 @@ export default function LoginForm(props: IProps) {
             type="text"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder="Email"
+            placeholder={t("Email")}
           />
         </p>
         <p>
@@ -48,11 +50,11 @@ export default function LoginForm(props: IProps) {
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            placeholder="Password"
+            placeholder={t("Password")}
           />
         </p>
         <p className="error">{errorMessage}</p>
-        <button type="submit">Log In</button>
+        <button type="submit">{t("Log_in")}</button>
       </form>
     </div>
   );
