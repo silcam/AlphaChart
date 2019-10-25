@@ -5,6 +5,7 @@ import AlphabetsList from "../alphabets/AlphabetsList";
 import { LogOutFunc } from "../users/useCurrentUser";
 import { CurrentUser } from "../../models/User";
 import useNetwork from "../common/useNetwork";
+import { useTranslation } from "../common/I18nContext";
 
 interface IProps {
   logOut: LogOutFunc;
@@ -12,6 +13,7 @@ interface IProps {
 }
 
 export default function UserHomePage(props: IProps) {
+  const t = useTranslation();
   const [alphabets, setAlphabets] = useState<Alphabet[] | null>(null);
   const [loading, request] = useNetwork();
 
@@ -30,16 +32,16 @@ export default function UserHomePage(props: IProps) {
     <div className="HomePage">
       <div>
         <Link to={`/alphabets/new`}>
-          <button>New Alphabet</button>
+          <button>{t("New_alphabet_chart")}</button>
         </Link>
       </div>
       <div className="flex-row">
         <div>
-          <h2>My Alphabets</h2>
+          <h2>{t("My_alphabets")}</h2>
           <AlphabetsList alphabets={myAlphabets} />
         </div>
         <div>
-          <h2>Other Alphabets</h2>
+          <h2>{t("Other_alphabets")}</h2>
           <AlphabetsList alphabets={otherAlphabets} />
         </div>
       </div>
