@@ -55,7 +55,7 @@ test("Create alphabet", async () => {
   const alphabet: Alphabet = response.body;
   expect(alphabet.user).toEqual("titus@yahoo.com");
   expect(alphabet.name).toEqual("Vowelly");
-  expect(alphabet.charts[0].letters).toEqual(vowelly.chart.letters);
+  expect(alphabet.chart.letters).toEqual(vowelly.chart.letters);
 });
 
 test("Update alphabet chart", async () => {
@@ -67,8 +67,8 @@ test("Update alphabet chart", async () => {
     .send(vowelly.chart);
   const alphabet: Alphabet = response.body;
   expect(alphabet.name).toEqual("Ελληνικα");
-  expect(alphabet.charts[0].cols).toEqual(2);
-  expect(alphabet.charts[0].letters).toEqual(vowelly.chart.letters);
+  expect(alphabet.chart.cols).toEqual(2);
+  expect(alphabet.chart.letters).toEqual(vowelly.chart.letters);
 });
 
 test("Upload image to alphabet chart", async () => {

@@ -98,7 +98,7 @@ export interface Alphabet {
   _id: string;
   name: string;
   user: string;
-  charts: AlphabetChart[];
+  chart: AlphabetChart;
 }
 
 export type StoredAlphabet = Omit<Alphabet, "_id"> & { _id: ObjectId };
@@ -145,50 +145,3 @@ export function alphabetSummaryForm(styles: ChartStyles): number {
     ? styles.otherSettings.alphabetSummaryForm
     : defaultChartStyles().otherSettings!.alphabetSummaryForm!;
 }
-
-// export function setAlphabetLetter(
-//   abLetter: AlphabetLetter,
-//   caseIndex: number,
-//   value: string
-// ): AlphabetLetter {
-//   const { letter, ...rest } = abLetter;
-//   return {
-//     ...rest,
-//     letter: letter.set(caseIndex, value)
-//   };
-// }
-
-// export function demoAlphabetChart(): AlphabetChart {
-//   return List(
-//     [
-//       "Α",
-//       "Β",
-//       "Γ",
-//       "Δ",
-//       "Ε",
-//       "Ζ",
-//       "Η",
-//       "Θ",
-//       "Ι",
-//       "Κ",
-//       "Λ",
-//       "Μ",
-//       "Ν",
-//       "Ξ",
-//       "Ο",
-//       "Π",
-//       "Ρ",
-//       "Σ",
-//       "Τ",
-//       "Υ",
-//       "Φ",
-//       "Χ",
-//       "Ψ",
-//       "Ω"
-//     ].map(ucLetter => ({
-//       letter: List([ucLetter, ucLetter.toLocaleLowerCase()]),
-//       exampleWord: "",
-//       imagePath: ""
-//     }))
-//   );
-// }

@@ -49,7 +49,7 @@ export default function ViewChartPage(props: IProps) {
         ) : (
           <Chart
             alphabet={alphabet}
-            chart={alphabet.charts[0]}
+            chart={alphabet.chart}
             setChart={() => {}}
           />
         )}

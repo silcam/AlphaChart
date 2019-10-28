@@ -36,20 +36,20 @@ async function createAlphabet(
   const alphabet: Omit<Alphabet, "_id"> = {
     name: draftAlphabet.name,
     user: user.email,
-    charts: [
-      update(draftAlphabet.chart, { timestamp: { $set: Date.now().valueOf() } })
-    ]
+    chart: update(draftAlphabet.chart, {
+      timestamp: { $set: Date.now().valueOf() }
+    })
   };
   const collection = await alphabetCollection();
   const result = await collection.insertOne(alphabet);
   return result.ops[0];
 }
 
-async function createChart(
+async function updateChart(
   abId: string,
   chart: AlphabetChart
 ): Promise<Alphabet> {
-  log.log(`[Query] Create Chart for Alphabet ${abId}`);
+  log.log(`[Query] Update Chart for Alphabet ${abId}`);
   const finalChart = update(chart, {
     timestamp: { $set: Date.now().valueOf() }
   });
@@ -57,11 +57,8 @@ async function createChart(
   const result = await collection.findOneAndUpdate(
     { _id: new ObjectID(abId) },
     {
-      $push: {
-        charts: {
-          $each: [finalChart],
-          $position: 0
-        }
+      $set: {
+        chart: finalChart
       }
     },
     { returnOriginal: false }
@@ -91,6 +88,6 @@ export default {
   alphabet,
   alphabets,
   createAlphabet,
-  createChart,
+  updateChart,
   copyAlphabet
 };

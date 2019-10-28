@@ -22,7 +22,7 @@ interface IProps {
 
 export default function ChartEditor(props: IProps) {
   const t = useTranslation();
-  const originalChart = props.alphabet.charts[0];
+  const originalChart = props.alphabet.chart;
   const [chart, setChart, chartModified] = useStateModified(originalChart);
   const setCols = (cols: number) =>
     setChart(update(chart, { cols: { $set: cols } }));

@@ -68,7 +68,7 @@ export default function alphabetsController(app: Express) {
     } else {
       const user = await verifyLogin(req, alphabet.user);
       if (user) {
-        const newAlphabet = await AlphabetData.createChart(
+        const newAlphabet = await AlphabetData.updateChart(
           req.params.id,
           newChart
         );
