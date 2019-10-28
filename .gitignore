@@ -24,3 +24,6 @@ yarn-error.log*
 
 /server/dist
 /alphachart-images
+
+# migrations
+/.migrate
