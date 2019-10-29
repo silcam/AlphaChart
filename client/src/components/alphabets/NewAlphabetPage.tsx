@@ -3,6 +3,7 @@ import { blankAlphabet, DraftAlphabet } from "../../models/Alphabet";
 import { History } from "history";
 import keyHandler from "../common/KeyHandler";
 import useNetwork from "../common/useNetwork";
+import { apiPath } from "../../models/Api";
 
 interface IProps {
   history: History;
@@ -19,7 +20,7 @@ export default function NewAlphabetPage(props: IProps) {
         ...blankAlphabet(name)
       };
       const response = await request(axios =>
-        axios.post("/api/alphabets", alphabet)
+        axios.post(apiPath("/alphabets"), alphabet)
       );
       if (response) {
         const id = response.data._id;

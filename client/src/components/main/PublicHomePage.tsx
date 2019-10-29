@@ -5,6 +5,7 @@ import AlphabetsList from "../alphabets/AlphabetsList";
 import { AlphabetListing } from "../../models/Alphabet";
 import useNetwork from "../common/useNetwork";
 import { useTranslation } from "../common/I18nContext";
+import { apiPath } from "../../models/Api";
 
 interface IProps {
   logIn: LogInFunc;
@@ -17,7 +18,7 @@ export default function PublicHomePage(props: IProps) {
   const [loading, request] = useNetwork();
 
   useEffect(() => {
-    request(axios => axios.get("/api/alphabets"))
+    request(axios => axios.get(apiPath("/alphabets")))
       .then(response => {
         response && setAlphabets(response.data);
       })

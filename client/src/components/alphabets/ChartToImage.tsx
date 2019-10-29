@@ -16,7 +16,7 @@ interface IProps {
 
 export default function ChartToImage(props: IProps) {
   const t = useTranslation();
-  const { setErrorMessage } = useContext(ErrorContext);
+  const { setError } = useContext(ErrorContext);
   return (
     <div>
       <OptionButton
@@ -24,7 +24,7 @@ export default function ChartToImage(props: IProps) {
           try {
             makeImage();
           } catch (err) {
-            setErrorMessage(err);
+            setError({ msg: `${err}` });
           }
         }}
         buttonText={t("Save_chart_image")}
@@ -81,7 +81,7 @@ function OptionsMenu(props: IOptionsMenuProps) {
   const [enableBGColor, setEnableBGColor] = useState(true);
   const inputValid = !!dimensions[0] && (!enableBGColor || bgColorValid);
   const [saving, setSaving] = useState(false);
-  const { setErrorMessage } = useContext(ErrorContext);
+  const { setError } = useContext(ErrorContext);
 
   return (
     <div className="compChartToImageOptionsMenu">
@@ -143,7 +143,7 @@ function OptionsMenu(props: IOptionsMenuProps) {
                 backgroundColor: enableBGColor ? bgColor : undefined
               });
             } catch (err) {
-              setErrorMessage(err);
+              setError({ msg: `${err}` });
             }
             setSaving(false);
           }}

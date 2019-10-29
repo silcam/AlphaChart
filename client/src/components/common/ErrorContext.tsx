@@ -1,8 +1,18 @@
 import React from "react";
 
-const ErrorContext = React.createContext({
-  errorMessage: "",
-  setErrorMessage: (_msg: string) => {}
+export interface ACError {
+  msg: string;
+  render?: () => JSX.Element;
+}
+
+interface IErrorContext {
+  error: ACError | null;
+  setError: (e: ACError | null) => void;
+}
+
+const ErrorContext = React.createContext<IErrorContext>({
+  error: null,
+  setError: _e => {}
 });
 
 export default ErrorContext;

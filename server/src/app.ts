@@ -4,6 +4,7 @@ import usersController from "./controllers/usersController";
 import cookieSession from "cookie-session";
 import secrets from "./common/secrets";
 import alphabetsController from "./controllers/alphabetsController";
+import apiVersion from "./controllers/apiVersion";
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.set("port", process.env.PORT || 3001);
 
 app.use(bodyParser.json());
 app.use(cookieSession({ secret: secrets.cookieSecret }));
+app.use(apiVersion);
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {

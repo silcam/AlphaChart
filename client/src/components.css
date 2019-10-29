@@ -124,6 +124,19 @@ div.NumberPicker button {
     margin: 2px;
 }
 
+/* OldApiError */
+div.compOldApiError {
+    flex-direction: row;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+div.compOldApiError a {
+    text-decoration: underline;
+    font-weight: normal;
+    padding-left: 20px;
+}
+
 /* OptionButton */
 
 div.compOptionButton {

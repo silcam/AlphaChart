@@ -9,9 +9,10 @@ import UserData from "../storage/UserData";
 import { checkPassword } from "../common/password";
 import { currentUser } from "./controllerHelper";
 import log from "../common/log";
+import { apiPath } from "../../../client/src/models/Api";
 
 export default function usersController(app: Express) {
-  app.post("/api/users", async (req, res) => {
+  app.post(apiPath("/users"), async (req, res) => {
     const newUser: NewUser = req.body;
     try {
       const errors = validationErrors(newUser);
@@ -33,7 +34,7 @@ export default function usersController(app: Express) {
     }
   });
 
-  app.get("/api/users/current", async (req, res) => {
+  app.get(apiPath("/users/current"), async (req, res) => {
     try {
       const user = await currentUser(req);
       if (user) {
@@ -47,7 +48,7 @@ export default function usersController(app: Express) {
     }
   });
 
-  app.post("/api/users/login", async (req, res) => {
+  app.post(apiPath("/users/login"), async (req, res) => {
     try {
       const loginAttempt: LoginAttempt = req.body;
       const user = await UserData.user(loginAttempt.email);
@@ -69,7 +70,7 @@ export default function usersController(app: Express) {
     }
   });
 
-  app.post("/api/users/logout", (req, res) => {
+  app.post(apiPath("/users/logout"), (req, res) => {
     req.session!.email = undefined;
     res.status(204).send();
   });

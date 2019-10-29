@@ -4,17 +4,23 @@ import { useLocation } from "react-router-dom";
 import LnkBtn from "./LnkBtn";
 
 export default function ErrorMessage() {
-  const { errorMessage, setErrorMessage } = useContext(ErrorContext);
+  const { error, setError } = useContext(ErrorContext);
 
   const location = useLocation();
   useEffect(() => {
-    setErrorMessage("");
+    setError(null);
   }, [location.pathname]);
 
-  return errorMessage ? (
+  return error ? (
     <div className="compErrorMessage">
-      <div>{errorMessage}</div>
-      <LnkBtn text="X" onClick={() => setErrorMessage("")} />
+      {error.render ? (
+        error.render()
+      ) : (
+        <React.Fragment>
+          <div>{error.msg}</div>
+          <LnkBtn text="X" onClick={() => setError(null)} />
+        </React.Fragment>
+      )}
     </div>
   ) : null;
 }

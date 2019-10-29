@@ -4,6 +4,7 @@ import ErrorContext from "../common/ErrorContext";
 import useNetwork from "../common/useNetwork";
 import { useTranslation } from "../common/I18nContext";
 import { TKey } from "../../locales/en";
+import { apiPath } from "../../models/Api";
 
 type LoginError = "Invalid" | "Unknown";
 export type LogInFunc = (
@@ -29,12 +30,14 @@ export default function useCurrentUser(): [
     throwErrorsWithResponse: true
   });
 
-  const { setErrorMessage } = useContext(ErrorContext);
+  const { setError } = useContext(ErrorContext);
 
   const getCurrentUser = async (
     setCurrentUser: (u: CurrentUser | null) => void
   ) => {
-    const response = await request(axios => axios.get("/api/users/current"));
+    const response = await request(axios =>
+      axios.get(apiPath("/users/current"))
+    );
     response && setCurrentUser(response.data);
   };
 
@@ -42,7 +45,7 @@ export default function useCurrentUser(): [
     try {
       getCurrentUser(setCurrentUser);
     } catch (err) {
-      setErrorMessage(t("Trouble_loading_user_info"));
+      setError({ msg: t("Trouble_loading_user_info") });
     }
   }, []);
 
@@ -52,7 +55,7 @@ export default function useCurrentUser(): [
   ) => {
     try {
       const response = await requestThrowsErrorResponses(axios =>
-        axios.post("/api/users/login", loginAttempt)
+        axios.post(apiPath("/users/login"), loginAttempt)
       );
       response && setCurrentUser(response.data);
     } catch (err) {
@@ -62,7 +65,9 @@ export default function useCurrentUser(): [
   };
 
   const logOut = async () => {
-    const response = await request(axios => axios.post("/api/users/logout"));
+    const response = await request(axios =>
+      axios.post(apiPath("/users/logout"))
+    );
     if (response) setCurrentUser(null);
   };
 
@@ -72,7 +77,7 @@ export default function useCurrentUser(): [
   ) => {
     try {
       const response = await requestThrowsErrorResponses(axios =>
-        axios.post("/api/users", newUser)
+        axios.post(apiPath("/users"), newUser)
       );
       response && setCurrentUser(response.data);
     } catch (err) {

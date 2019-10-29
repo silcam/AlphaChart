@@ -2,6 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import useNetwork from "../common/useNetwork";
 import { useTranslation } from "../common/I18nContext";
+import { apiPath } from "../../models/Api";
 
 interface IProps {
   id: string;
@@ -14,7 +15,7 @@ export default function CopyAlphabetButton(props: IProps) {
 
   const copyAlphabet = async () => {
     const response = await request(axios =>
-      axios.post(`/api/alphabets/${props.id}/copy`)
+      axios.post(apiPath(`/alphabets/${props.id}/copy`))
     );
     if (response) {
       history.push(`/alphabets/view/${response.data._id}`);

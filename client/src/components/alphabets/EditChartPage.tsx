@@ -4,6 +4,7 @@ import { Alphabet, AlphabetChart } from "../../models/Alphabet";
 import Loading from "../common/Loading";
 import { History } from "history";
 import useNetwork from "../common/useNetwork";
+import { apiPath } from "../../models/Api";
 
 interface IProps {
   id: string;
@@ -14,14 +15,14 @@ export default function EditChartPage(props: IProps) {
   const [alphabet, setAlphabet] = useState<Alphabet | null>(null);
   const [, request] = useNetwork();
   useEffect(() => {
-    request(axios => axios.get(`/api/alphabets/${props.id}`))
+    request(axios => axios.get(apiPath(`/alphabets/${props.id}`)))
       .then(response => response && setAlphabet(response.data))
       .catch(err => console.error(err));
   }, [props.id]);
 
   const save = async (chart: AlphabetChart) => {
     await request(axios =>
-      axios.post(`/api/alphabets/${props.id}/charts`, chart)
+      axios.post(apiPath(`/alphabets/${props.id}/charts`), chart)
     );
     props.history.push(`/alphabets/view/${props.id}`);
   };

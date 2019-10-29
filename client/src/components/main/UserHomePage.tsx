@@ -6,6 +6,7 @@ import { LogOutFunc } from "../users/useCurrentUser";
 import { CurrentUser } from "../../models/User";
 import useNetwork from "../common/useNetwork";
 import { useTranslation } from "../common/I18nContext";
+import { apiPath } from "../../models/Api";
 
 interface IProps {
   logOut: LogOutFunc;
@@ -18,7 +19,7 @@ export default function UserHomePage(props: IProps) {
   const [, request] = useNetwork();
 
   useEffect(() => {
-    request(axios => axios.get("/api/alphabets"))
+    request(axios => axios.get(apiPath("/alphabets")))
       .then(response => response && setAlphabets(response.data))
       .catch(err => console.error(err));
   }, []);

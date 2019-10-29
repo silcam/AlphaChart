@@ -5,6 +5,7 @@ import Loading from "../common/Loading";
 import ViewChartHeader from "./ViewChartHeader";
 import { CurrentUserOrNot, userId } from "../../models/User";
 import useNetwork from "../common/useNetwork";
+import { apiPath } from "../../models/Api";
 
 interface IProps {
   id: string;
@@ -22,7 +23,7 @@ export default function ViewChartPage(props: IProps) {
   const [, request] = useNetwork();
 
   useEffect(() => {
-    request(axios => axios.get(`/api/alphabets/${props.id}`))
+    request(axios => axios.get(apiPath(`/alphabets/${props.id}`)))
       .then(response => response && setAlphabet(response.data))
       .catch(err => console.error(err));
   }, [props.id]);

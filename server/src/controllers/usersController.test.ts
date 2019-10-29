@@ -2,6 +2,7 @@ import request from "supertest";
 import app from "../app";
 import Data from "../storage/Data";
 import { loggedInAgent } from "../testHelper";
+import { apiPath } from "../../../client/src/models/Api";
 
 beforeEach(Data.loadFixtures);
 
@@ -10,7 +11,7 @@ afterEach(Data.deleteDatabase);
 test("Create new user", async () => {
   expect.assertions(1);
   const agent = request.agent(app);
-  const response = await agent.post("/api/users").send({
+  const response = await agent.post(apiPath("/users")).send({
     email: "madeleine@pm.me",
     name: "Madeleine",
     password: "maddymaddymaddy"
@@ -24,7 +25,7 @@ test("Create new user", async () => {
 test("Auto-assign name for new user", async () => {
   expect.assertions(1);
   const agent = request.agent(app);
-  const response = await agent.post("/api/users").send({
+  const response = await agent.post(apiPath("/users")).send({
     email: "madeleine@pm.me",
     name: "",
     password: "maddymaddymaddy"
@@ -38,7 +39,7 @@ test("Auto-assign name for new user", async () => {
 test("Create existing user", async () => {
   expect.assertions(2);
   const agent = request.agent(app);
-  const response = await agent.post("/api/users").send({
+  const response = await agent.post(apiPath("/users")).send({
     email: "titus@yahoo.com",
     name: "T-Man",
     password: "yeahyeahyeah"
@@ -52,7 +53,7 @@ test("Create existing user", async () => {
 test("Invalid new users", async () => {
   expect.assertions(4);
   const agent = request.agent(app);
-  let response = await agent.post("/api/users").send({
+  let response = await agent.post(apiPath("/users")).send({
     email: "yo",
     name: "yo",
     password: "yeahyeahyeah"
@@ -62,7 +63,7 @@ test("Invalid new users", async () => {
     error: "Invalid_email"
   });
 
-  response = await agent.post("/api/users").send({
+  response = await agent.post(apiPath("/users")).send({
     email: "madeleine@pm.me",
     name: "Maddy",
     password: "tooshort"
@@ -75,31 +76,33 @@ test("Invalid new users", async () => {
 
 test("Current User - Not logged in", async () => {
   const agent = request.agent(app);
-  const response = await agent.get("/api/users/current");
+  const response = await agent.get(apiPath("/users/current"));
   expect(response.body).toBeNull();
 });
 
 test("Current User", async () => {
   const agent = await loggedInAgent();
-  const response = await agent.get("/api/users/current");
+  const response = await agent.get(apiPath("/users/current"));
   expect(response.body).toEqual({ name: "Titus", email: "titus@yahoo.com" });
 });
 
 test("Valid Login", async () => {
   expect.assertions(1);
   const agent = request.agent(app);
-  const response = await agent
-    .post("/api/users/login")
-    .send({ email: "titus@yahoo.com", password: "minecraft" });
+  const response = await agent.post(apiPath("/users/login")).send({
+    email: "titus@yahoo.com",
+    password: "minecraft"
+  });
   expect(response.body).toEqual({ name: "Titus", email: "titus@yahoo.com" });
 });
 
 test("InValid Login", async () => {
   expect.assertions(2);
   const agent = request.agent(app);
-  const response = await agent
-    .post("/api/users/login")
-    .send({ email: "titus@yahoo.com", password: "wrong!" });
+  const response = await agent.post(apiPath("/users/login")).send({
+    email: "titus@yahoo.com",
+    password: "wrong!"
+  });
   expect(response.status).toEqual(401);
   expect(response.body).toEqual({ error: "Invalid login" });
 });
@@ -107,8 +110,8 @@ test("InValid Login", async () => {
 test("Logout", async () => {
   expect.assertions(2);
   const agent = await loggedInAgent();
-  let response = await agent.post("/api/users/logout");
+  let response = await agent.post(apiPath("/users/logout"));
   expect(response.status).toBe(204);
-  response = await agent.get("/api/users/current");
+  response = await agent.get(apiPath("/users/current"));
   expect(response.body).toBeNull();
 });

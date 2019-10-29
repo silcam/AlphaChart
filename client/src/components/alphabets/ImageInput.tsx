@@ -3,6 +3,7 @@ import { Alphabet, AlphabetLetter } from "../../models/Alphabet";
 import { useDropzone } from "react-dropzone";
 import Loading from "../common/Loading";
 import useNetwork from "../common/useNetwork";
+import { apiPath } from "../../models/Api";
 
 interface IProps {
   alphabet: Alphabet;
@@ -18,11 +19,15 @@ export default function ImageInput(props: IProps) {
     formData.append("image", acceptedFiles[0]);
     request(
       axios =>
-        axios.post(`/api/alphabets/${props.alphabet._id}/images`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
+        axios.post(
+          apiPath(`/alphabets/${props.alphabet._id}/images`),
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
           }
-        }),
+        ),
       { 413: "That image is too big." }
     )
       .then(response => {

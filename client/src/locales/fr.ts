@@ -60,7 +60,9 @@ const fr: Strings = {
   Top_alphabet_style: "Style du sommaire de l'alphabet",
   Bold_key_letter: "Lettre clé en gras",
   Border_thickness: "Épaisseur de bordure",
-  Border_color: "Couleur de bordure"
+  Border_color: "Couleur de bordure",
+  Old_api_error: "L'appli Alphachart a besoin de se mettre à jour.",
+  Reload: "Recharger"
 };
 
 export default fr;

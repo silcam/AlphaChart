@@ -57,7 +57,9 @@ const en = {
   Top_alphabet_style: "Top Alphabet Style",
   Bold_key_letter: "Bold key letter?",
   Border_thickness: "Border Thickness",
-  Border_color: "Border Color"
+  Border_color: "Border Color",
+  Old_api_error: "The Alphachart app needs to update.",
+  Reload: "Reload"
 };
 
 export type Strings = typeof en;
