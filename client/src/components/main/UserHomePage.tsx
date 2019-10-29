@@ -1,28 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Alphabet, AlphabetListing } from "../../models/Alphabet";
+import { AlphabetListing } from "../../models/Alphabet";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { LogOutFunc } from "../users/useCurrentUser";
 import { CurrentUser } from "../../models/User";
-import useNetwork from "../common/useNetwork";
 import { useTranslation } from "../common/I18nContext";
-import { apiPath } from "../../models/Api";
 
 interface IProps {
   logOut: LogOutFunc;
   currentUser: CurrentUser;
+  alphabets: AlphabetListing[] | null;
 }
 
 export default function UserHomePage(props: IProps) {
   const t = useTranslation();
-  const [alphabets, setAlphabets] = useState<AlphabetListing[] | null>(null);
-  const [, request] = useNetwork();
-
-  useEffect(() => {
-    request(axios => axios.get(apiPath("/alphabets")))
-      .then(response => response && setAlphabets(response.data))
-      .catch(err => console.error(err));
-  }, []);
+  const alphabets = props.alphabets;
 
   const myAlphabets =
     alphabets && alphabets.filter(a => a.user === props.currentUser.email);

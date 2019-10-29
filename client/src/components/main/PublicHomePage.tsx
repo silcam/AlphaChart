@@ -1,29 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { LogInFunc, CreateAccountFunc } from "../users/useCurrentUser";
 import CreateAccountOrLogIn from "../users/CreateAccountOrLogIn";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { AlphabetListing } from "../../models/Alphabet";
-import useNetwork from "../common/useNetwork";
 import { useTranslation } from "../common/I18nContext";
-import { apiPath } from "../../models/Api";
 
 interface IProps {
   logIn: LogInFunc;
   createAccount: CreateAccountFunc;
+  alphabets: AlphabetListing[] | null;
 }
 
 export default function PublicHomePage(props: IProps) {
   const t = useTranslation();
-  const [alphabets, setAlphabets] = useState<AlphabetListing[] | null>(null);
-  const [loading, request] = useNetwork();
-
-  useEffect(() => {
-    request(axios => axios.get(apiPath("/alphabets")))
-      .then(response => {
-        response && setAlphabets(response.data);
-      })
-      .catch(err => console.error(err));
-  }, []);
+  const alphabets = props.alphabets;
 
   return (
     <div className="flex-row compPublicHomePage">
