@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Alphabet } from "../../models/Alphabet";
+import { Alphabet, AlphabetListing } from "../../models/Alphabet";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { LogOutFunc } from "../users/useCurrentUser";
 import { CurrentUser } from "../../models/User";
@@ -14,8 +14,8 @@ interface IProps {
 
 export default function UserHomePage(props: IProps) {
   const t = useTranslation();
-  const [alphabets, setAlphabets] = useState<Alphabet[] | null>(null);
-  const [loading, request] = useNetwork();
+  const [alphabets, setAlphabets] = useState<AlphabetListing[] | null>(null);
+  const [, request] = useNetwork();
 
   useEffect(() => {
     request(axios => axios.get("/api/alphabets"))
@@ -38,7 +38,7 @@ export default function UserHomePage(props: IProps) {
       <div className="flex-row">
         <div>
           <h2>{t("My_alphabets")}</h2>
-          <AlphabetsList alphabets={myAlphabets} />
+          <AlphabetsList alphabets={myAlphabets} hideUser />
         </div>
         <div>
           <h2>{t("Other_alphabets")}</h2>

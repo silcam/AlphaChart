@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { LogInFunc, CreateAccountFunc } from "../users/useCurrentUser";
 import CreateAccountOrLogIn from "../users/CreateAccountOrLogIn";
 import AlphabetsList from "../alphabets/AlphabetsList";
-import { Alphabet } from "../../models/Alphabet";
+import { AlphabetListing } from "../../models/Alphabet";
 import useNetwork from "../common/useNetwork";
 import { useTranslation } from "../common/I18nContext";
 
@@ -13,7 +13,7 @@ interface IProps {
 
 export default function PublicHomePage(props: IProps) {
   const t = useTranslation();
-  const [alphabets, setAlphabets] = useState<Alphabet[] | null>(null);
+  const [alphabets, setAlphabets] = useState<AlphabetListing[] | null>(null);
   const [loading, request] = useNetwork();
 
   useEffect(() => {

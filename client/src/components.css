@@ -8,6 +8,13 @@ ul.compAlphabetsList li {
     margin: 4px 0;
 }
 
+ul.compAlphabetsList .username {
+    font-size: 0.7em;
+    color: #999;
+    font-style: italic;
+    margin-left: 0.7em;
+}
+
 /* ColorInput */
 
 div.compColorInput .color-picker-preview {

@@ -101,6 +101,10 @@ export interface Alphabet {
   chart: AlphabetChart;
 }
 
+export interface AlphabetListing extends Omit<Alphabet, "chart"> {
+  userDisplayName: string;
+}
+
 export type StoredAlphabet = Omit<Alphabet, "_id"> & { _id: ObjectId };
 
 export function validDraftAlphabet(alphabet: DraftAlphabet) {

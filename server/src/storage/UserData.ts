@@ -3,6 +3,12 @@ import { createPassword } from "../common/password";
 import Data from "./Data";
 import log from "../common/log";
 
+async function users(): Promise<StoredUser[]> {
+  log.log(`[Query] READ Users`);
+  const collection = await userCollection();
+  return collection.find({}).toArray();
+}
+
 async function user(email: string): Promise<StoredUser | null> {
   log.log(`[Query] READ User ${email}`);
   const collection = await userCollection();
@@ -30,6 +36,7 @@ async function userCollection() {
 }
 
 export default {
+  users,
   user,
   createUser
 };
