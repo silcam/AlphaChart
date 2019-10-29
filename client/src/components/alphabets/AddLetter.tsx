@@ -48,8 +48,9 @@ export default function AddLetter(props: IProps) {
 
 function formsHeuristic(text: string) {
   const [firstLetter, ...rest] = Array.from(text);
+  const remainder = rest.join("");
   const upper = firstLetter.toLocaleUpperCase();
   const lower = firstLetter.toLocaleLowerCase();
   if (upper === lower) return [text];
-  return [`${upper}${rest}`, `${lower}${rest}`];
+  return [`${upper}${remainder}`, `${lower}${remainder}`];
 }
