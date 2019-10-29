@@ -4,33 +4,34 @@ import {
   Alphabet,
   blankAlphabetLetter
 } from "../../models/Alphabet";
-import { Link } from "react-router-dom";
 import NumberPicker from "../common/NumberPicker";
 import update from "immutability-helper";
 import Chart from "./Chart";
 import AddLetter from "./AddLetter";
 import LetterSideMenu from "./LetterSideMenu";
-import useStateModified from "../common/useStateModified";
 import LnkBtn from "../common/LnkBtn";
 import SettingsSideMenu from "./SettingsSideMenu";
 import { useTranslation } from "../common/I18nContext";
+import useUndo from "../common/useUndo";
+import UndoRedo from "../common/UndoRedo";
 
 interface IProps {
   alphabet: Alphabet;
   save: (chart: AlphabetChart) => void;
+  saving: boolean;
+  setEditing: (e: boolean) => void;
 }
 
 export default function ChartEditor(props: IProps) {
   const t = useTranslation();
-  const originalChart = props.alphabet.chart;
-  const [chart, setChart, chartModified] = useStateModified(originalChart);
+  const chart = props.alphabet.chart;
+  const [canUndo, canRedo, setChart, undo, redo] = useUndo(chart, props.save);
+
   const setCols = (cols: number) =>
     setChart(update(chart, { cols: { $set: cols } }));
 
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
-
-  const done = () => props.save(chart);
 
   return (
     <div style={{ paddingBottom: "30px" }}>
@@ -41,14 +42,9 @@ export default function ChartEditor(props: IProps) {
           justifyContent: "flex-start"
         }}
       >
-        <button onClick={done} disabled={!chartModified}>
-          {t("Save_and_quit")}
-        </button>
-        <Link to={`/alphabets/view/${props.alphabet._id}`}>
-          <button onClick={() => {}} className="red">
-            {t("Cancel")}
-          </button>
-        </Link>
+        <button onClick={() => props.setEditing(false)}>{t("Done")}</button>
+        <UndoRedo canUndo={canUndo} canRedo={canRedo} undo={undo} redo={redo} />
+        <div>{props.saving && t("Saving")}</div>
       </div>
       <div className="flex-row">
         <AddLetter

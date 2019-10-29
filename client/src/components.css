@@ -96,6 +96,33 @@ div.compErrorMessage a {
     font-weight: bold;
 }
 
+/* Icon */
+.compIcon {
+    cursor: pointer;
+}
+
+.compIcon path {
+    fill: #aaa;
+}
+
+.compIcon[data-disabled='true'] {
+    cursor: inherit;
+}
+
+.compIcon[data-disabled='true'] path,
+.compIcon.iconBlue[data-disabled='true']:hover path,
+.compIcon.iconBlue[data-disabled='true']:hover:active path  {
+    fill: #ddd;
+}
+
+.compIcon.iconBlue:hover path {
+    fill: #1892ef;
+}
+
+.compIcon.iconBlue:hover:active path {
+    fill: #1892efdd;
+}
+
 /* LocalePicker */
 
 div.compLocalePicker {
@@ -236,4 +263,14 @@ div.settings-side-menu h1 {
 div.settings-side-menu input,
 div.settings-side-menu select {
     font-size: 20px;
+}
+
+/* UndoRedo */
+
+div.compUndoRedo {
+    flex-direction: row;
+}
+
+div.compUndoRedo img {
+    cursor: pointer;
 }

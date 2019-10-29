@@ -1,35 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ChartEditor from "./ChartEditor";
 import { Alphabet, AlphabetChart } from "../../models/Alphabet";
-import Loading from "../common/Loading";
-import { History } from "history";
 import useNetwork from "../common/useNetwork";
 import { apiPath } from "../../models/Api";
+import update from "immutability-helper";
+import useRefireBuffer from "../common/useRefireBuffer";
 
 interface IProps {
   id: string;
-  history: History;
+  alphabet: Alphabet;
+  setAlphabet: (a: Alphabet) => void;
+  setEditing: (e: boolean) => void;
 }
 
 export default function EditChartPage(props: IProps) {
-  const [alphabet, setAlphabet] = useState<Alphabet | null>(null);
-  const [, request] = useNetwork();
-  useEffect(() => {
-    request(axios => axios.get(apiPath(`/alphabets/${props.id}`)))
-      .then(response => response && setAlphabet(response.data))
-      .catch(err => console.error(err));
-  }, [props.id]);
+  const [saving, request] = useNetwork();
+  const withRefireBuffer = useRefireBuffer();
 
   const save = async (chart: AlphabetChart) => {
-    await request(axios =>
-      axios.post(apiPath(`/alphabets/${props.id}/charts`), chart)
+    props.setAlphabet(update(props.alphabet, { chart: { $set: chart } }));
+    withRefireBuffer(() =>
+      request(axios =>
+        axios.post(apiPath(`/alphabets/${props.id}/charts`), chart)
+      )
     );
-    props.history.push(`/alphabets/view/${props.id}`);
   };
 
-  return alphabet === null ? (
-    <Loading />
-  ) : (
-    <ChartEditor alphabet={alphabet} save={save} />
+  return (
+    <ChartEditor
+      alphabet={props.alphabet}
+      save={save}
+      saving={saving}
+      setEditing={props.setEditing}
+    />
   );
 }

@@ -22,6 +22,7 @@ const fr: Strings = {
   Save_and_quit: "Enregister et terminer",
   Cancel: "Annuler",
   Close: "Fermer",
+  Done: "Terminer",
   Unknown_error: "Erreur inattendu",
   Edit_chart: "Éditer",
   Copy_to_my_alphabets: "Copier dans mes alphebets",

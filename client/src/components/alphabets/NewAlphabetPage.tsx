@@ -24,7 +24,7 @@ export default function NewAlphabetPage(props: IProps) {
       );
       if (response) {
         const id = response.data._id;
-        props.history.push(`/alphabets/edit/${id}/chart`);
+        props.history.push(`/alphabets/view/${id}`, { edit: true });
       }
     }
   };

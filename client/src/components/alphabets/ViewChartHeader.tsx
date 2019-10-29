@@ -7,9 +7,9 @@ import { useTranslation } from "../common/I18nContext";
 
 interface IProps {
   id: string;
-  chartLoaded?: boolean;
   setChartDimens: (d: ChartDimens | null) => void;
   canEdit: boolean;
+  setEditing: (e: boolean) => void;
 }
 
 export default function ViewChartHeader(props: IProps) {
@@ -22,20 +22,18 @@ export default function ViewChartHeader(props: IProps) {
         justifyContent: "flex-end"
       }}
     >
-      {props.chartLoaded && (
-        <div className="flex-row">
-          <div>
-            {props.canEdit ? (
-              <Link to={`/alphabets/edit/${props.id}/chart`}>
-                <button>{t("Edit_chart")}</button>
-              </Link>
-            ) : (
-              <CopyAlphabetButton id={props.id} />
-            )}
-          </div>
-          <ChartToImage setChartDimens={props.setChartDimens} />
+      <div className="flex-row">
+        <div>
+          {props.canEdit ? (
+            <button onClick={() => props.setEditing(true)}>
+              {t("Edit_chart")}
+            </button>
+          ) : (
+            <CopyAlphabetButton id={props.id} />
+          )}
         </div>
-      )}
+        <ChartToImage setChartDimens={props.setChartDimens} />
+      </div>
     </div>
   );
 }

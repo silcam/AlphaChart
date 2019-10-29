@@ -19,6 +19,7 @@ const en = {
   Save_and_quit: "Save and Quit",
   Cancel: "Cancel",
   Close: "Close",
+  Done: "Done",
   Unknown_error: "Unknown error",
   Edit_chart: "Edit Chart",
   Copy_to_my_alphabets: "Copy to My Alphabets",

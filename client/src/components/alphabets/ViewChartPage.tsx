@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Alphabet } from "../../models/Alphabet";
 import Chart from "./Chart";
-import Loading from "../common/Loading";
 import ViewChartHeader from "./ViewChartHeader";
 import { CurrentUserOrNot, userId } from "../../models/User";
-import useNetwork from "../common/useNetwork";
-import { apiPath } from "../../models/Api";
 
 interface IProps {
   id: string;
   user: CurrentUserOrNot;
+  alphabet: Alphabet;
+  setEditing: (e: boolean) => void;
 }
 
 export interface ChartDimens {
@@ -18,22 +17,16 @@ export interface ChartDimens {
 }
 
 export default function ViewChartPage(props: IProps) {
-  const [alphabet, setAlphabet] = useState<Alphabet | null>(null);
   const [chartDimens, setChartDimens] = useState<ChartDimens | null>(null);
-  const [, request] = useNetwork();
+  const alphabet = props.alphabet;
 
-  useEffect(() => {
-    request(axios => axios.get(apiPath(`/alphabets/${props.id}`)))
-      .then(response => response && setAlphabet(response.data))
-      .catch(err => console.error(err));
-  }, [props.id]);
   return (
     <div style={{ paddingBottom: "30px" }}>
       <ViewChartHeader
         id={props.id}
-        chartLoaded={!!alphabet}
         setChartDimens={setChartDimens}
-        canEdit={!!alphabet && alphabet.user === userId(props.user)}
+        canEdit={alphabet.user === userId(props.user)}
+        setEditing={props.setEditing}
       />
       <div
         style={
@@ -45,15 +38,7 @@ export default function ViewChartPage(props: IProps) {
             : {}
         }
       >
-        {alphabet === null ? (
-          <Loading />
-        ) : (
-          <Chart
-            alphabet={alphabet}
-            chart={alphabet.chart}
-            setChart={() => {}}
-          />
-        )}
+        <Chart alphabet={alphabet} chart={alphabet.chart} setChart={() => {}} />
       </div>
     </div>
   );
