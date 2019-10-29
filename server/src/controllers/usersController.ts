@@ -41,7 +41,7 @@ export default function usersController(app: Express) {
         res.json(toCurrentUser(user));
       } else {
         req.session!.email = undefined;
-        res.json(null);
+        res.json({ locale: req.session!.locale });
       }
     } catch (err) {
       fiveHundred(res);
@@ -64,6 +64,23 @@ export default function usersController(app: Express) {
         res.json(toCurrentUser(user));
       } else {
         res.status(401).json({ error: "Invalid login" });
+      }
+    } catch (err) {
+      fiveHundred(res);
+    }
+  });
+
+  app.post(apiPath("/users/locale"), async (req, res) => {
+    try {
+      const locale = req.body.locale;
+      if (locale) {
+        req.session!.locale = locale;
+        const user = await currentUser(req);
+        if (user) {
+          user.locale = locale;
+          UserData.update(user);
+        }
+        res.status(204).send();
       }
     } catch (err) {
       fiveHundred(res);

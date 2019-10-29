@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../app";
 import Data from "../storage/Data";
-import { loggedInAgent } from "../testHelper";
+import { loggedInAgent, notLoggedInAgent } from "../testHelper";
 import { apiPath } from "../../../client/src/models/Api";
 
 beforeEach(Data.loadFixtures);
@@ -77,7 +77,7 @@ test("Invalid new users", async () => {
 test("Current User - Not logged in", async () => {
   const agent = request.agent(app);
   const response = await agent.get(apiPath("/users/current"));
-  expect(response.body).toBeNull();
+  expect(response.body).toEqual({});
 });
 
 test("Current User", async () => {
@@ -113,5 +113,31 @@ test("Logout", async () => {
   let response = await agent.post(apiPath("/users/logout"));
   expect(response.status).toBe(204);
   response = await agent.get(apiPath("/users/current"));
-  expect(response.body).toBeNull();
+  expect(response.body).toEqual({});
+});
+
+test("Post Locale - Not logged in", async () => {
+  expect.assertions(2);
+  const agent = notLoggedInAgent();
+  let response = await agent
+    .post(apiPath("/users/locale"))
+    .send({ locale: "fr" });
+  expect(response.status).toBe(204);
+  response = await agent.get(apiPath("/users/current"));
+  expect(response.body).toEqual({ locale: "fr" });
+});
+
+test("Post Locale - Logged in", async () => {
+  expect.assertions(2);
+  const agent = await loggedInAgent();
+  let response = await agent
+    .post(apiPath("/users/locale"))
+    .send({ locale: "fr" });
+  expect(response.status).toBe(204);
+  response = await agent.get(apiPath("/users/current"));
+  expect(response.body).toEqual({
+    name: "Titus",
+    email: "titus@yahoo.com",
+    locale: "fr"
+  });
 });

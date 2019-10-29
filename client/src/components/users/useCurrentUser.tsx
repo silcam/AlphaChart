@@ -2,7 +2,7 @@ import { CurrentUser, LoginAttempt, NewUser } from "../../models/User";
 import { useState, useEffect, useContext } from "react";
 import ErrorContext from "../common/ErrorContext";
 import useNetwork from "../common/useNetwork";
-import { useTranslation } from "../common/I18nContext";
+import I18nContext, { useTranslation, Locale } from "../common/I18nContext";
 import { TKey } from "../../locales/en";
 import { apiPath } from "../../models/Api";
 
@@ -25,6 +25,7 @@ export default function useCurrentUser(): [
 ] {
   const t = useTranslation();
   const [currentUser, setCurrentUser] = useState<null | CurrentUser>(null);
+  const { setLocale } = useContext(I18nContext);
   const [, request] = useNetwork();
   const [, requestThrowsErrorResponses] = useNetwork({
     throwErrorsWithResponse: true
@@ -33,17 +34,23 @@ export default function useCurrentUser(): [
   const { setError } = useContext(ErrorContext);
 
   const getCurrentUser = async (
-    setCurrentUser: (u: CurrentUser | null) => void
+    setCurrentUser: (u: CurrentUser | null) => void,
+    setLocale: (loc: Locale) => void
   ) => {
     const response = await request(axios =>
       axios.get(apiPath("/users/current"))
     );
-    response && setCurrentUser(response.data);
+    if (response) {
+      response.data.email
+        ? setCurrentUser(response.data)
+        : setCurrentUser(null);
+      response.data.locale && setLocale(response.data.locale);
+    }
   };
 
   useEffect(() => {
     try {
-      getCurrentUser(setCurrentUser);
+      getCurrentUser(setCurrentUser, setLocale);
     } catch (err) {
       setError({ msg: t("Trouble_loading_user_info") });
     }

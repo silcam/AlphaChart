@@ -31,12 +31,19 @@ async function createUser(user: NewUser) {
   return result.ops[0];
 }
 
+async function update(user: StoredUser) {
+  log.log(`[Query] UPDATE User ${user._id}`);
+  const collection = await userCollection();
+  const result = await collection.replaceOne({ _id: user._id }, user);
+}
+
 async function userCollection() {
-  return (await Data.db()).collection("users");
+  return (await Data.db()).collection<StoredUser>("users");
 }
 
 export default {
   users,
   user,
-  createUser
+  createUser,
+  update
 };

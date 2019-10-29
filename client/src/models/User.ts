@@ -12,6 +12,7 @@ export interface User {
 
 export interface CurrentUser extends User {
   email: string;
+  locale?: string;
 }
 
 export type CurrentUserOrNot = CurrentUser | null;
@@ -20,6 +21,7 @@ export interface StoredUser extends CurrentUser {
   _id: string;
   passwordHash: string;
   passwordSalt: string;
+  locale?: string;
 }
 
 export interface LoginAttempt {
@@ -36,7 +38,8 @@ export function toPublicUser(user: StoredUser): User {
 export function toCurrentUser(user: StoredUser): CurrentUser {
   return {
     name: user.name,
-    email: user.email
+    email: user.email,
+    locale: user.locale
   };
 }
 
