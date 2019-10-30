@@ -40,8 +40,8 @@ cd $WORKING_DIR
 yarn install
 yarn tsc
 
+yarn migrate
 ln -sfn $WORKING_DIR $CURRENT_LN
-
 passenger-config restart-app $ROOT_DIR
 
 ## Cleanup
