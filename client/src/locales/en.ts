@@ -57,7 +57,7 @@ const en = {
   Right: "Right",
   Show_top_alphabet: "Show Top Alphabet?",
   Top_alphabet_style: "Top Alphabet Style",
-  Bold_key_letter: "Bold key letter?",
+  Bold_key_letter: "Bold Key Letter?",
   Border_thickness: "Border Thickness",
   Border_color: "Border Color",
   Old_api_error: "The Alphachart app needs to update.",

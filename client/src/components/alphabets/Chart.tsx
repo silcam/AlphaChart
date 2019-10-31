@@ -191,7 +191,7 @@ export default function Chart(props: IProps) {
               setText={footer => updateMeta({ footer })}
               styles={{
                 ...stylesFor(chart, "table"),
-                ...stylesFor(chart, "lastRowFiller")
+                ...stylesFor(chart, "footer")
               }}
             />
           )}

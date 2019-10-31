@@ -6,9 +6,7 @@ describe("Chart Editor", () => {
   });
 
   it("Persists changes", () => {
-    cy.contains("label", "Add Letters")
-      .siblings("input")
-      .type("W ");
+    cy.withLabel("Add Letters").type("W ");
     cy.chartSnap("Chart with W");
     cy.contains("Done").click();
     cy.chartSnap("Chart View with W");
@@ -17,7 +15,7 @@ describe("Chart Editor", () => {
   });
 
   it("Adds letters", () => {
-    const input = () => cy.contains("label", "Add Letters").siblings("input");
+    const input = () => cy.withLabel("Add Letters");
     input().type("W "); // sep: space
     cy.chartSnap("Add W");
     input().type("q,"); // sep: comma

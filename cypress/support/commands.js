@@ -38,9 +38,17 @@ beforeEach(() => {
 });
 
 // Find input by placeholder
-Cypress.Commands.add("placeholder", placeholder => {
-  return cy.get(`input[placeholder='${placeholder}']`);
-});
+Cypress.Commands.add("placeholder", placeholder =>
+  cy.get(`input[placeholder='${placeholder}']`)
+);
+
+// Find item by label
+Cypress.Commands.add("withLabel", label =>
+  cy
+    .contains("label", label)
+    .siblings()
+    .first()
+);
 
 // Log in
 Cypress.Commands.add("logIn", user => {
