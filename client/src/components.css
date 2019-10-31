@@ -256,6 +256,11 @@ div.settings-side-menu div.input {
     font-size: 20px;
 }
 
+div.settings-side-menu hr {
+    width: 100%;
+    border-color: #ddd;
+}
+
 div.settings-side-menu h1 {
     margin-top: 0;
 }

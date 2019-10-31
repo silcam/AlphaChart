@@ -35,6 +35,11 @@ describe("Chart Editor Settings", () => {
   it("Can hide the top alphabet", () => {
     cy.withLabel("Show Top Alphabet").click();
     cy.chartSnap("Without top alphabet");
+
+    // Should hide these inputs
+    cy.contains("label", "Top Alphabet Font Size").should("not.exist");
+    cy.contains("label", "Top Alphabet Spacing").should("not.exist");
+    cy.contains("label", "Top Alphabet Style").should("not.exist");
   });
 
   it("Changes Top Alphabet font size", () => {

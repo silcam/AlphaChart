@@ -55,6 +55,9 @@ export default function SettingsSideMenu(props: IProps) {
           ))}
         </select>
       </div>
+
+      <hr />
+
       <div className="input">
         <label>{t("Title_font_size")}:</label>
         <FontSizeInput
@@ -99,6 +102,9 @@ export default function SettingsSideMenu(props: IProps) {
           ))}
         </select>
       </div>
+
+      <hr />
+
       <div className="input">
         <label>{t("Show_top_alphabet")}</label>
         <Switch
@@ -108,46 +114,53 @@ export default function SettingsSideMenu(props: IProps) {
           }
         />
       </div>
-      <div className="input">
-        <label>{t("Top_alphabet_font_size")}:</label>
-        <FontSizeInput
-          fontSize={styles.alphabetSummary!.fontSize!}
-          setFontSize={fontSize =>
-            updateStyles("alphabetSummary", { fontSize })
-          }
-        />
-      </div>
-      <div className="input">
-        <label>{t("Top_alphabet_spacing")}:</label>
-        <NumberPicker
-          value={parseInt(
-            styles.alphabetSummaryLetter!.padding!.replace(/^0 /, "")
-          )}
-          setValue={v =>
-            updateStyles("alphabetSummaryLetter", { padding: `0 ${v}px` })
-          }
-          noType
-          minimum={0}
-        />
-      </div>
-      <div className="input">
-        <label>{t("Top_alphabet_style")}:</label>
-        <select
-          value={styles.otherSettings!.alphabetSummaryForm!}
-          onChange={e =>
-            updateStyles("otherSettings", {
-              alphabetSummaryForm: e.target.value
-            })
-          }
-        >
-          {props.chart.letters[0] &&
-            props.chart.letters[0].forms.map((form, index) => (
-              <option key={index} value={index}>
-                {form}
-              </option>
-            ))}
-        </select>
-      </div>
+      {styles.alphabetSummary!.display === "flex" && (
+        <React.Fragment>
+          <div className="input">
+            <label>{t("Top_alphabet_font_size")}:</label>
+            <FontSizeInput
+              fontSize={styles.alphabetSummary!.fontSize!}
+              setFontSize={fontSize =>
+                updateStyles("alphabetSummary", { fontSize })
+              }
+            />
+          </div>
+          <div className="input">
+            <label>{t("Top_alphabet_spacing")}:</label>
+            <NumberPicker
+              value={parseInt(
+                styles.alphabetSummaryLetter!.padding!.replace(/^0 /, "")
+              )}
+              setValue={v =>
+                updateStyles("alphabetSummaryLetter", { padding: `0 ${v}px` })
+              }
+              noType
+              minimum={0}
+            />
+          </div>
+          <div className="input">
+            <label>{t("Top_alphabet_style")}:</label>
+            <select
+              value={styles.otherSettings!.alphabetSummaryForm!}
+              onChange={e =>
+                updateStyles("otherSettings", {
+                  alphabetSummaryForm: e.target.value
+                })
+              }
+            >
+              {props.chart.letters[0] &&
+                props.chart.letters[0].forms.map((form, index) => (
+                  <option key={index} value={index}>
+                    {form}
+                  </option>
+                ))}
+            </select>
+          </div>
+        </React.Fragment>
+      )}
+
+      <hr />
+
       <div className="input">
         <label>{t("Letter_font_size")}:</label>
         <FontSizeInput
@@ -174,6 +187,9 @@ export default function SettingsSideMenu(props: IProps) {
           onColor="#1892ef"
         />
       </div>
+
+      <hr />
+
       <div className="input">
         <label>{t("Last_row_filler_font_size")}:</label>
         <FontSizeInput
@@ -188,6 +204,9 @@ export default function SettingsSideMenu(props: IProps) {
           setFontSize={fontSize => updateStyles("footer", { fontSize })}
         />
       </div>
+
+      <hr />
+
       <div className="input">
         <label>{t("Border_thickness")}:</label>
         <NumberPicker
