@@ -9,6 +9,7 @@ interface IProps {
   id: string;
   setChartDimens: (d: ChartDimens | null) => void;
   canEdit: boolean;
+  loggedIn: boolean;
   setEditing: (e: boolean) => void;
 }
 
@@ -28,9 +29,9 @@ export default function ViewChartHeader(props: IProps) {
             <button onClick={() => props.setEditing(true)}>
               {t("Edit_chart")}
             </button>
-          ) : (
+          ) : props.loggedIn ? (
             <CopyAlphabetButton id={props.id} />
-          )}
+          ) : null}
         </div>
         <ChartToImage setChartDimens={props.setChartDimens} />
       </div>

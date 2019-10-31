@@ -26,6 +26,7 @@ export default function ViewChartPage(props: IProps) {
         id={props.id}
         setChartDimens={setChartDimens}
         canEdit={alphabet.user === userId(props.user)}
+        loggedIn={!!props.user}
         setEditing={props.setEditing}
       />
       <div
