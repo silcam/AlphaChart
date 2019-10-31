@@ -29,6 +29,8 @@ import { API_VERSION } from "../../server/dist/client/src/models/Api";
 // Libraries
 require("@cypress/snapshot").register();
 import "cypress-file-upload";
+import { addMatchImageSnapshotCommand } from "cypress-image-snapshot/command";
+addMatchImageSnapshotCommand();
 
 // Load Fixtures
 beforeEach(() => {

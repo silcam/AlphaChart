@@ -69,6 +69,7 @@ describe("Chart Editor", () => {
 
     cy.contains("Done").click();
     cy.get(lambdaImage);
+    cy.matchImageSnapshot("Chart Editor - Adds images - Lambda apple final");
   });
 
   it("Moves, adds & deletes letters", () => {
