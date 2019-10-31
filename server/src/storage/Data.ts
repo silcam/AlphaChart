@@ -9,14 +9,25 @@ let DB: Db | null = null;
 
 async function db(): Promise<Db> {
   if (!DB) {
-    const dbName =
-      process.env.NODE_ENV === "test"
-        ? `acTest-${Date.now().valueOf()}-${Math.floor(Math.random() * 1000)}`
-        : "alphachart";
+    const dbName = databaseName();
+    console.log(`Connecting to Mongo db: ${dbName}`);
     CLIENT = await MongoClient.connect(URL, { useNewUrlParser: true });
     DB = await CLIENT.db(dbName);
   }
   return DB;
+}
+
+function databaseName() {
+  switch (process.env.NODE_ENV) {
+    case "test":
+      return `acTest-${Date.now().valueOf()}-${Math.floor(
+        Math.random() * 1000
+      )}`;
+    case "test-cypress":
+      return "alphachart-cypress";
+    default:
+      return "alphachart";
+  }
 }
 
 nodeCleanup(() => {
@@ -29,6 +40,7 @@ async function loadFixtures() {
   for (let i = 0; i < collections.length; ++i) {
     const key = collections[i];
     const collection = await database.createCollection(key);
+    await collection.deleteMany({});
     await collection.insertMany(fixtures[key]);
   }
 }

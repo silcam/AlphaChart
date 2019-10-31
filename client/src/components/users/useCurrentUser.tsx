@@ -78,10 +78,7 @@ export default function useCurrentUser(): [
     if (response) setCurrentUser(null);
   };
 
-  const createAccount = async (
-    newUser: NewUser,
-    handleError: (msg: TKey) => void
-  ) => {
+  const createAccount: CreateAccountFunc = async (newUser, handleError) => {
     try {
       const response = await requestThrowsErrorResponses(axios =>
         axios.post(apiPath("/users"), newUser)
