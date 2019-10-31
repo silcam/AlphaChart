@@ -13,6 +13,7 @@ const en = {
   Invalid_email: "Email is invalid.",
   Password_too_short: "Please choose a password with at least 10 characters.",
   Passwords_do_not_match: "Passwords do not match.",
+  User_exists: "A user already exists for that email address.",
   Alphabet_charts: "Alphabet Charts",
   Save: "Save",
   Saving: "Saving...",

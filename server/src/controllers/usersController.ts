@@ -27,7 +27,7 @@ export default function usersController(app: Express) {
       if (err.errmsg.includes("duplicate key")) {
         res
           .status(422)
-          .json({ error: `A user already exists for ${newUser.email}` });
+          .json({ error: "User_exists", subs: { email: newUser.email } });
       } else {
         fiveHundred(res);
       }

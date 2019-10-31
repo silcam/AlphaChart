@@ -16,6 +16,7 @@ const fr: Strings = {
   Password_too_short:
     "Veuillez choisir un mot de passe avec au moins 10 caractères",
   Passwords_do_not_match: "Les mots de passe ne se correspondent pas.",
+  User_exists: "Il y a déjà un utilisateur avec ce mail.",
   Alphabet_charts: "Tableaux alphabétiques",
   Save: "Enregistrer",
   Saving: "Enregistrement...",

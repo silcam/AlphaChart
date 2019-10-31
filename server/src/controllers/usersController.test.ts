@@ -45,9 +45,7 @@ test("Create existing user", async () => {
     password: "yeahyeahyeah"
   });
   expect(response.status).toBe(422);
-  expect(response.body).toEqual({
-    error: "A user already exists for titus@yahoo.com"
-  });
+  expect(response.body.error).toEqual("User_exists");
 });
 
 test("Invalid new users", async () => {

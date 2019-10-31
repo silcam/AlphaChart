@@ -5,10 +5,13 @@ import cookieSession from "cookie-session";
 import secrets from "./common/secrets";
 import alphabetsController from "./controllers/alphabetsController";
 import apiVersion from "./controllers/apiVersion";
+import testDbController from "./controllers/testDbController";
 
 const app = express();
 
-app.set("port", process.env.PORT || 3001);
+// const PORT = process.env.NODE_ENV === "test" ? 3001 : 3001;
+const PORT = 3001;
+app.set("port", PORT);
 
 app.use(bodyParser.json());
 app.use(cookieSession({ secret: secrets.cookieSecret }));
@@ -17,6 +20,8 @@ app.use(apiVersion);
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
+} else if (process.env.NODE_ENV === "test-cypress") {
+  testDbController(app);
 }
 
 alphabetsController(app);
