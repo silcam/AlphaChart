@@ -118,6 +118,19 @@ export default function SettingsSideMenu(props: IProps) {
         />
       </div>
       <div className="input">
+        <label>{t("Top_alphabet_spacing")}:</label>
+        <NumberPicker
+          value={parseInt(
+            styles.alphabetSummaryLetter!.padding!.replace(/^0 /, "")
+          )}
+          setValue={v =>
+            updateStyles("alphabetSummaryLetter", { padding: `0 ${v}px` })
+          }
+          noType
+          minimum={0}
+        />
+      </div>
+      <div className="input">
         <label>{t("Top_alphabet_style")}:</label>
         <select
           value={styles.otherSettings!.alphabetSummaryForm!}

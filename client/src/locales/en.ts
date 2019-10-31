@@ -47,6 +47,7 @@ const en = {
   Title_font_size: "Title Font Size",
   Subtitle_font_size: "Subtitle Font Size",
   Top_alphabet_font_size: "Top Alphabet Font Size",
+  Top_alphabet_spacing: "Top Alphabet Spacing",
   Letter_font_size: "Letter Font Size",
   Example_word_font_size: "Example Word Font Size",
   Last_row_filler_font_size: "Last Row Filler Font Size",

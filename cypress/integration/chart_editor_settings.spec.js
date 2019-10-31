@@ -44,6 +44,13 @@ describe("Chart Editor Settings", () => {
     cy.chartSnap("Top Alphabet font 17");
   });
 
+  it("Changes Top Alphabet spacing", () => {
+    cy.withLabel("Top Alphabet Spacing")
+      .contains("button", "+")
+      .click();
+    cy.chartSnap("Ever so slightly more spacing");
+  });
+
   it("Changes Top Alphabet Style", () => {
     cy.withLabel("Top Alphabet Style").select("Α");
     cy.chartSnap("Uppercase Letters up top");

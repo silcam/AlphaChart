@@ -55,6 +55,7 @@ div.alphatable {
 
 div.alphasummary {
   justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 
 div.alpharow {

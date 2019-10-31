@@ -50,6 +50,7 @@ const fr: Strings = {
   Title_font_size: "Titre - taille de police",
   Subtitle_font_size: "Sous-titre - taille de police",
   Top_alphabet_font_size: "Sommaire de l'alphabet - taille de police",
+  Top_alphabet_spacing: "Sommaire de l'alphabet - espacement",
   Letter_font_size: "Lettre - taille de police",
   Example_word_font_size: "Mot modèle - taille de police",
   Last_row_filler_font_size: "Éspace du dernier rang- taille de police",

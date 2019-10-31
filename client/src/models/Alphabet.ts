@@ -36,6 +36,9 @@ export interface ChartStyles {
     display?: "flex" | "none";
     fontSize?: string;
   };
+  alphabetSummaryLetter?: {
+    padding?: string;
+  };
   exampleWord?: {
     fontSize?: string;
   };
@@ -68,6 +71,7 @@ export function defaultChartStyles(): ChartStyles {
     table: { borderStyle: "solid", borderWidth: "1px", borderColor: "#ddd" },
     letter: { fontSize: "3em" },
     alphabetSummary: { display: "flex", fontSize: "1.6em" },
+    alphabetSummaryLetter: { padding: "0 0px" },
     exampleWord: { fontSize: "1em" },
     exampleWordKeyLetter: { fontWeight: "bold" },
     lastRowFiller: { fontSize: "1em" },
