@@ -14,6 +14,11 @@ import NumberPicker from "../common/NumberPicker";
 import ColorInput from "../common/ColorInput";
 import { useTranslation } from "../common/I18nContext";
 import { TKey } from "../../locales/en";
+import {
+  letterSettingsFromStyles,
+  cssFromLetterSettings,
+  LetterPosition
+} from "../../models/ChartSettings";
 
 interface IProps {
   chart: AlphabetChart;
@@ -35,6 +40,7 @@ export default function SettingsSideMenu(props: IProps) {
     const op = props.chart.styles[key] ? "$merge" : "$set";
     props.setStyles(update(props.chart.styles, { [key]: { [op]: s } }));
   };
+  const letterSettings = letterSettingsFromStyles(styles);
 
   return (
     <div className="side-menu settings-side-menu">
@@ -167,6 +173,42 @@ export default function SettingsSideMenu(props: IProps) {
           fontSize={styles.letter!.fontSize!}
           setFontSize={fontSize => updateStyles("letter", { fontSize })}
         />
+      </div>
+      <div className="input">
+        <label>{t("Reverse_letters")}:</label>
+        <Switch
+          checked={letterSettings.reverse}
+          onChange={reverse =>
+            updateStyles(
+              "letter",
+              cssFromLetterSettings({ ...letterSettings, reverse })
+            )
+          }
+          onColor="#1892ef"
+        />
+      </div>
+      <div className="input">
+        <label>{t("Letter_position")}:</label>
+        <select
+          value={letterSettings.position}
+          onChange={e =>
+            updateStyles(
+              "letter",
+              cssFromLetterSettings({
+                ...letterSettings,
+                position: e.target.value as LetterPosition
+              })
+            )
+          }
+        >
+          {(["Left", "Right", "Center", "Split"] as LetterPosition[]).map(
+            position => (
+              <option key={position} value={position}>
+                {t(position)}
+              </option>
+            )
+          )}
+        </select>
       </div>
       <div className="input">
         <label>{t("Example_word_font_size")}:</label>

@@ -31,6 +31,8 @@ export interface ChartStyles {
   };
   letter?: {
     fontSize?: string;
+    flexDirection?: "row" | "row-reverse";
+    justifyContent?: "flex-start" | "flex-end" | "space-between" | "center";
   };
   alphabetSummary?: {
     display?: "flex" | "none";
@@ -69,7 +71,11 @@ export function defaultChartStyles(): ChartStyles {
     title: { fontSize: "3em", textAlign: "Center" },
     subtitle: { fontSize: "1.6em", textAlign: "Center" },
     table: { borderStyle: "solid", borderWidth: "1px", borderColor: "#ddd" },
-    letter: { fontSize: "3em" },
+    letter: {
+      fontSize: "3em",
+      flexDirection: "row",
+      justifyContent: "flex-start"
+    },
     alphabetSummary: { display: "flex", fontSize: "1.6em" },
     alphabetSummaryLetter: { padding: "0 0px" },
     exampleWord: { fontSize: "1em" },

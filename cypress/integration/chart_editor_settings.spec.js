@@ -68,6 +68,19 @@ describe("Chart Editor Settings", () => {
     cy.chartSnap("Letter font 31");
   });
 
+  it("Changes Letter order and position", () => {
+    cy.withLabel("Reverse Letters").click();
+    cy.chartSnap("aA Left");
+    cy.withLabel("Letter Position").select("Center");
+    cy.chartSnap("aA Center");
+    cy.withLabel("Letter Position").select("Split");
+    cy.chartSnap("aA Split");
+    cy.withLabel("Letter Position").select("Right");
+    cy.chartSnap("aA Right");
+    cy.withLabel("Reverse Letter").click();
+    cy.chartSnap("Aa Right");
+  });
+
   it("Changes Example Word font size", () => {
     cy.withLabel("Example Word Font Size")
       .contains("button", "+")

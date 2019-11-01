@@ -71,7 +71,7 @@ describe("Chart Editor", () => {
   });
 
   it("Moves, adds & deletes letters", () => {
-    cy.contains(".letter", "Α α").click();
+    cy.contains(".letter", "Α").click();
 
     // Move the letter
     cy.contains(".side-menu button", "+").click();
@@ -98,7 +98,7 @@ describe("Chart Editor", () => {
   });
 
   it("Edits letter forms", () => {
-    cy.contains(".letter", "Α α").click();
+    cy.contains(".letter", "Α").click();
     cy.contains(".side-menu", "Αα");
     cy.get(".side-menu")
       .get("input[value='Α']")
@@ -135,13 +135,13 @@ describe("Chart Editor", () => {
 
   it("Opens and closes menus", () => {
     // Letter side menu
-    cy.contains(".letter", "Β β").click();
+    cy.contains(".letter", "Β").click();
     cy.get(".letter-side-menu").should("be.visible");
     cy.contains(".side-menu a", "Close").click();
     cy.get(".letter-side-menu").should("not.be.visible");
-    cy.contains(".letter", "Β β").click();
+    cy.contains(".letter", "Β").click();
     cy.get(".letter-side-menu").should("be.visible");
-    cy.contains(".letter", "Β β").click();
+    cy.contains(".letter", "Β").click();
     cy.get(".letter-side-menu").should("not.be.visible");
 
     // Settings side menu
@@ -157,7 +157,7 @@ describe("Chart Editor", () => {
     // They close each other
     cy.contains("Chart Settings").click();
     cy.get(".settings-side-menu").should("be.visible");
-    cy.contains(".letter", "Β β").click();
+    cy.contains(".letter", "Β").click();
     cy.get(".letter-side-menu").should("be.visible");
     cy.get(".settings-side-menu").should("not.be.visible");
     cy.contains("Chart Settings").click();

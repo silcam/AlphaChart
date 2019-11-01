@@ -100,7 +100,14 @@ export default function Chart(props: IProps) {
                     }
                   >
                     <div className="letter" style={stylesFor(chart, "letter")}>
-                      {abletter.forms.join(" ")}
+                      {abletter.forms.map((form, index) => (
+                        <React.Fragment>
+                          <div>{form}</div>
+                          {index < abletter.forms.length - 1 && (
+                            <div>&nbsp;</div>
+                          )}
+                        </React.Fragment>
+                      ))}
                     </div>
 
                     <div className="flex-space" />

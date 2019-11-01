@@ -3,7 +3,7 @@ describe("Public Chart View", () => {
     cy.visit("/");
     cy.contains("Ελληνικα").click();
     cy.url().should("include", "/alphabets/view/5d4c38e158e6dbb33d7d7b12");
-    cy.contains("Β β");
+    cy.get(".compChart");
     cy.contains("Copy to My Alphabets").should("not.exist");
     cy.contains("Save Chart Image");
   });
@@ -13,7 +13,7 @@ describe("Public Chart View", () => {
     cy.visit("/");
     cy.contains("Ελληνικα").click();
     cy.url().should("include", "/alphabets/view/5d4c38e158e6dbb33d7d7b12");
-    cy.contains("Β β");
+    cy.get(".compChart");
     cy.contains("Copy to My Alphabets");
     cy.contains("Save Chart Image");
   });
