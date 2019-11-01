@@ -1,11 +1,11 @@
 import React from "react";
+import { AlphabetChart } from "../../models/Alphabet";
 import {
   ChartStyles,
-  AlphabetChart,
-  defaultChartStyles,
-  stylesFor,
-  defaultFonts
-} from "../../models/Alphabet";
+  defaultFonts,
+  completeStyles,
+  TextAlign
+} from "../../models/ChartStyles";
 import update from "immutability-helper";
 import FontSizeInput from "./FontSizeInput";
 import LnkBtn from "../common/LnkBtn";
@@ -18,7 +18,7 @@ import {
   letterSettingsFromStyles,
   cssFromLetterSettings,
   LetterPosition
-} from "../../models/ChartSettings";
+} from "../../models/ChartStyles";
 
 interface IProps {
   chart: AlphabetChart;
@@ -28,14 +28,7 @@ interface IProps {
 
 export default function SettingsSideMenu(props: IProps) {
   const t = useTranslation();
-  const keys = Object.keys(defaultChartStyles()) as (keyof ChartStyles)[];
-  const styles: ChartStyles = keys.reduce(
-    (styles: ChartStyles, key) => ({
-      ...styles,
-      [key]: stylesFor(props.chart, key)
-    }),
-    {}
-  );
+  const styles = completeStyles(props.chart.styles);
   const updateStyles = (key: keyof ChartStyles, s: any) => {
     const op = props.chart.styles[key] ? "$merge" : "$set";
     props.setStyles(update(props.chart.styles, { [key]: { [op]: s } }));
@@ -51,7 +44,7 @@ export default function SettingsSideMenu(props: IProps) {
       <div className="input">
         <label>{t("Font")}:</label>
         <select
-          value={styles.chart!.fontFamily}
+          value={styles.chart.fontFamily}
           onChange={e => updateStyles("chart", { fontFamily: e.target.value })}
         >
           {defaultFonts.map(font => (
@@ -67,41 +60,41 @@ export default function SettingsSideMenu(props: IProps) {
       <div className="input">
         <label>{t("Title_font_size")}:</label>
         <FontSizeInput
-          fontSize={styles.title!.fontSize!}
+          fontSize={styles.title.fontSize!}
           setFontSize={fontSize => updateStyles("title", { fontSize })}
         />
       </div>
       <div className="input">
         <label>{t("Subtitle_font_size")}:</label>
         <FontSizeInput
-          fontSize={styles.subtitle!.fontSize!}
+          fontSize={styles.subtitle.fontSize!}
           setFontSize={fontSize => updateStyles("subtitle", { fontSize })}
         />
       </div>
       <div className="input">
         <label>{t("Title_position")}:</label>
         <select
-          value={styles.title!.textAlign}
+          value={styles.title.textAlign.toLocaleLowerCase()}
           onChange={e => {
             props.setStyles(
               update(props.chart.styles, {
                 title: {
                   $set: {
                     ...props.chart.styles.title,
-                    textAlign: e.target.value
+                    textAlign: e.target.value as TextAlign
                   }
                 },
                 subtitle: {
                   $set: {
                     ...props.chart.styles.subtitle,
-                    textAlign: e.target.value
+                    textAlign: e.target.value as TextAlign
                   }
                 }
               })
             );
           }}
         >
-          {(["Left", "Center", "Right"] as TKey[]).map(opt => (
+          {(["left", "center", "right"] as TKey[]).map(opt => (
             <option key={opt} value={opt}>
               {t(opt)}
             </option>
@@ -114,18 +107,18 @@ export default function SettingsSideMenu(props: IProps) {
       <div className="input">
         <label>{t("Show_top_alphabet")}</label>
         <Switch
-          checked={styles.alphabetSummary!.display === "flex"}
+          checked={styles.alphabetSummary.display === "flex"}
           onChange={show =>
             updateStyles("alphabetSummary", { display: show ? "flex" : "none" })
           }
         />
       </div>
-      {styles.alphabetSummary!.display === "flex" && (
+      {styles.alphabetSummary.display === "flex" && (
         <React.Fragment>
           <div className="input">
             <label>{t("Top_alphabet_font_size")}:</label>
             <FontSizeInput
-              fontSize={styles.alphabetSummary!.fontSize!}
+              fontSize={styles.alphabetSummary.fontSize!}
               setFontSize={fontSize =>
                 updateStyles("alphabetSummary", { fontSize })
               }
@@ -135,7 +128,7 @@ export default function SettingsSideMenu(props: IProps) {
             <label>{t("Top_alphabet_spacing")}:</label>
             <NumberPicker
               value={parseInt(
-                styles.alphabetSummaryLetter!.padding!.replace(/^0 /, "")
+                styles.alphabetSummaryLetter.padding.replace(/^0 /, "")
               )}
               setValue={v =>
                 updateStyles("alphabetSummaryLetter", { padding: `0 ${v}px` })
@@ -147,7 +140,7 @@ export default function SettingsSideMenu(props: IProps) {
           <div className="input">
             <label>{t("Top_alphabet_style")}:</label>
             <select
-              value={styles.otherSettings!.alphabetSummaryForm!}
+              value={styles.otherSettings.alphabetSummaryForm!}
               onChange={e =>
                 updateStyles("otherSettings", {
                   alphabetSummaryForm: e.target.value
@@ -170,7 +163,7 @@ export default function SettingsSideMenu(props: IProps) {
       <div className="input">
         <label>{t("Letter_font_size")}:</label>
         <FontSizeInput
-          fontSize={styles.letter!.fontSize!}
+          fontSize={styles.letter.fontSize!}
           setFontSize={fontSize => updateStyles("letter", { fontSize })}
         />
       </div>
@@ -201,7 +194,7 @@ export default function SettingsSideMenu(props: IProps) {
             )
           }
         >
-          {(["Left", "Right", "Center", "Split"] as LetterPosition[]).map(
+          {(["left", "right", "center", "split"] as LetterPosition[]).map(
             position => (
               <option key={position} value={position}>
                 {t(position)}
@@ -213,14 +206,14 @@ export default function SettingsSideMenu(props: IProps) {
       <div className="input">
         <label>{t("Example_word_font_size")}:</label>
         <FontSizeInput
-          fontSize={styles.exampleWord!.fontSize!}
+          fontSize={styles.exampleWord.fontSize!}
           setFontSize={fontSize => updateStyles("exampleWord", { fontSize })}
         />
       </div>
       <div className="input">
         <label>{t("Bold_key_letter")}</label>
         <Switch
-          checked={styles.exampleWordKeyLetter!.fontWeight === "bold"}
+          checked={styles.exampleWordKeyLetter.fontWeight === "bold"}
           onChange={bold =>
             updateStyles("exampleWordKeyLetter", {
               fontWeight: bold ? "bold" : "normal"
@@ -235,14 +228,14 @@ export default function SettingsSideMenu(props: IProps) {
       <div className="input">
         <label>{t("Last_row_filler_font_size")}:</label>
         <FontSizeInput
-          fontSize={styles.lastRowFiller!.fontSize!}
+          fontSize={styles.lastRowFiller.fontSize!}
           setFontSize={fontSize => updateStyles("lastRowFiller", { fontSize })}
         />
       </div>
       <div className="input">
         <label>{t("Footer_font_size")}:</label>
         <FontSizeInput
-          fontSize={styles.footer!.fontSize!}
+          fontSize={styles.footer.fontSize!}
           setFontSize={fontSize => updateStyles("footer", { fontSize })}
         />
       </div>
@@ -252,7 +245,7 @@ export default function SettingsSideMenu(props: IProps) {
       <div className="input">
         <label>{t("Border_thickness")}:</label>
         <NumberPicker
-          value={parseInt(styles.table!.borderWidth!)}
+          value={parseInt(styles.table.borderWidth!)}
           setValue={v => updateStyles("table", { borderWidth: `${v}px` })}
           noType
           minimum={0}
@@ -261,7 +254,7 @@ export default function SettingsSideMenu(props: IProps) {
       <div className="input">
         <label>{t("Border_color")}:</label>
         <ColorInput
-          color={styles.table!.borderColor!}
+          color={styles.table.borderColor!}
           setColor={borderColor => updateStyles("table", { borderColor })}
         />
       </div>

@@ -1,16 +1,11 @@
 import React from "react";
-import {
-  Alphabet,
-  AlphabetLetter,
-  AlphabetChart,
-  stylesFor,
-  alphabetSummaryForm
-} from "../../models/Alphabet";
+import { Alphabet, AlphabetLetter, AlphabetChart } from "../../models/Alphabet";
 import ImageInput from "./ImageInput";
 import update from "immutability-helper";
 import WithLineBreaks from "../common/WithLineBreaks";
 import ExampleWord from "./ExampleWord";
 import AlphaFooter from "./AlphaFooter";
+import { alphabetSummaryForm, completeStyles } from "../../models/ChartStyles";
 
 interface IProps {
   alphabet: Alphabet;
@@ -23,6 +18,7 @@ interface IProps {
 
 export default function Chart(props: IProps) {
   const chart = props.chart;
+  const chartStyles = completeStyles(props.chart.styles);
   const alphabetTable = clump(chart.letters, Math.max(chart.cols, 1));
   const cellWidth = 100 / chart.cols;
 
@@ -32,8 +28,8 @@ export default function Chart(props: IProps) {
     props.setChart(update(chart, { meta: { $merge: meta } }));
 
   return (
-    <div className="compChart" id="compChart" style={stylesFor(chart, "chart")}>
-      <div className="alphaTitle" style={stylesFor(chart, "title")}>
+    <div className="compChart" id="compChart" style={chartStyles.chart}>
+      <div className="alphaTitle" style={chartStyles.title}>
         {props.edit ? (
           <input
             type="text"
@@ -46,7 +42,7 @@ export default function Chart(props: IProps) {
         )}
       </div>
       {(props.edit || chart.meta.subtitle) && (
-        <div className="alphaSubtitle" style={stylesFor(chart, "subtitle")}>
+        <div className="alphaSubtitle" style={chartStyles.subtitle}>
           {props.edit ? (
             <input
               type="text"
@@ -60,20 +56,17 @@ export default function Chart(props: IProps) {
         </div>
       )}
       <div>
-        <div className="alphatable" style={stylesFor(chart, "table")}>
+        <div className="alphatable" style={chartStyles.table}>
           <div
             className="alpharow alphasummary"
             style={{
-              ...stylesFor(chart, "table"),
-              ...stylesFor(chart, "alphabetSummary")
+              ...chartStyles.table,
+              ...chartStyles.alphabetSummary
             }}
           >
             {chart.letters.map((letter, index) => (
-              <div
-                key={index}
-                style={stylesFor(chart, "alphabetSummaryLetter")}
-              >
-                {letter.forms[alphabetSummaryForm(chart.styles)]}
+              <div key={index} style={chartStyles.alphabetSummaryLetter}>
+                {letter.forms[alphabetSummaryForm(chartStyles)]}
               </div>
             ))}
           </div>
@@ -88,7 +81,7 @@ export default function Chart(props: IProps) {
                     }`}
                     key={letterIndex}
                     style={{
-                      ...stylesFor(chart, "table"),
+                      ...chartStyles.table,
                       width: `${cellWidth}%`
                     }}
                     data-selected={index === props.selectedIndex}
@@ -99,7 +92,7 @@ export default function Chart(props: IProps) {
                       )
                     }
                   >
-                    <div className="letter" style={stylesFor(chart, "letter")}>
+                    <div className="letter" style={chartStyles.letter}>
                       {abletter.forms.map((form, index) => (
                         <React.Fragment>
                           <div>{form}</div>
@@ -130,7 +123,7 @@ export default function Chart(props: IProps) {
                     </div>
                     <div
                       style={{
-                        ...stylesFor(chart, "exampleWord"),
+                        ...chartStyles.exampleWord,
                         marginTop: "8px"
                       }}
                     >
@@ -149,10 +142,7 @@ export default function Chart(props: IProps) {
                       ) : (
                         <ExampleWord
                           letter={abletter}
-                          keyLetterStyle={stylesFor(
-                            chart,
-                            "exampleWordKeyLetter"
-                          )}
+                          keyLetterStyle={chartStyles.exampleWordKeyLetter}
                         />
                       )}
                     </div>
@@ -163,8 +153,8 @@ export default function Chart(props: IProps) {
                 <div
                   className="alphacell lastRowFiller"
                   style={{
-                    ...stylesFor(chart, "table"),
-                    ...stylesFor(chart, "lastRowFiller"),
+                    ...chartStyles.table,
+                    ...chartStyles.lastRowFiller,
                     width: `${(chart.cols - row.length) * cellWidth}%`
                   }}
                 >
@@ -189,8 +179,8 @@ export default function Chart(props: IProps) {
               text={chart.meta.lastRowFiller}
               setText={lastRowFiller => updateMeta({ lastRowFiller })}
               styles={{
-                ...stylesFor(chart, "table"),
-                ...stylesFor(chart, "lastRowFiller")
+                ...chartStyles.table,
+                ...chartStyles.lastRowFiller
               }}
             />
           )}
@@ -200,8 +190,8 @@ export default function Chart(props: IProps) {
               text={chart.meta.footer}
               setText={footer => updateMeta({ footer })}
               styles={{
-                ...stylesFor(chart, "table"),
-                ...stylesFor(chart, "footer")
+                ...chartStyles.table,
+                ...chartStyles.footer
               }}
             />
           )}

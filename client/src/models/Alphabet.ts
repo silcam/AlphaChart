@@ -1,89 +1,10 @@
 import { ObjectId } from "bson";
+import { ChartStyles, defaultChartStyles } from "./ChartStyles";
 
 export interface AlphabetLetter {
   forms: string[];
   exampleWord: string;
   imagePath: string;
-}
-
-export const defaultFonts = [
-  "Andika",
-  "AndikaNewBasic",
-  "CharisSIL-Literacy"
-] as const;
-
-export interface ChartStyles {
-  chart?: {
-    fontFamily?: string;
-  };
-  title?: {
-    fontSize?: string;
-    textAlign?: string;
-  };
-  subtitle?: {
-    fontSize?: string;
-    textAlign?: string;
-  };
-  table?: {
-    borderStyle?: "solid";
-    borderWidth?: string;
-    borderColor?: string;
-  };
-  letter?: {
-    fontSize?: string;
-    flexDirection?: "row" | "row-reverse";
-    justifyContent?: "flex-start" | "flex-end" | "space-between" | "center";
-  };
-  alphabetSummary?: {
-    display?: "flex" | "none";
-    fontSize?: string;
-  };
-  alphabetSummaryLetter?: {
-    padding?: string;
-  };
-  exampleWord?: {
-    fontSize?: string;
-  };
-  exampleWordKeyLetter?: {
-    fontWeight?: "normal" | "bold";
-  };
-  lastRowFiller?: {
-    fontSize?: string;
-  };
-  footer?: {
-    fontSize?: string;
-  };
-  otherSettings?: {
-    alphabetSummaryForm?: number;
-    display?: string; // Dummy property because TS is hard
-  };
-}
-
-// export type ChartStyles = {
-//   [P in keyof ChartStylesStrict]?: {
-//     [SubP in keyof ChartStylesStrict[P]]?: ChartStylesStrict[P][SubP];
-//   };
-// };
-
-export function defaultChartStyles(): ChartStyles {
-  return {
-    chart: { fontFamily: "AndikaNewBasic" },
-    title: { fontSize: "3em", textAlign: "Center" },
-    subtitle: { fontSize: "1.6em", textAlign: "Center" },
-    table: { borderStyle: "solid", borderWidth: "1px", borderColor: "#ddd" },
-    letter: {
-      fontSize: "3em",
-      flexDirection: "row",
-      justifyContent: "flex-start"
-    },
-    alphabetSummary: { display: "flex", fontSize: "1.6em" },
-    alphabetSummaryLetter: { padding: "0 0px" },
-    exampleWord: { fontSize: "1em" },
-    exampleWordKeyLetter: { fontWeight: "bold" },
-    lastRowFiller: { fontSize: "1em" },
-    footer: { fontSize: "1em" },
-    otherSettings: { alphabetSummaryForm: 1 }
-  };
 }
 
 export interface AlphabetChart {
@@ -146,16 +67,4 @@ export function blankAlphabetLetter(): AlphabetLetter {
     exampleWord: "",
     imagePath: ""
   };
-}
-
-export function stylesFor(chart: AlphabetChart, element: keyof ChartStyles) {
-  return chart.styles[element]
-    ? { ...defaultChartStyles()[element], ...chart.styles[element] }
-    : defaultChartStyles()[element];
-}
-
-export function alphabetSummaryForm(styles: ChartStyles): number {
-  return styles.otherSettings && styles.otherSettings.alphabetSummaryForm
-    ? styles.otherSettings.alphabetSummaryForm
-    : defaultChartStyles().otherSettings!.alphabetSummaryForm!;
 }
