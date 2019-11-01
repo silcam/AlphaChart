@@ -26,9 +26,10 @@ ln -sfn $SHARED_DIR/client/node_modules $WORKING_DIR/client/node_modules
 # ln -sfn $SHARED_DIR/client/build $WORKING_DIR/client/build
 ln -sfn $SHARED_DIR/secrets.json $WORKING_DIR/secrets.json
 ln -sfn $WORKING_DIR/server/dist/server/src/server.js $WORKING_DIR/server.js
+ln -sfn $SHARED_DIR/.migrate $WORKING_DIR/.migrate
 
 cd $WORKING_DIR/client
-yarn install
+yarn install --production
 yarn build
 # cp -rlf $WORKING_DIR/client/build/* $SHARED_DIR/public/ 
 
@@ -37,7 +38,7 @@ mv $WORKING_DIR/client/public $WORKING_DIR/client/public_old
 ln -sfn $SHARED_DIR/public $WORKING_DIR/client/public
 
 cd $WORKING_DIR
-yarn install
+yarn install --production
 yarn tsc
 
 yarn migrate
