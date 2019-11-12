@@ -5,7 +5,11 @@ import update from "immutability-helper";
 import WithLineBreaks from "../common/WithLineBreaks";
 import ExampleWord from "./ExampleWord";
 import AlphaFooter from "./AlphaFooter";
-import { alphabetSummaryForm, completeStyles } from "../../models/ChartStyles";
+import {
+  alphabetSummaryForm,
+  completeStyles,
+  stylesForImage
+} from "../../models/ChartStyles";
 
 interface IProps {
   alphabet: Alphabet;
@@ -94,7 +98,7 @@ export default function Chart(props: IProps) {
                   >
                     <div className="letter" style={chartStyles.letter}>
                       {abletter.forms.map((form, index) => (
-                        <React.Fragment>
+                        <React.Fragment key={index}>
                           <div>{form}</div>
                           {index < abletter.forms.length - 1 && (
                             <div>&nbsp;</div>
@@ -113,11 +117,19 @@ export default function Chart(props: IProps) {
                           setImagePath={imagePath =>
                             updateLetter(index, { imagePath })
                           }
+                          imageStyles={stylesForImage(
+                            chartStyles,
+                            abletter.imagePath
+                          )}
                         />
                       ) : abletter.imagePath ? (
                         <img
                           src={encodeURI(abletter.imagePath)}
                           alt={abletter.exampleWord}
+                          style={stylesForImage(
+                            chartStyles,
+                            abletter.imagePath
+                          )}
                         />
                       ) : null}
                     </div>

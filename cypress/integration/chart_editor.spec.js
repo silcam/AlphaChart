@@ -74,9 +74,9 @@ describe("Chart Editor", () => {
     cy.contains(".letter", "Α").click();
 
     // Move the letter
-    cy.contains(".side-menu button", "+").click();
+    cy.withLabel("Letter Position").contains("button", "+").click();
     cy.chartSnap("Alpha second");
-    cy.contains(".side-menu button", "-").click();
+    cy.withLabel("Letter Position").contains("button", "-").click();
     cy.chartSnap("Alpha first again");
 
     // Add a letter before

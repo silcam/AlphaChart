@@ -127,4 +127,21 @@ describe("Chart Editor Settings", () => {
       .type("#0000FF");
     cy.chartSnap("Thick blue border");
   });
+
+  it("Adjusts image size and position", () => {
+    cy.contains(".letter", "β").click();
+    cy.withLabel("Size")
+      .contains("button", "+")
+      .click()
+      .click()
+      .click();
+    cy.chartSnap("Boat image 83%");
+
+    cy.withLabel("Image Position")
+      .contains("button", "+")
+      .click()
+      .click()
+      .click();
+    cy.chartSnap("Boat image bumped up 3px");
+  });
 });

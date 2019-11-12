@@ -65,7 +65,9 @@ const en = {
   Border_thickness: "Border Thickness",
   Border_color: "Border Color",
   Old_api_error: "The Alphachart app needs to update.",
-  Reload: "Reload"
+  Reload: "Reload",
+  Size: "Size",
+  Image_position: "Image Position"
 };
 
 export type Strings = typeof en;

@@ -14,6 +14,7 @@ import SettingsSideMenu from "./SettingsSideMenu";
 import { useTranslation } from "../common/I18nContext";
 import useUndo from "../common/useUndo";
 import UndoRedo from "../common/UndoRedo";
+import { stylesForImage, completeStyles } from "../../models/ChartStyles";
 
 interface IProps {
   alphabet: Alphabet;
@@ -131,6 +132,18 @@ export default function ChartEditor(props: IProps) {
                 })
               );
               setSelectedIndex(position);
+            }}
+            imageStyles={stylesForImage(
+              chart.styles,
+              chart.letters[selectedIndex].imagePath
+            )}
+            setImageStyles={styles => {
+              const chartStyles = update(completeStyles(chart.styles), {
+                images: {
+                  [chart.letters[selectedIndex].imagePath]: { $set: styles }
+                }
+              });
+              setChart(update(chart, { styles: { $set: chartStyles } }));
             }}
           />
         )

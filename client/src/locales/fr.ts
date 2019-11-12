@@ -68,7 +68,9 @@ const fr: Strings = {
   Border_thickness: "Épaisseur de bordure",
   Border_color: "Couleur de bordure",
   Old_api_error: "L'appli Alphachart a besoin de se mettre à jour.",
-  Reload: "Recharger"
+  Reload: "Recharger",
+  Size: "Taille",
+  Image_position: "Position de l'image"
 };
 
 export default fr;

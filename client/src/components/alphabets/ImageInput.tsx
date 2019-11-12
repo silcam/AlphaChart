@@ -4,11 +4,13 @@ import { useDropzone } from "react-dropzone";
 import Loading from "../common/Loading";
 import useNetwork from "../common/useNetwork";
 import { apiPath } from "../../models/Api";
+import { ImageStyles } from "../../models/ChartStyles";
 
 interface IProps {
   alphabet: Alphabet;
   setImagePath: (imgPath: string) => void;
   letter: AlphabetLetter;
+  imageStyles: ImageStyles;
 }
 
 export default function ImageInput(props: IProps) {
@@ -65,6 +67,7 @@ export default function ImageInput(props: IProps) {
               <img
                 src={encodeURI(props.letter.imagePath)}
                 alt={props.letter.exampleWord}
+                style={props.imageStyles}
               />
             )}
             <p className="drop-zone">{dropZoneLabel}</p>

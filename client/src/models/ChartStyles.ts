@@ -7,6 +7,10 @@ export const defaultFonts = [
 ] as const;
 
 export type TextAlign = "left" | "right" | "center";
+export interface ImageStyles {
+  width: string;
+  paddingBottom: string;
+}
 export interface ChartStylesStrict {
   chart: {
     fontFamily: string;
@@ -28,6 +32,9 @@ export interface ChartStylesStrict {
     fontSize: string;
     flexDirection: "row" | "row-reverse";
     justifyContent: "flex-start" | "flex-end" | "space-between" | "center";
+  };
+  images: {
+    [imagePath: string]: ImageStyles;
   };
   alphabetSummary: {
     display: "flex" | "none";
@@ -71,6 +78,7 @@ export function defaultChartStyles(): ChartStylesStrict {
       flexDirection: "row",
       justifyContent: "flex-start"
     },
+    images: {},
     alphabetSummary: { display: "flex", fontSize: "1.6em" },
     alphabetSummaryLetter: { padding: "0 0px" },
     exampleWord: { fontSize: "1em" },
@@ -79,6 +87,20 @@ export function defaultChartStyles(): ChartStylesStrict {
     footer: { fontSize: "1em" },
     otherSettings: { alphabetSummaryForm: 1, display: "" }
   };
+}
+
+export function defaultImageStyles(): ImageStyles {
+  return {
+    width: "80%",
+    paddingBottom: "0px"
+  };
+}
+
+export function stylesForImage(
+  styles: ChartStyles,
+  imagePath: string
+): ImageStyles {
+  return (styles.images && styles.images[imagePath]) || defaultImageStyles();
 }
 
 export function completeStyles(mergeStyles: ChartStyles): ChartStylesStrict {
