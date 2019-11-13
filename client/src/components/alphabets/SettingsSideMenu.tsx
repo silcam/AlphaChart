@@ -57,7 +57,7 @@ export default function SettingsSideMenu(props: IProps) {
         </select>
       </div>
       <div className="input">
-        <label>{t("Right_to_left")}</label>
+        <label>{t("Right_to_left")}:</label>
         <Switch
           checked={isRightToLeft(styles)}
           onChange={rightToLeft =>
