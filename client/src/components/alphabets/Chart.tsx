@@ -65,7 +65,8 @@ export default function Chart(props: IProps) {
             className="alpharow alphasummary"
             style={{
               ...chartStyles.table,
-              ...chartStyles.alphabetSummary
+              ...chartStyles.alphabetSummary,
+              ...chartStyles.row
             }}
           >
             {chart.letters.map((letter, index) => (
@@ -75,7 +76,7 @@ export default function Chart(props: IProps) {
             ))}
           </div>
           {alphabetTable.map((row, rowIndex) => (
-            <div className="alpharow" key={rowIndex}>
+            <div className="alpharow" key={rowIndex} style={chartStyles.row}>
               {row.map((abletter, letterIndex) => {
                 const index = flatIndex(chart.cols, rowIndex, letterIndex);
                 return (

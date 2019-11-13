@@ -70,7 +70,8 @@ const fr: Strings = {
   Old_api_error: "L'appli Alphachart a besoin de se mettre à jour.",
   Reload: "Recharger",
   Size: "Taille",
-  Image_position: "Position de l'image"
+  Image_position: "Position de l'image",
+  Right_to_left: "Droite à gauche"
 };
 
 export default fr;

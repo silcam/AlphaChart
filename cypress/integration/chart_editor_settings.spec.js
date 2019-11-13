@@ -7,7 +7,14 @@ describe("Chart Editor Settings", () => {
   });
 
   it("Changes the font", () => {
+    cy.get(".compChart").should("have.css", "font-family", "AndikaNewBasic");
+
     cy.contains("select", "Andika").select("CharisSIL-Literacy");
+    cy.get(".compChart").should(
+      "have.css",
+      "font-family",
+      "CharisSIL-Literacy"
+    );
     cy.chartSnap("With Charis font");
   });
 
@@ -143,5 +150,23 @@ describe("Chart Editor Settings", () => {
       .click()
       .click();
     cy.chartSnap("Boat image bumped up 3px");
+  });
+
+  it("Switches to Right-to-Left", () => {
+    cy.get(".alphasummary").should("have.css", "flex-direction", "row");
+    cy.contains(".alpharow", "Γ").should("have.css", "flex-direction", "row");
+    cy.get(".lastRowFiller").should("have.css", "text-align", "left");
+    cy.get(".alphafooter").should("have.css", "text-align", "left");
+
+    cy.withLabel("Right to Left").click();
+    cy.get(".alphasummary").should("have.css", "flex-direction", "row-reverse");
+    cy.contains(".alpharow", "Γ").should(
+      "have.css",
+      "flex-direction",
+      "row-reverse"
+    );
+    cy.get(".lastRowFiller").should("have.css", "text-align", "right");
+    cy.get(".alphafooter").should("have.css", "text-align", "right");
+    cy.chartSnap("Right to Left");
   });
 });

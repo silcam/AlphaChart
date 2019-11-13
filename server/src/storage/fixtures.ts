@@ -39,7 +39,7 @@ const fixtures: Fixtures = {
         timestamp: 1568107634729,
         cols: 5,
         meta: { title: "Ελληνικα" },
-        styles: {},
+        styles: { otherSettings: { alphabetSummaryForm: 1 } },
         letters: [
           {
             forms: ["Α", "α"],

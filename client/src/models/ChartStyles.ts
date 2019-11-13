@@ -28,6 +28,9 @@ export interface ChartStylesStrict {
     borderWidth: string;
     borderColor: string;
   };
+  row: {
+    flexDirection: "row" | "row-reverse";
+  };
   letter: {
     fontSize: string;
     flexDirection: "row" | "row-reverse";
@@ -51,9 +54,11 @@ export interface ChartStylesStrict {
   };
   lastRowFiller: {
     fontSize: string;
+    textAlign: "left" | "right";
   };
   footer: {
     fontSize: string;
+    textAlign: "left" | "right";
   };
   otherSettings: {
     alphabetSummaryForm: number;
@@ -73,6 +78,7 @@ export function defaultChartStyles(): ChartStylesStrict {
     title: { fontSize: "3em", textAlign: "center" },
     subtitle: { fontSize: "1.6em", textAlign: "center" },
     table: { borderStyle: "solid", borderWidth: "1px", borderColor: "#ddd" },
+    row: { flexDirection: "row" },
     letter: {
       fontSize: "3em",
       flexDirection: "row",
@@ -83,9 +89,9 @@ export function defaultChartStyles(): ChartStylesStrict {
     alphabetSummaryLetter: { padding: "0 0px" },
     exampleWord: { fontSize: "1em" },
     exampleWordKeyLetter: { fontWeight: "bold" },
-    lastRowFiller: { fontSize: "1em" },
-    footer: { fontSize: "1em" },
-    otherSettings: { alphabetSummaryForm: 1, display: "" }
+    lastRowFiller: { fontSize: "1em", textAlign: "left" },
+    footer: { fontSize: "1em", textAlign: "left" },
+    otherSettings: { alphabetSummaryForm: 0, display: "" }
   };
 }
 
@@ -160,4 +166,19 @@ export function cssFromLetterSettings(
         ? "flex-start"
         : "flex-end"
   };
+}
+
+export function isRightToLeft(styles: ChartStylesStrict): boolean {
+  return styles.row.flexDirection === "row-reverse";
+}
+
+export function setRightToLeft(
+  styles: ChartStylesStrict,
+  rightToLeft: boolean
+): ChartStylesStrict {
+  return update(styles, {
+    row: { flexDirection: { $set: rightToLeft ? "row-reverse" : "row" } },
+    lastRowFiller: { textAlign: { $set: rightToLeft ? "right" : "left" } },
+    footer: { textAlign: { $set: rightToLeft ? "right" : "left" } }
+  });
 }

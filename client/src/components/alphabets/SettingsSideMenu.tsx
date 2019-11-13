@@ -4,7 +4,9 @@ import {
   ChartStyles,
   defaultFonts,
   completeStyles,
-  TextAlign
+  TextAlign,
+  isRightToLeft,
+  setRightToLeft
 } from "../../models/ChartStyles";
 import update from "immutability-helper";
 import FontSizeInput from "./FontSizeInput";
@@ -53,6 +55,15 @@ export default function SettingsSideMenu(props: IProps) {
             </option>
           ))}
         </select>
+      </div>
+      <div className="input">
+        <label>{t("Right_to_left")}</label>
+        <Switch
+          checked={isRightToLeft(styles)}
+          onChange={rightToLeft =>
+            props.setStyles(setRightToLeft(styles, rightToLeft))
+          }
+        />
       </div>
 
       <hr />

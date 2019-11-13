@@ -67,7 +67,8 @@ const en = {
   Old_api_error: "The Alphachart app needs to update.",
   Reload: "Reload",
   Size: "Size",
-  Image_position: "Image Position"
+  Image_position: "Image Position",
+  Right_to_left: "Right to Left"
 };
 
 export type Strings = typeof en;
