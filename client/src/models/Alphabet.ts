@@ -1,5 +1,5 @@
 import { ObjectId } from "bson";
-import { ChartStyles, defaultChartStyles } from "./ChartStyles";
+import { ChartStyles, defaultChartStyles, setRightToLeft } from "./ChartStyles";
 
 export interface AlphabetLetter {
   forms: string[];
@@ -49,6 +49,10 @@ export function validDraftAlphabet(alphabet: DraftAlphabet) {
 }
 
 export function blankAlphabet(name: string): DraftAlphabet {
+  const rightToLeft = /[א-ת؀-ۿ]/.test(name);
+  const styles = rightToLeft
+    ? setRightToLeft(defaultChartStyles(), rightToLeft)
+    : defaultChartStyles();
   return {
     name,
     chart: {
@@ -56,7 +60,7 @@ export function blankAlphabet(name: string): DraftAlphabet {
       cols: 5,
       letters: [],
       meta: { title: name },
-      styles: defaultChartStyles()
+      styles
     }
   };
 }
