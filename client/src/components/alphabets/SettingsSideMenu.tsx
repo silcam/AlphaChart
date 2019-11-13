@@ -254,19 +254,19 @@ export default function SettingsSideMenu(props: IProps) {
       <hr />
 
       <div className="input">
+        <label>{t("Border_color")}:</label>
+        <ColorInput
+          color={styles.table.borderColor!}
+          setColor={borderColor => updateStyles("table", { borderColor })}
+        />
+      </div>
+      <div className="input">
         <label>{t("Border_thickness")}:</label>
         <NumberPicker
           value={parseInt(styles.table.borderWidth!)}
           setValue={v => updateStyles("table", { borderWidth: `${v}px` })}
           noType
           minimum={0}
-        />
-      </div>
-      <div className="input">
-        <label>{t("Border_color")}:</label>
-        <ColorInput
-          color={styles.table.borderColor!}
-          setColor={borderColor => updateStyles("table", { borderColor })}
         />
       </div>
     </div>

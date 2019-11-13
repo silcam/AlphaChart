@@ -15,6 +15,7 @@ body {
 div {
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
 
 .flex-row {
@@ -126,6 +127,8 @@ input[type=password]:focus {
 
 input:disabled {
   color: #aaa;
+  -webkit-text-fill-color: #aaa;
+  opacity: 1;
   background: none;
 }
 
