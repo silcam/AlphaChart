@@ -9,11 +9,12 @@ interface IProps {
 
 export default function ExampleWord(props: IProps) {
   const letter = props.letter;
+  const nbspWord = letter.exampleWord.replace(/ /g, "\u00A0");
   const keyLetterPtrn = new RegExp(
     `(${letter.forms.map(f => regexEscape(f)).join("|")})`,
     "g"
   );
-  const pieces = letter.exampleWord.split(keyLetterPtrn);
+  const pieces = nbspWord.split(keyLetterPtrn);
   return (
     <div className="exampleWord">
       {pieces.map((piece, index) =>

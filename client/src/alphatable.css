@@ -87,6 +87,7 @@ div.alphacell div.letter {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
+  align-items: baseline;
 }
 
 div.alphacell img {
