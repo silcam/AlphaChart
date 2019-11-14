@@ -1,8 +1,8 @@
 #!/bin/bash
 
-scp deploy-remote.sh alphachart@george:/var/www/alphachart/
+scp deploy-remote.sh alphachart@iozoom:/var/www/alphachart/
 
-ssh alphachart@george /var/www/alphachart/deploy-remote.sh
+ssh alphachart@iozoom /var/www/alphachart/deploy-remote.sh
 
 
 
