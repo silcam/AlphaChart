@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import update from "immutability-helper";
 
 export default function useUndo<T>(
@@ -9,12 +9,21 @@ export default function useUndo<T>(
   const [redoStackSize, redoPush, redoPop, redoClear] = useStack<T>();
   const canUndo = undoStackSize > 0;
   const canRedo = redoStackSize > 0;
+  const [bufferingPush, setBufferingPush] = useState(false);
 
   const push = (item: T) => {
     redoClear();
-    undoPush(current);
+    if (!bufferingPush) undoPush(current);
     setCurrent(item);
+    setBufferingPush(true);
   };
+
+  useEffect(() => {
+    console.log(`PUSH Buffer Effect : ${bufferingPush ? "TRUE" : "FALSE"}`);
+    if (bufferingPush) {
+      setTimeout(() => setBufferingPush(false), 2500);
+    }
+  }, [bufferingPush]);
 
   const undo = () => {
     redoPush(current);
