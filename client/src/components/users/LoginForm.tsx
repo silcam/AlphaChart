@@ -41,7 +41,10 @@ export default function LoginForm(props: IProps) {
           <input
             type="text"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={e => {
+              setEmail(e.target.value);
+              setErrorMessage("");
+            }}
             placeholder={t("Email")}
           />
         </p>
@@ -49,7 +52,10 @@ export default function LoginForm(props: IProps) {
           <input
             type="password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={e => {
+              setPassword(e.target.value);
+              setErrorMessage("");
+            }}
             placeholder={t("Password")}
           />
         </p>
