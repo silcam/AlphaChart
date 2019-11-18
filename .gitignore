@@ -24,6 +24,7 @@ yarn-error.log*
 
 /server/dist
 /alphachart-images
+/mailTrapAuth.json
 
 # migrations
 /.migrate

@@ -1,4 +1,4 @@
-import { TKey } from "../locales/en";
+import { TKey } from "../i18n/en";
 
 export interface NewUser {
   email: string;
@@ -21,12 +21,16 @@ export interface StoredUser extends CurrentUser {
   _id: string;
   passwordHash: string;
   passwordSalt: string;
-  locale?: string;
 }
 
 export interface LoginAttempt {
   email: string;
   password: string;
+}
+
+export interface UnverifiedUser extends StoredUser {
+  verification: string;
+  created: number;
 }
 
 export function toPublicUser(user: StoredUser): User {

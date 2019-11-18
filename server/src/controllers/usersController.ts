@@ -1,35 +1,55 @@
 import { Express, Response } from "express";
 import {
   NewUser,
-  validationErrors,
   toCurrentUser,
   LoginAttempt
 } from "../../../client/src/models/User";
 import UserData from "../storage/UserData";
-import { checkPassword } from "../common/password";
 import { currentUser } from "./controllerHelper";
-import log from "../common/log";
 import { apiPath } from "../../../client/src/models/Api";
+import newUnverifiedUser, {
+  NewUnverifiedUserErrorType
+} from "../actions/newUnverifiedUser";
+import verifyUser, { VerifyUserErrorType } from "../actions/verifyUser";
+import login, { LoginErrorType } from "../actions/login";
+import { Locale } from "../../../client/src/i18n/i18n";
 
 export default function usersController(app: Express) {
   app.post(apiPath("/users"), async (req, res) => {
     const newUser: NewUser = req.body;
+    const locale: Locale = req.session!.locale || "en";
     try {
-      const errors = validationErrors(newUser);
-      if (errors) res.status(422).json({ error: errors.join(" ") });
-      else {
-        const user = await UserData.createUser(newUser);
-        req.session!.email = newUser.email;
-        res.json(toCurrentUser(user));
-      }
+      const unverifiedUser = await newUnverifiedUser(newUser, locale);
+      res.status(204).send();
     } catch (err) {
-      log.error(JSON.stringify(err));
-      if (err.errmsg.includes("duplicate key")) {
+      const errType: NewUnverifiedUserErrorType = err.errType;
+      if (errType === "AlreadyExists") {
         res
           .status(422)
           .json({ error: "User_exists", subs: { email: newUser.email } });
+      } else if (errType === "Invalid") {
+        res.status(422).json({ error: err.validationErrors.join(" ") });
       } else {
-        fiveHundred(res);
+        fiveHundred(res, err);
+      }
+    }
+  });
+
+  app.post(apiPath("/users/verify"), async (req, res) => {
+    const verification: string = req.body.verification;
+    try {
+      const user = await verifyUser(verification);
+      res.json(toCurrentUser(user));
+    } catch (err) {
+      const errType: VerifyUserErrorType = err.errType;
+      if (errType === "AlreadyExists") {
+        res
+          .status(422)
+          .json({ error: "User_exists", subs: { email: err.user.email } });
+      } else if (errType === "InvalidCode") {
+        res.status(422).json({ error: "Invalid_code" });
+      } else {
+        fiveHundred(res, err);
       }
     }
   });
@@ -44,29 +64,23 @@ export default function usersController(app: Express) {
         res.json({ locale: req.session!.locale });
       }
     } catch (err) {
-      fiveHundred(res);
+      fiveHundred(res, err);
     }
   });
 
   app.post(apiPath("/users/login"), async (req, res) => {
+    const loginAttempt: LoginAttempt = req.body;
     try {
-      const loginAttempt: LoginAttempt = req.body;
-      const user = await UserData.user(loginAttempt.email);
-      if (
-        user &&
-        checkPassword(
-          loginAttempt.password,
-          user.passwordHash,
-          user.passwordSalt
-        )
-      ) {
-        req.session!.email = user.email;
-        res.json(toCurrentUser(user));
-      } else {
-        res.status(401).json({ error: "Invalid login" });
-      }
+      const user = await login(loginAttempt);
+      req.session!.email = user.email;
+      res.json(toCurrentUser(user));
     } catch (err) {
-      fiveHundred(res);
+      const errType: LoginErrorType = err.errType;
+      if (errType === "Invalid")
+        res.status(401).json({ error: "Invalid_login" });
+      else if (errType === "Unverified")
+        res.status(401).json({ error: "Account_not_verified" });
+      else fiveHundred(res, err);
     }
   });
 
@@ -83,7 +97,7 @@ export default function usersController(app: Express) {
         res.status(204).send();
       }
     } catch (err) {
-      fiveHundred(res);
+      fiveHundred(res, err);
     }
   });
 
@@ -93,6 +107,7 @@ export default function usersController(app: Express) {
   });
 }
 
-function fiveHundred(res: Response) {
+function fiveHundred(res: Response, err: any) {
+  console.error(err);
   res.status(500).json({ error: "Unknown" });
 }

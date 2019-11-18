@@ -15,7 +15,7 @@ import Switch from "react-switch";
 import NumberPicker from "../common/NumberPicker";
 import ColorInput from "../common/ColorInput";
 import { useTranslation } from "../common/I18nContext";
-import { TKey } from "../../locales/en";
+import { TKey } from "../../i18n/en";
 import {
   letterSettingsFromStyles,
   cssFromLetterSettings,

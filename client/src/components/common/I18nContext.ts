@@ -1,36 +1,5 @@
 import React, { useContext } from "react";
-import en, { Strings } from "../../locales/en";
-import fr from "../../locales/fr";
-
-const strings = {
-  en,
-  fr
-};
-export type Locale = keyof typeof strings;
-
-export function availableLocales(): Locale[] {
-  return Object.keys(strings) as Locale[];
-}
-
-function translate(
-  strings: Strings,
-  key: keyof Strings,
-  subs: { [key: string]: string } = {}
-) {
-  return Object.keys(subs).reduce((outStr, subKey) => {
-    const keyPattern = `%{${subKey}}`;
-    while (subKey.includes(keyPattern)) {
-      outStr = outStr.replace(keyPattern, subs[subKey]);
-    }
-    return outStr;
-  }, strings[key]);
-}
-
-type TFunc = (key: keyof Strings, subs?: { [key: string]: string }) => string;
-
-function tForLocale(locale: keyof typeof strings): TFunc {
-  return (key, subs) => translate(strings[locale], key, subs);
-}
+import { Locale, tForLocale } from "../../i18n/i18n";
 
 interface I18n {
   locale: Locale;

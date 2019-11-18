@@ -3,37 +3,37 @@ import app from "../app";
 import Data from "../storage/Data";
 import { loggedInAgent, notLoggedInAgent } from "../testHelper";
 import { apiPath } from "../../../client/src/models/Api";
+import { interactsWithMail as iwm } from "nodemailer-stub";
 
 beforeEach(Data.loadFixtures);
 
 afterEach(Data.deleteDatabase);
 
 test("Create new user", async () => {
-  expect.assertions(1);
+  expect.assertions(3);
   const agent = request.agent(app);
   const response = await agent.post(apiPath("/users")).send({
     email: "madeleine@pm.me",
     name: "Madeleine",
     password: "maddymaddymaddy"
   });
-  expect(response.body).toEqual({
-    name: "Madeleine",
-    email: "madeleine@pm.me"
-  });
+  expect(response.status).toBe(204);
+  const mail = iwm.lastMail();
+  expect(mail.subject).toEqual("Confirm your Alphachart account");
+  expect(mail.to).toEqual(["madeleine@pm.me"]);
 });
 
 test("Auto-assign name for new user", async () => {
-  expect.assertions(1);
+  expect.assertions(2);
   const agent = request.agent(app);
   const response = await agent.post(apiPath("/users")).send({
     email: "madeleine@pm.me",
     name: "",
     password: "maddymaddymaddy"
   });
-  expect(response.body).toEqual({
-    name: "madeleine",
-    email: "madeleine@pm.me"
-  });
+  expect(response.status).toBe(204);
+  const mail = iwm.lastMail();
+  expect(mail.content).toContain("Hi madeleine,");
 });
 
 test("Create existing user", async () => {
@@ -72,6 +72,60 @@ test("Invalid new users", async () => {
   });
 });
 
+test("Respond to login attempt by unverified user", async () => {
+  expect.assertions(2);
+  const agent = notLoggedInAgent();
+  await submitNewUser(agent);
+  const response = await agent
+    .post(apiPath("/users/login"))
+    .send({ email: "madeleine@pm.me", password: "maddymaddymaddy" });
+  expect(response.status).toBe(401);
+  expect(response.body).toEqual({ error: "Account_not_verified" });
+});
+
+test("Verify User", async () => {
+  expect.assertions(2);
+  const agent = notLoggedInAgent();
+  const verification = await submitNewUser(agent);
+  const response = await agent
+    .post(apiPath("/users/verify"))
+    .send({ verification });
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual({
+    name: "Madeleine",
+    email: "madeleine@pm.me"
+  });
+});
+
+test("Duplicate User Verify", async () => {
+  expect.assertions(3);
+  const agent = await notLoggedInAgent();
+  const verification1 = await submitNewUser(agent);
+  const verification2 = await submitNewUser(agent);
+  let response = await agent
+    .post(apiPath("/users/verify"))
+    .send({ verification: verification1 });
+  expect(response.status).toBe(200);
+  response = await agent
+    .post(apiPath("/users/verify"))
+    .send({ verification: verification2 });
+  expect(response.status).toBe(422);
+  expect(response.body.error).toEqual("User_exists");
+});
+
+test("Verify with invalid (already used) code", async () => {
+  expect.assertions(3);
+  const agent = await notLoggedInAgent();
+  const verification = await submitNewUser(agent);
+  let response = await agent
+    .post(apiPath("/users/verify"))
+    .send({ verification });
+  expect(response.status).toBe(200);
+  response = await agent.post(apiPath("/users/verify")).send({ verification });
+  expect(response.status).toBe(422);
+  expect(response.body.error).toEqual("Invalid_code");
+});
+
 test("Current User - Not logged in", async () => {
   const agent = request.agent(app);
   const response = await agent.get(apiPath("/users/current"));
@@ -102,7 +156,7 @@ test("InValid Login", async () => {
     password: "wrong!"
   });
   expect(response.status).toEqual(401);
-  expect(response.body).toEqual({ error: "Invalid login" });
+  expect(response.body).toEqual({ error: "Invalid_login" });
 });
 
 test("Logout", async () => {
@@ -139,3 +193,15 @@ test("Post Locale - Logged in", async () => {
     locale: "fr"
   });
 });
+
+async function submitNewUser(agent: request.SuperTest<request.Test>) {
+  const response = await agent.post(apiPath("/users")).send({
+    email: "madeleine@pm.me",
+    name: "Madeleine",
+    password: "maddymaddymaddy"
+  });
+  // expect(response.status).toBe(204);
+  const mail = iwm.lastMail();
+  const verification = /\/users\/verify\/(.+?)"/.exec(mail.content)![1];
+  return verification;
+}

@@ -12,6 +12,8 @@ const fr: Strings = {
   Log_in: "Se connecter",
   Log_out: "Se déconnecter",
   Invalid_login: "Addresse mail ou mot de passe non valide",
+  Account_not_verified:
+    "Ce compte n'est pas encore vérifié. Il faut trouver le mail de confirmation de Alphachart et suivre le lien de confirmation.",
   Invalid_email: "Addresse mail non valide",
   Password_too_short:
     "Veuillez choisir un mot de passe avec au moins 10 caractères",
@@ -71,7 +73,21 @@ const fr: Strings = {
   Reload: "Recharger",
   Size: "Taille",
   Image_position: "Position de l'image",
-  Right_to_left: "Droite à gauche"
+  Right_to_left: "Droite à gauche",
+  Account_confirmation: "Confirmer le compte",
+  Confirmation_link_email:
+    "Un mail a été envoyé à %{email}. Suivez le lien de confirmation pour terminer l'établissement de votre compte.",
+  Account_verified: "Compte vérifié !",
+  Verifying: "Vérification en cours",
+  Invalid_code:
+    "Le code de vérification n'est pas valide. Avez-vous validé ce compte déjà ?",
+  Confirm_your_Alphachart_account: "Confirmer votre compte Alphachart",
+  Welcome_to_Alphachart: "Bienvenue à Alphachart",
+  Hi: "Bonjour %{name}",
+  Welcome_email_confirm_text:
+    "Pour commencer à faire vos tableaux alphabétiques, veuillez %{startLink}confirmer votre compte%{endLink}.",
+  Welcome_email_ignore:
+    "(Si vouz n'avez pas demandé un compte Alphachart, simplement ignorez ce mail.)"
 };
 
 export default fr;

@@ -1,32 +1,44 @@
 import React, { useState } from "react";
-import { LogInFunc, CreateAccountFunc } from "./useCurrentUser";
+import { LogInFunc } from "./useCurrentUser";
 import LoginForm from "./LoginForm";
 import CreateAccountForm from "./CreateAccountForm";
-import LnkBtn from "../common/LnkBtn";
 import { useTranslation } from "../common/I18nContext";
 
 interface IProps {
   logIn: LogInFunc;
-  createAccount: CreateAccountFunc;
 }
+type ViewState = "login" | "createAccount" | "emailConfirmation";
 
 export default function CreateAccountOrLogIn(props: IProps) {
   const t = useTranslation();
-  const [showLogin, setShowLogin] = useState(true);
-  const toggleShowLogin = () => setShowLogin(!showLogin);
-  return (
-    <div>
-      {showLogin ? (
-        <LoginForm logIn={props.logIn} />
-      ) : (
-        <CreateAccountForm createAccount={props.createAccount} />
-      )}
-      <p>
-        <LnkBtn
-          onClick={toggleShowLogin}
-          text={showLogin ? t("Create_account") : t("Cancel")}
+  const [viewState, setViewState] = useState<ViewState>("login");
+  const [email, setEmail] = useState("");
+
+  switch (viewState) {
+    case "login":
+      return (
+        <LoginForm
+          logIn={props.logIn}
+          createAccount={() => setViewState("createAccount")}
         />
-      </p>
-    </div>
-  );
+      );
+    case "createAccount":
+      return (
+        <CreateAccountForm
+          cancel={() => setViewState("login")}
+          accountCreated={email => {
+            setEmail(email);
+            setViewState("emailConfirmation");
+          }}
+        />
+      );
+    case "emailConfirmation":
+    default:
+      return (
+        <div>
+          <h2>{t("Account_confirmation")}</h2>
+          <p>{t("Confirmation_link_email", { email })}</p>
+        </div>
+      );
+  }
 }

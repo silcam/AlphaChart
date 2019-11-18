@@ -1,6 +1,7 @@
 import { MongoClient, Db } from "mongodb";
 import nodeCleanup from "node-cleanup";
 import fixtures from "./fixtures";
+import log from "../common/log";
 
 const PORT = 27017;
 const URL = `mongodb://localhost:${PORT}`;
@@ -10,7 +11,7 @@ let DB: Db | null = null;
 async function db(): Promise<Db> {
   if (!DB) {
     const dbName = databaseName();
-    console.log(`Connecting to Mongo db: ${dbName}`);
+    log.log(`Connecting to Mongo db: ${dbName}`);
     CLIENT = await MongoClient.connect(URL, { useNewUrlParser: true });
     DB = await CLIENT.db(dbName);
   }

@@ -6,6 +6,7 @@ const SECRETS_FILEPATH = "./secrets.json";
 interface ISecrets {
   cookieSecret: string;
   userIdSalt: string;
+  emailFromAddress: string;
 }
 
 let secrets: ISecrets;
@@ -15,7 +16,8 @@ if (fs.existsSync(SECRETS_FILEPATH)) {
   log.warn("WARNING: Using default secrets!!");
   secrets = {
     cookieSecret: "abc123",
-    userIdSalt: "salt"
+    userIdSalt: "salt",
+    emailFromAddress: "admin@alphachart.com"
   };
 }
 

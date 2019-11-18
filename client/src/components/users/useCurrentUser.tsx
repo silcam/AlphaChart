@@ -2,14 +2,14 @@ import { CurrentUser, LoginAttempt, NewUser } from "../../models/User";
 import { useState, useEffect, useContext } from "react";
 import ErrorContext from "../common/ErrorContext";
 import useNetwork from "../common/useNetwork";
-import I18nContext, { useTranslation, Locale } from "../common/I18nContext";
-import { TKey } from "../../locales/en";
+import I18nContext, { useTranslation } from "../common/I18nContext";
 import { apiPath } from "../../models/Api";
+import { TKey } from "../../i18n/en";
+import { Locale } from "../../i18n/i18n";
 
-type LoginError = "Invalid" | "Unknown";
 export type LogInFunc = (
   loginAttempt: LoginAttempt,
-  handleError: (e: LoginError) => void
+  handleError: (e: TKey) => void
 ) => void;
 export type LogOutFunc = () => Promise<void>;
 export type CreateAccountFunc = (
@@ -20,8 +20,7 @@ export type CreateAccountFunc = (
 export default function useCurrentUser(): [
   CurrentUser | null,
   LogInFunc,
-  LogOutFunc,
-  CreateAccountFunc
+  LogOutFunc
 ] {
   const t = useTranslation();
   const [currentUser, setCurrentUser] = useState<null | CurrentUser>(null);
@@ -58,7 +57,7 @@ export default function useCurrentUser(): [
 
   const logIn = async (
     loginAttempt: LoginAttempt,
-    handleError: (e: LoginError) => void
+    handleError: (e: TKey) => void
   ) => {
     try {
       const response = await requestThrowsErrorResponses(axios =>
@@ -66,8 +65,9 @@ export default function useCurrentUser(): [
       );
       response && setCurrentUser(response.data);
     } catch (err) {
-      if (err.response && err.response.status === 401) handleError("Invalid");
-      else handleError("Unknown");
+      if (err.response && err.response.status === 401)
+        handleError(err.response.data.error);
+      else handleError("Unknown_error");
     }
   };
 
@@ -78,18 +78,5 @@ export default function useCurrentUser(): [
     if (response) setCurrentUser(null);
   };
 
-  const createAccount: CreateAccountFunc = async (newUser, handleError) => {
-    try {
-      const response = await requestThrowsErrorResponses(axios =>
-        axios.post(apiPath("/users"), newUser)
-      );
-      response && setCurrentUser(response.data);
-    } catch (err) {
-      if (err.response && err.response.status === 422)
-        handleError(err.response.data.error);
-      else handleError("Unknown_error");
-    }
-  };
-
-  return [currentUser, logIn, logOut, createAccount];
+  return [currentUser, logIn, logOut];
 }

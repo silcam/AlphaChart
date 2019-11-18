@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
-import I18nContext, { availableLocales, Locale } from "./I18nContext";
+import I18nContext from "./I18nContext";
+import { availableLocales, Locale } from "../../i18n/i18n";
 import LnkBtn from "./LnkBtn";
 import { capitalize } from "./util";
 import useNetwork from "./useNetwork";

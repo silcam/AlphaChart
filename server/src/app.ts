@@ -6,6 +6,7 @@ import secrets from "./common/secrets";
 import alphabetsController from "./controllers/alphabetsController";
 import apiVersion from "./controllers/apiVersion";
 import testDbController from "./controllers/testDbController";
+import testSentEmailController from "./controllers/testSentEmailController";
 
 const app = express();
 
@@ -20,8 +21,12 @@ app.use(apiVersion);
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
-} else if (process.env.NODE_ENV === "test-cypress") {
+}
+if (process.env.NODE_ENV === "test-cypress") {
   testDbController(app);
+}
+if (process.env.NODE_ENV !== "production") {
+  testSentEmailController(app);
 }
 
 alphabetsController(app);

@@ -1,5 +1,4 @@
-import { StoredUser, NewUser } from "../../../client/src/models/User";
-import { createPassword } from "../common/password";
+import { StoredUser } from "../../../client/src/models/User";
 import Data from "./Data";
 import log from "../common/log";
 
@@ -15,19 +14,10 @@ async function user(email: string): Promise<StoredUser | null> {
   return collection.findOne({ _id: email });
 }
 
-async function createUser(user: NewUser) {
+async function createUser(user: StoredUser) {
   log.log("[Query] CREATE User");
-  const passwordParams = createPassword(user.password);
-  if (!user.name) user.name = user.email.replace(/@.*/, ""); // This should be in User.ts
-  const storedUser: StoredUser = {
-    _id: user.email,
-    name: user.name,
-    email: user.email,
-    passwordHash: passwordParams.hash,
-    passwordSalt: passwordParams.salt
-  };
   const collection = await userCollection();
-  const result = await collection.insertOne(storedUser);
+  const result = await collection.insertOne(user);
   return result.ops[0];
 }
 

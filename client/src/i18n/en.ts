@@ -10,6 +10,8 @@ const en = {
   Log_in: "Log in",
   Log_out: "Log out",
   Invalid_login: "Invalid Login",
+  Account_not_verified:
+    "This account needs to be verified. Check your email for the confirmation email from Alphachart and follow the confirmation link in the email.",
   Invalid_email: "Email is invalid.",
   Password_too_short: "Please choose a password with at least 10 characters.",
   Passwords_do_not_match: "Passwords do not match.",
@@ -68,9 +70,23 @@ const en = {
   Reload: "Reload",
   Size: "Size",
   Image_position: "Image Position",
-  Right_to_left: "Right to Left"
+  Right_to_left: "Right to Left",
+  Account_confirmation: "Account Confirmation",
+  Confirmation_link_email:
+    "A confirmation email was sent to %{email}. Click the confirmation link in the email to finish setting up your account.",
+  Account_verified: "Account Verified!",
+  Verifying: "Verifying",
+  Invalid_code:
+    "The verification code is invalid. Did you already verify your account?",
+  Confirm_your_Alphachart_account: "Confirm your Alphachart account",
+  Welcome_to_Alphachart: "Welcome to Alphachart",
+  Hi: "Hi %{name}",
+  Welcome_email_confirm_text:
+    "To get started making alphabet charts, please %{startLink}confirm your account%{endLink}.",
+  Welcome_email_ignore:
+    "(If you did not request an Alphachart account, just ignore this email.)"
 };
 
 export type Strings = typeof en;
-export type TKey = keyof Strings;
+export type TKey = keyof Strings | "";
 export default en;
