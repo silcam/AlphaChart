@@ -21,7 +21,7 @@ export default async function sendMail(
 
 function getMailer() {
   return process.env.NODE_ENV === "production"
-    ? nodemailer.createTransport({ sendmail: true })
+    ? nodemailer.createTransport({ sendmail: true, path: "/usr/sbin/sendmail" })
     : nodemailer.createTransport(stubTransport);
 }
 
