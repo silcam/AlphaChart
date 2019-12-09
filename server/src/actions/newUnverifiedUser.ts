@@ -16,10 +16,18 @@ export default async function newUnverifiedUser(
   locale: Locale
 ): Promise<UnverifiedUser> {
   const existing = await UserData.user(user.email);
-  if (existing) return throwErr("AlreadyExists");
+  if (existing)
+    throw {
+      status: 422,
+      response: { error: "User_exists", subs: { email: user.email } }
+    };
 
   const vErrors = validationErrors(user);
-  if (vErrors) return throwErr("Invalid", { validationErrors: vErrors });
+  if (vErrors)
+    throw {
+      status: 422,
+      response: { error: vErrors.join(" ") }
+    };
 
   if (!user.name) user.name = user.email.replace(/@.*/, "");
   const passwordParams = createPassword(user.password);
@@ -39,11 +47,4 @@ export default async function newUnverifiedUser(
   await UnverifiedUserData.create(unverifiedUser);
   await sendNewUserMail(unverifiedUser, locale);
   return unverifiedUser;
-}
-
-function throwErr(
-  errType: NewUnverifiedUserErrorType,
-  errBody: { validationErrors?: string[] } = {}
-): never {
-  throw { ...errBody, errType };
 }

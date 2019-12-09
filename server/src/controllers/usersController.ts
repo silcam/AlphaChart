@@ -13,101 +13,55 @@ import newUnverifiedUser, {
 import verifyUser, { VerifyUserErrorType } from "../actions/verifyUser";
 import login, { LoginErrorType } from "../actions/login";
 import { Locale } from "../../../client/src/i18n/i18n";
+import { addGetHandler, addPostHandler } from "./serverApi";
 
 export default function usersController(app: Express) {
-  app.post(apiPath("/users"), async (req, res) => {
+  addPostHandler(app, "/users", async req => {
     const newUser: NewUser = req.body;
     const locale: Locale = req.session!.locale || "en";
-    try {
-      const unverifiedUser = await newUnverifiedUser(newUser, locale);
-      res.status(204).send();
-    } catch (err) {
-      const errType: NewUnverifiedUserErrorType = err.errType;
-      if (errType === "AlreadyExists") {
-        res
-          .status(422)
-          .json({ error: "User_exists", subs: { email: newUser.email } });
-      } else if (errType === "Invalid") {
-        res.status(422).json({ error: err.validationErrors.join(" ") });
-      } else {
-        fiveHundred(res, err);
-      }
-    }
+
+    const unverifiedUser = await newUnverifiedUser(newUser, locale);
+    return null;
   });
 
-  app.post(apiPath("/users/verify"), async (req, res) => {
+  addPostHandler(app, "/users/verify", async req => {
     const verification: string = req.body.verification;
-    try {
-      const user = await verifyUser(verification);
-      res.json(toCurrentUser(user));
-    } catch (err) {
-      const errType: VerifyUserErrorType = err.errType;
-      if (errType === "AlreadyExists") {
-        res
-          .status(422)
-          .json({ error: "User_exists", subs: { email: err.user.email } });
-      } else if (errType === "InvalidCode") {
-        res.status(422).json({ error: "Invalid_code" });
-      } else {
-        fiveHundred(res, err);
-      }
+    const user = await verifyUser(verification);
+    return toCurrentUser(user);
+  });
+
+  addGetHandler(app, "/users/current", async req => {
+    const user = await currentUser(req);
+    if (user) {
+      return toCurrentUser(user);
+    } else {
+      req.session!.email = undefined;
+      return { locale: req.session!.locale };
     }
   });
 
-  app.get(apiPath("/users/current"), async (req, res) => {
-    try {
+  addPostHandler(app, "/users/login", async req => {
+    const loginAttempt: LoginAttempt = req.body;
+    const user = await login(loginAttempt);
+    req.session!.email = user.email;
+    return toCurrentUser(user);
+  });
+
+  addPostHandler(app, "/users/locale", async req => {
+    const locale = req.body.locale;
+    if (locale) {
+      req.session!.locale = locale;
       const user = await currentUser(req);
       if (user) {
-        res.json(toCurrentUser(user));
-      } else {
-        req.session!.email = undefined;
-        res.json({ locale: req.session!.locale });
+        user.locale = locale;
+        UserData.update(user);
       }
-    } catch (err) {
-      fiveHundred(res, err);
     }
+    return null;
   });
 
-  app.post(apiPath("/users/login"), async (req, res) => {
-    const loginAttempt: LoginAttempt = req.body;
-    try {
-      const user = await login(loginAttempt);
-      req.session!.email = user.email;
-      res.json(toCurrentUser(user));
-    } catch (err) {
-      const errType: LoginErrorType = err.errType;
-      if (errType === "Invalid")
-        res.status(401).json({ error: "Invalid_login" });
-      else if (errType === "Unverified")
-        res.status(401).json({ error: "Account_not_verified" });
-      else fiveHundred(res, err);
-    }
-  });
-
-  app.post(apiPath("/users/locale"), async (req, res) => {
-    try {
-      const locale = req.body.locale;
-      if (locale) {
-        req.session!.locale = locale;
-        const user = await currentUser(req);
-        if (user) {
-          user.locale = locale;
-          UserData.update(user);
-        }
-        res.status(204).send();
-      }
-    } catch (err) {
-      fiveHundred(res, err);
-    }
-  });
-
-  app.post(apiPath("/users/logout"), (req, res) => {
+  addPostHandler(app, "/users/logout", async req => {
     req.session!.email = undefined;
-    res.status(204).send();
+    return null;
   });
-}
-
-function fiveHundred(res: Response, err: any) {
-  console.error(err);
-  res.status(500).json({ error: "Unknown" });
 }

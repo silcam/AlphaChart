@@ -14,16 +14,13 @@ export default async function login(
       checkPassword(loginAttempt.password, user.passwordHash, user.passwordSalt)
     )
       return user;
-    return throwErr("Invalid");
+    throw { status: 401, response: { error: "Invalid_login" } };
   } else {
     const unverifiedUsers = await UnverifiedUserData.findByEmail(
       loginAttempt.email
     );
-    if (unverifiedUsers.length > 0) return throwErr("Unverified");
-    return throwErr("Invalid");
+    if (unverifiedUsers.length > 0)
+      throw { status: 401, response: { error: "Account_not_verified" } };
+    throw { status: 401, response: { error: "Invalid_login" } };
   }
-}
-
-function throwErr(errType: LoginErrorType): never {
-  throw { errType };
 }

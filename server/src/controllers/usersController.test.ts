@@ -17,7 +17,7 @@ test("Create new user", async () => {
     name: "Madeleine",
     password: "maddymaddymaddy"
   });
-  expect(response.status).toBe(204);
+  expect(response.status).toBe(200);
   const mail = iwm.lastMail();
   expect(mail.subject).toEqual("Confirm your Alphachart account");
   expect(mail.to).toEqual(["madeleine@pm.me"]);
@@ -31,7 +31,7 @@ test("Auto-assign name for new user", async () => {
     name: "",
     password: "maddymaddymaddy"
   });
-  expect(response.status).toBe(204);
+  expect(response.status).toBe(200);
   const mail = iwm.lastMail();
   expect(mail.content).toContain("Hi madeleine,");
 });
@@ -163,7 +163,7 @@ test("Logout", async () => {
   expect.assertions(2);
   const agent = await loggedInAgent();
   let response = await agent.post(apiPath("/users/logout"));
-  expect(response.status).toBe(204);
+  expect(response.status).toBe(200);
   response = await agent.get(apiPath("/users/current"));
   expect(response.body).toEqual({});
 });
@@ -174,7 +174,7 @@ test("Post Locale - Not logged in", async () => {
   let response = await agent
     .post(apiPath("/users/locale"))
     .send({ locale: "fr" });
-  expect(response.status).toBe(204);
+  expect(response.status).toBe(200);
   response = await agent.get(apiPath("/users/current"));
   expect(response.body).toEqual({ locale: "fr" });
 });
@@ -185,7 +185,7 @@ test("Post Locale - Logged in", async () => {
   let response = await agent
     .post(apiPath("/users/locale"))
     .send({ locale: "fr" });
-  expect(response.status).toBe(204);
+  expect(response.status).toBe(200);
   response = await agent.get(apiPath("/users/current"));
   expect(response.body).toEqual({
     name: "Titus",

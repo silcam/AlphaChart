@@ -8,7 +8,8 @@ export default async function verifyUser(
   verification: string
 ): Promise<StoredUser> {
   const unverifiedUser = await UnverifiedUserData.find(verification);
-  if (!unverifiedUser) return throwErr("InvalidCode");
+  if (!unverifiedUser)
+    throw { status: 422, response: { error: "Invalid_code" } };
 
   const { verification: _v, created, ...user } = unverifiedUser;
   user._id = user.email;
@@ -16,18 +17,14 @@ export default async function verifyUser(
     await UserData.createUser(user);
   } catch (err) {
     if (err.errmsg.includes("duplicate key"))
-      return throwErr("AlreadyExists", { user });
+      throw {
+        status: 422,
+        response: { error: "User_exists", subs: { email: user.email } }
+      };
     else throw err;
   }
 
   UnverifiedUserData.remove(verification);
 
   return user;
-}
-
-function throwErr(
-  errType: VerifyUserErrorType,
-  errBody: { user?: StoredUser } = {}
-): never {
-  throw { ...errBody, errType };
 }
