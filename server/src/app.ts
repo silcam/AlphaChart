@@ -7,6 +7,7 @@ import alphabetsController from "./controllers/alphabetsController";
 import apiVersion from "./controllers/apiVersion";
 import testDbController from "./controllers/testDbController";
 import testSentEmailController from "./controllers/testSentEmailController";
+import Log from "./common/log";
 
 const app = express();
 
@@ -17,6 +18,13 @@ app.set("port", PORT);
 app.use(bodyParser.json());
 app.use(cookieSession({ secret: secrets.cookieSecret }));
 app.use(apiVersion);
+
+app.use((req, res, next) => {
+  res.on("finish", () => {
+    Log.log(`[HTTP] ${req.method} ${req.path} => ${res.statusCode}`);
+  });
+  next();
+});
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === "production") {
