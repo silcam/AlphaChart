@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { NewUser, validationErrors } from "../../models/User";
-import { useTranslation } from "../common/I18nContext";
-
-import useNetwork from "../common/useNetwork";
-import { apiPath } from "../../models/Api";
+import { useTranslation } from "../common/useTranslation";
 import LnkBtn from "../common/LnkBtn";
-import { TKey } from "../../i18n/en";
+import { TKey, isTKey } from "../../i18n/en";
 import Loading from "../common/Loading";
+import { usePush } from "../../api/apiRequest";
+import { pushNewUser } from "../../state/currentUserSlice";
 
 interface IProps {
   cancel: () => void;
@@ -20,8 +19,13 @@ export default function CreateAccountForm(props: IProps) {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [errors, setErrors] = useState<TKey[]>([]);
-  const [loading, request] = useNetwork({
-    throwErrorsWithResponse: true
+
+  const [save, loading] = usePush(pushNewUser, err => {
+    if (err.type == "HTTP" && isTKey(err.error)) {
+      setErrors([err.error]);
+      return true;
+    }
+    return false;
   });
 
   const createAccount = async () => {
@@ -34,16 +38,8 @@ export default function CreateAccountForm(props: IProps) {
     if (errors) {
       setErrors(errors);
     } else {
-      try {
-        const response = await request(axios =>
-          axios.post(apiPath("/users"), newUser)
-        );
-        if (response) props.accountCreated(email);
-      } catch (err) {
-        if (err.response && err.response.status === 422)
-          setErrors([err.response.data.error]);
-        else setErrors(["Unknown_error"]);
-      }
+      const success = await save(newUser);
+      if (success) props.accountCreated(email);
     }
   };
 

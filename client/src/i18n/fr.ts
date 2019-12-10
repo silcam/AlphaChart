@@ -87,7 +87,12 @@ const fr: Strings = {
   Welcome_email_confirm_text:
     "Pour commencer à faire vos tableaux alphabétiques, veuillez %{startLink}confirmer votre compte%{endLink}.",
   Welcome_email_ignore:
-    "(Si vouz n'avez pas demandé un compte Alphachart, simplement ignorez ce mail.)"
+    "(Si vouz n'avez pas demandé un compte Alphachart, simplement ignorez ce mail.)",
+  No_connection: "Aucune connexion",
+  Connection_restored: "Connexion restaurée",
+  Server_error: "Erreur de serveur : %{status}",
+  Image_too_big: "Cette image est trop grande.",
+  App_error: "Erreur de l'application (Code %{status})"
 };
 
 export default fr;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AlphabetChart, AlphabetLetter } from "../../models/Alphabet";
 import update from "immutability-helper";
 import keyHandler from "../common/KeyHandler";
-import { useTranslation } from "../common/I18nContext";
+import { useTranslation } from "../common/useTranslation";
 
 interface IProps {
   chart: AlphabetChart;

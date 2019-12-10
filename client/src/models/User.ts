@@ -1,4 +1,5 @@
 import { TKey } from "../i18n/en";
+import { Locale } from "../i18n/i18n";
 
 export interface NewUser {
   email: string;
@@ -12,7 +13,7 @@ export interface User {
 
 export interface CurrentUser extends User {
   email: string;
-  locale?: string;
+  locale?: Locale;
 }
 
 export type CurrentUserOrNot = CurrentUser | null;
@@ -58,4 +59,8 @@ export function validationErrors(user: NewUser, passwordCheck?: string) {
 
 export function userId(user: CurrentUserOrNot) {
   return user && user.email;
+}
+
+export function isCurrentUser(user: any): user is CurrentUser {
+  return typeof user.name === "string" && typeof user.email === "string";
 }

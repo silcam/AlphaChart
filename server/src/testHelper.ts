@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "./app";
 import { DraftAlphabet } from "../../client/src/models/Alphabet";
-import { apiPath } from "../../client/src/models/Api";
+import { apiPath } from "../../client/src/api/Api";
 
 export async function loggedInAgent(name?: string) {
   let user = { email: "titus@yahoo.com", password: "minecraft" };

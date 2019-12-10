@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Alphabet } from "../../models/Alphabet";
 import Chart from "./Chart";
 import ViewChartHeader from "./ViewChartHeader";
-import { CurrentUserOrNot, userId } from "../../models/User";
+import { userId } from "../../models/User";
+import { useSelector } from "react-redux";
+import { AppState } from "../../state/appState";
 
 interface IProps {
   id: string;
-  user: CurrentUserOrNot;
   alphabet: Alphabet;
   setEditing: (e: boolean) => void;
 }
@@ -19,14 +20,15 @@ export interface ChartDimens {
 export default function ViewChartPage(props: IProps) {
   const [chartDimens, setChartDimens] = useState<ChartDimens | null>(null);
   const alphabet = props.alphabet;
+  const user = useSelector((state: AppState) => state.currentUser.user);
 
   return (
     <div style={{ paddingBottom: "30px" }}>
       <ViewChartHeader
         id={props.id}
         setChartDimens={setChartDimens}
-        canEdit={alphabet.user === userId(props.user)}
-        loggedIn={!!props.user}
+        canEdit={alphabet.user === userId(user)}
+        loggedIn={!!user}
         setEditing={props.setEditing}
       />
       <div

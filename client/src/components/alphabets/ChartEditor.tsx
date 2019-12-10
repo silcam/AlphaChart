@@ -11,7 +11,7 @@ import AddLetter from "./AddLetter";
 import LetterSideMenu from "./LetterSideMenu";
 import LnkBtn from "../common/LnkBtn";
 import SettingsSideMenu from "./SettingsSideMenu";
-import { useTranslation } from "../common/I18nContext";
+import { useTranslation } from "../common/useTranslation";
 import useUndo from "../common/useUndo";
 import UndoRedo from "../common/UndoRedo";
 import { stylesForImage, completeStyles } from "../../models/ChartStyles";
@@ -127,7 +127,10 @@ export default function ChartEditor(props: IProps) {
               setChart(
                 update(chart, {
                   letters: {
-                    $splice: [[selectedIndex, 1], [position, 0, letter]]
+                    $splice: [
+                      [selectedIndex, 1],
+                      [position, 0, letter]
+                    ]
                   }
                 })
               );

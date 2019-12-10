@@ -3,9 +3,11 @@ import htmlToImage, { OptionsType } from "html-to-image";
 import { saveAs } from "file-saver";
 import OptionButton from "../common/OptionButton";
 import { ChartDimens } from "./ViewChartPage";
-import ErrorContext from "../common/ErrorContext";
 import ColorInput from "../common/ColorInput";
-import { useTranslation } from "../common/I18nContext";
+import { useTranslation } from "../common/useTranslation";
+import { throwAppError, asAppError } from "../../AppError/AppError";
+import { useDispatch } from "react-redux";
+import bannerSlice from "../../banners/bannerSlice";
 
 const CHART_ID = "compChart";
 const DEFAULT_FONT_SIZE = 16;
@@ -16,7 +18,8 @@ interface IProps {
 
 export default function ChartToImage(props: IProps) {
   const t = useTranslation();
-  const { setError } = useContext(ErrorContext);
+  const dispatch = useDispatch();
+
   return (
     <div>
       <OptionButton
@@ -24,7 +27,9 @@ export default function ChartToImage(props: IProps) {
           try {
             makeImage();
           } catch (err) {
-            setError({ msg: `${err}` });
+            dispatch(
+              bannerSlice.actions.add({ type: "Error", error: asAppError(err) })
+            );
           }
         }}
         buttonText={t("Save_chart_image")}
@@ -81,7 +86,7 @@ function OptionsMenu(props: IOptionsMenuProps) {
   const [enableBGColor, setEnableBGColor] = useState(true);
   const inputValid = !!dimensions[0] && (!enableBGColor || bgColorValid);
   const [saving, setSaving] = useState(false);
-  const { setError } = useContext(ErrorContext);
+  const dispatch = useDispatch();
 
   return (
     <div className="compChartToImageOptionsMenu">
@@ -143,7 +148,12 @@ function OptionsMenu(props: IOptionsMenuProps) {
                 backgroundColor: enableBGColor ? bgColor : undefined
               });
             } catch (err) {
-              setError({ msg: `${err}` });
+              dispatch(
+                bannerSlice.actions.add({
+                  type: "Error",
+                  error: asAppError(err)
+                })
+              );
             }
             setSaving(false);
           }}
@@ -159,11 +169,11 @@ function OptionsMenu(props: IOptionsMenuProps) {
 async function makeImage(opts: OptionsType = { backgroundColor: "#ffffff" }) {
   try {
     const chartNode = document.getElementById(CHART_ID);
-    if (!chartNode) throw new Error("No chart found in makeImage()!");
-    const dataUrl = await htmlToImage.toPng(chartNode, opts);
+    if (!chartNode) throwAppError({ type: "Alphachart", code: "1" });
+    const dataUrl = await htmlToImage.toPng(chartNode!, opts);
     saveAs(dataUrl, "chart.png");
   } catch (err) {
     console.error(err);
-    throw "There was a problem creating that chart.";
+    throwAppError({ type: "Alphachart", code: "2" });
   }
 }

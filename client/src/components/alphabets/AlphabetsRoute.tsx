@@ -2,14 +2,9 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import AlphabetsPage from "./AlphabetsPage";
 import NewAlphabetPage from "./NewAlphabetPage";
-import { CurrentUserOrNot } from "../../models/User";
 import ChartPage from "./ChartPage";
 
-interface IProps {
-  user: CurrentUserOrNot;
-}
-
-export default function AlphabetsRoute(props: IProps) {
+export default function AlphabetsRoute() {
   return (
     <Switch>
       <Route
@@ -19,7 +14,7 @@ export default function AlphabetsRoute(props: IProps) {
       <Route
         path="/alphabets/view/:id"
         render={({ match }) => (
-          <ChartPage id={match.params.id} user={props.user} />
+          <ChartPage key={match.params.id} id={match.params.id} />
         )}
       />
       <Route render={() => <AlphabetsPage />} />

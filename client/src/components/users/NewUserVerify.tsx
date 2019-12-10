@@ -1,44 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "../common/I18nContext";
-import useNetwork from "../common/useNetwork";
-import { apiPath } from "../../models/Api";
+import { useTranslation } from "../common/useTranslation";
 import Loading from "../common/Loading";
 import LoginForm from "./LoginForm";
-import { LogInFunc } from "./useCurrentUser";
 import { CurrentUser } from "../../models/User";
 import { Redirect } from "react-router-dom";
-import { TKey } from "../../i18n/en";
+import { TKey, isTKey } from "../../i18n/en";
+import { useSelector } from "react-redux";
+import { AppState } from "../../state/appState";
+import { usePush } from "../../api/apiRequest";
+import { pushVerifyUser } from "../../state/currentUserSlice";
 
 interface IProps {
   verification: string;
-  logIn: LogInFunc;
-  user: CurrentUser | null;
 }
 
 export default function NewUserVerify(props: IProps) {
   const t = useTranslation();
-  const [loading, request] = useNetwork({ throwErrorsWithResponse: true });
+  const { user } = useSelector((state: AppState) => state.currentUser);
   const [verifiedUser, setVerifiedUser] = useState<CurrentUser | null>(null);
   const [errorMsg, setErrorMsg] = useState<TKey>("");
 
+  const [verify, loading] = usePush(pushVerifyUser, appError => {
+    if (
+      appError.type == "HTTP" &&
+      appError.status == 422 &&
+      isTKey(appError.error)
+    ) {
+      setErrorMsg(appError.error);
+      return true;
+    }
+    return false;
+  });
+
   useEffect(() => {
-    request(axios =>
-      axios.post(apiPath("/users/verify"), { verification: props.verification })
-    )
-      .then(response => response && setVerifiedUser(response.data))
-      .catch(err =>
-        err.response.data.error
-          ? setErrorMsg(err.response.data.error)
-          : setErrorMsg("Unknown_error")
-      );
+    verify(props.verification).then(vUser => setVerifiedUser(vUser || null));
   }, []);
 
-  if (props.user) return <Redirect to="/" />;
+  if (user) return <Redirect to="/" />;
 
   return verifiedUser ? (
     <div>
       <h3>{t("Account_verified")}</h3>
-      <LoginForm logIn={props.logIn} email={verifiedUser.email} />
+      <LoginForm email={verifiedUser.email} />
     </div>
   ) : (
     <div>

@@ -2,10 +2,10 @@ import {
   GetRoute,
   PostRoute,
   APIPost,
-  APIGet
-} from "../../../client/src/models/Api";
+  APIGet,
+  apiPath
+} from "../../../client/src/api/Api";
 import { Express, Request, Response } from "express";
-import { apiPath } from "../../../client/src/models/Api";
 
 export type GetRequestHandler<T extends GetRoute> = (
   req: Request

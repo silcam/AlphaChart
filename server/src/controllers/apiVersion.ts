@@ -1,8 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import {
-  API_VERSION,
-  OLD_API_STATUS_410
-} from "../../../client/src/models/Api";
+import { API_VERSION, OLD_API_STATUS_410 } from "../../../client/src/api/Api";
 
 const pattern = /\/api\/v\/(\d)/;
 

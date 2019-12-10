@@ -2,9 +2,11 @@ import React from "react";
 import { Alphabet, AlphabetLetter } from "../../models/Alphabet";
 import { useDropzone } from "react-dropzone";
 import Loading from "../common/Loading";
-import useNetwork from "../common/useNetwork";
-import { apiPath } from "../../models/Api";
 import { ImageStyles } from "../../models/ChartStyles";
+import { usePush } from "../../api/apiRequest";
+import { pushChartImage } from "./alphabetSlice";
+import { useDispatch } from "react-redux";
+import bannerSlice from "../../banners/bannerSlice";
 
 interface IProps {
   alphabet: Alphabet;
@@ -14,28 +16,27 @@ interface IProps {
 }
 
 export default function ImageInput(props: IProps) {
-  const [loading, request] = useNetwork();
+  const dispatch = useDispatch();
+  const [saveImage, loading] = usePush(pushChartImage, err => {
+    if (err.type == "HTTP" && err.status == 413) {
+      dispatch(
+        bannerSlice.actions.add({
+          type: "Error",
+          error: { type: "Other", message: "Image_too_big" }
+        })
+      );
+      return true;
+    }
+    return false;
+  });
 
-  const onDrop = (acceptedFiles: File[]) => {
-    const formData = new FormData();
-    formData.append("image", acceptedFiles[0]);
-    request(
-      axios =>
-        axios.post(
-          apiPath(`/alphabets/${props.alphabet._id}/images`),
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            }
-          }
-        ),
-      { 413: "That image is too big." }
-    )
-      .then(response => {
-        response && props.setImagePath(response.data.path);
-      })
-      .catch(err => console.error(err));
+  const onDrop = async (acceptedFiles: File[]) => {
+    const imageFile = acceptedFiles[0];
+    const imagePath = await saveImage({
+      alphabetId: props.alphabet._id,
+      image: imageFile
+    });
+    if (imagePath) props.setImagePath(imagePath);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

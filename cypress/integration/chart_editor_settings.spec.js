@@ -19,17 +19,19 @@ describe("Chart Editor Settings", () => {
   });
 
   it("Changes Title font size", () => {
+    cy.get(".alphaTitle").should("have.css", "font-size", "48px");
     cy.withLabel("Title Font Size")
       .contains("button", "+")
       .click();
-    cy.chartSnap("Title font 31");
+    cy.get(".alphaTitle").should("have.css", "font-size", "49.6px");
   });
 
   it("Changes Subtitle font size", () => {
+    cy.get(".alphaSubtitle").should("have.css", "font-size", "25.6px");
     cy.withLabel("Subtitle Font Size")
       .contains("button", "+")
       .click();
-    cy.chartSnap("Subtitle font 17");
+    cy.get(".alphaSubtitle").should("have.css", "font-size", "27.2px");
   });
 
   it("Changes Title position", () => {
@@ -101,13 +103,21 @@ describe("Chart Editor Settings", () => {
       .clear()
       .type("Δογ");
     cy.contains("Done").click();
-    cy.chartSnap("With bold key letters");
+    cy.contains(".exampleWord span", "Δ").should(
+      "have.css",
+      "font-weight",
+      "700"
+    );
 
     cy.contains("Edit").click();
     cy.contains("Chart Settings").click();
     cy.withLabel("Bold Key Letter").click();
     cy.contains("Done").click();
-    cy.chartSnap("Without bold key letters");
+    cy.contains(".exampleWord span", "Δ").should(
+      "have.css",
+      "font-weight",
+      "400"
+    );
   });
 
   it("Changes Last Row Filler font size", () => {

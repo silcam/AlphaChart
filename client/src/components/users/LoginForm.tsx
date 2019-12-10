@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { LoginAttempt } from "../../models/User";
-import { LogInFunc } from "./useCurrentUser";
-import { useTranslation } from "../common/I18nContext";
+import { useTranslation } from "../common/useTranslation";
 import LnkBtn from "../common/LnkBtn";
-import { TKey } from "../../i18n/en";
+import { TKey, isTKey } from "../../i18n/en";
 import Loading from "../common/Loading";
+import { usePush } from "../../api/apiRequest";
+import { pushLogin } from "../../state/currentUserSlice";
 
 interface IProps {
-  logIn: LogInFunc;
   createAccount?: () => void;
   email?: string;
   afterLogIn?: () => void;
@@ -18,18 +18,14 @@ export default function LoginForm(props: IProps) {
   const [email, setEmail] = useState(props.email || "");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleError = (e: TKey) => {
-    setErrorMessage(t(e));
-  };
-
-  const logIn = async () => {
-    const loginAttempt: LoginAttempt = { email, password };
-    setLoading(true);
-    await props.logIn(loginAttempt, handleError);
-    setLoading(false);
-  };
+  const [logIn, loading] = usePush(pushLogin, err => {
+    if (err.type == "HTTP" && isTKey(err.error)) {
+      setErrorMessage(t(err.error));
+      return true;
+    }
+    return false;
+  });
 
   return (
     <div>
@@ -41,7 +37,7 @@ export default function LoginForm(props: IProps) {
           <form
             onSubmit={e => {
               e.preventDefault();
-              logIn();
+              logIn({ email, password });
             }}
           >
             <p>

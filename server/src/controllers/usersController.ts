@@ -1,4 +1,4 @@
-import { Express, Response } from "express";
+import { Express } from "express";
 import {
   NewUser,
   toCurrentUser,
@@ -6,12 +6,9 @@ import {
 } from "../../../client/src/models/User";
 import UserData from "../storage/UserData";
 import { currentUser } from "./controllerHelper";
-import { apiPath } from "../../../client/src/models/Api";
-import newUnverifiedUser, {
-  NewUnverifiedUserErrorType
-} from "../actions/newUnverifiedUser";
-import verifyUser, { VerifyUserErrorType } from "../actions/verifyUser";
-import login, { LoginErrorType } from "../actions/login";
+import newUnverifiedUser from "../actions/newUnverifiedUser";
+import verifyUser from "../actions/verifyUser";
+import login from "../actions/login";
 import { Locale } from "../../../client/src/i18n/i18n";
 import { addGetHandler, addPostHandler } from "./serverApi";
 

@@ -1,11 +1,11 @@
-import { CurrentUser, NewUser, LoginAttempt } from "./User";
+import { CurrentUser, NewUser, LoginAttempt } from "../models/User";
 import { Locale } from "../i18n/i18n";
 import {
   AlphabetListing,
   Alphabet,
   DraftAlphabet,
   AlphabetChart
-} from "./Alphabet";
+} from "../models/Alphabet";
 
 export const API_VERSION = 6;
 export const OLD_API_STATUS_410 = 410;

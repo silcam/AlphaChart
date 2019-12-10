@@ -3,7 +3,7 @@ import { AlphabetLetter } from "../../models/Alphabet";
 import update from "immutability-helper";
 import LnkBtn from "../common/LnkBtn";
 import NumberPicker from "../common/NumberPicker";
-import { useTranslation } from "../common/I18nContext";
+import { useTranslation } from "../common/useTranslation";
 import { ImageStyles } from "../../models/ChartStyles";
 
 interface IProps {

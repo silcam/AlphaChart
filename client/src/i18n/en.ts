@@ -84,9 +84,18 @@ const en = {
   Welcome_email_confirm_text:
     "To get started making alphabet charts, please %{startLink}confirm your account%{endLink}.",
   Welcome_email_ignore:
-    "(If you did not request an Alphachart account, just ignore this email.)"
+    "(If you did not request an Alphachart account, just ignore this email.)",
+  No_connection: "No Connection",
+  Connection_restored: "Connection restored",
+  Server_error: "Server Error: %{status}",
+  Image_too_big: "That image is too big.",
+  App_error: "App Error (Code %{status})"
 };
 
 export type Strings = typeof en;
 export type TKey = keyof Strings | "";
 export default en;
+
+export function isTKey(str: any): str is TKey {
+  return str in en;
+}

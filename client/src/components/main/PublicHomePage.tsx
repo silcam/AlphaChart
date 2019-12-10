@@ -1,12 +1,10 @@
 import React from "react";
-import { LogInFunc } from "../users/useCurrentUser";
 import CreateAccountOrLogIn from "../users/CreateAccountOrLogIn";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { AlphabetListing } from "../../models/Alphabet";
-import { useTranslation } from "../common/I18nContext";
+import { useTranslation } from "../common/useTranslation";
 
 interface IProps {
-  logIn: LogInFunc;
   alphabets: AlphabetListing[] | null;
 }
 
@@ -17,7 +15,7 @@ export default function PublicHomePage(props: IProps) {
   return (
     <div className="flex-row compPublicHomePage">
       <div>
-        <CreateAccountOrLogIn logIn={props.logIn} />
+        <CreateAccountOrLogIn />
       </div>
       <div>
         <h2>{t("Alphabet_charts")}</h2>

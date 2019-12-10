@@ -2,9 +2,21 @@ import React, { useState, useEffect } from "react";
 
 // const CHARS = ["|", "/", "-", "\\"];
 
-const STATES = ["...", " ..", "  .", "   ", ".", ".. ", "..."];
+const STATES = ["   ", ".", ".. ", "...", "...", " ..", "  ."];
 
-export default function Loading() {
+export default function Loading(props: { small?: boolean }) {
+  return props.small ? (
+    <span className="compLoading">
+      <Dots />
+    </span>
+  ) : (
+    <h2 className="compLoading">
+      <Dots />
+    </h2>
+  );
+}
+
+function Dots() {
   const [stateIndex, setStateIndex] = useState(0);
   const nextCharIndex = stateIndex === STATES.length - 1 ? 0 : stateIndex + 1;
   useEffect(() => {
@@ -12,9 +24,5 @@ export default function Loading() {
     return () => clearTimeout(timeout);
   });
 
-  return (
-    <h2>
-      <pre>{STATES[stateIndex]}</pre>
-    </h2>
-  );
+  return <pre style={{ margin: 0 }}>{STATES[stateIndex]}</pre>;
 }

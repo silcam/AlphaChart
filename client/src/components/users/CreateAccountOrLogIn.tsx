@@ -1,27 +1,18 @@
 import React, { useState } from "react";
-import { LogInFunc } from "./useCurrentUser";
 import LoginForm from "./LoginForm";
 import CreateAccountForm from "./CreateAccountForm";
-import { useTranslation } from "../common/I18nContext";
+import { useTranslation } from "../common/useTranslation";
 
-interface IProps {
-  logIn: LogInFunc;
-}
 type ViewState = "login" | "createAccount" | "emailConfirmation";
 
-export default function CreateAccountOrLogIn(props: IProps) {
+export default function CreateAccountOrLogIn() {
   const t = useTranslation();
   const [viewState, setViewState] = useState<ViewState>("login");
   const [email, setEmail] = useState("");
 
   switch (viewState) {
     case "login":
-      return (
-        <LoginForm
-          logIn={props.logIn}
-          createAccount={() => setViewState("createAccount")}
-        />
-      );
+      return <LoginForm createAccount={() => setViewState("createAccount")} />;
     case "createAccount":
       return (
         <CreateAccountForm

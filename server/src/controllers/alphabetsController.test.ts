@@ -1,7 +1,7 @@
 import Data from "../storage/Data";
 import { loggedInAgent, vowellybet, notLoggedInAgent } from "../testHelper";
 import { Alphabet } from "../../../client/src/models/Alphabet";
-import { apiPath } from "../../../client/src/models/Api";
+import { apiPath } from "../../../client/src/api/Api";
 
 beforeEach(Data.loadFixtures);
 

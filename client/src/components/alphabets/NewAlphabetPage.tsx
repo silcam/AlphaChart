@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { blankAlphabet, DraftAlphabet } from "../../models/Alphabet";
 import { History } from "history";
 import keyHandler from "../common/KeyHandler";
-import useNetwork from "../common/useNetwork";
-import { apiPath } from "../../models/Api";
+import { usePush } from "../../api/apiRequest";
+import { pushDraftAlphabet } from "./alphabetSlice";
 
 interface IProps {
   history: History;
@@ -12,18 +12,16 @@ interface IProps {
 export default function NewAlphabetPage(props: IProps) {
   const [name, setName] = useState("");
   const formIsValid = name.length > 0;
-  const [loading, request] = useNetwork();
+  const [saveAlphabet, loading] = usePush(pushDraftAlphabet);
 
   const save = async () => {
     if (formIsValid) {
-      const alphabet: DraftAlphabet = {
+      const draft: DraftAlphabet = {
         ...blankAlphabet(name)
       };
-      const response = await request(axios =>
-        axios.post(apiPath("/alphabets"), alphabet)
-      );
-      if (response) {
-        const id = response.data._id;
+      const alphabet = await saveAlphabet(draft);
+      if (alphabet) {
+        const id = alphabet._id;
         props.history.push(`/alphabets/view/${id}`, { edit: true });
       }
     }

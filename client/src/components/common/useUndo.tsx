@@ -19,7 +19,7 @@ export default function useUndo<T>(
   };
 
   useEffect(() => {
-    console.log(`PUSH Buffer Effect : ${bufferingPush ? "TRUE" : "FALSE"}`);
+    // console.log(`PUSH Buffer Effect : ${bufferingPush ? "TRUE" : "FALSE"}`);
     if (bufferingPush) {
       setTimeout(() => setBufferingPush(false), 2500);
     }

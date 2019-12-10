@@ -8,7 +8,7 @@ import { UploadedFile } from "express-fileupload";
 import fileUpload = require("express-fileupload");
 import Images from "../storage/Images";
 import { verifyLogin, currentUser } from "./controllerHelper";
-import { apiPath } from "../../../client/src/models/Api";
+import { apiPath } from "../../../client/src/api/Api";
 import { addGetHandler, addPostHandler } from "./serverApi";
 
 export default function alphabetsController(app: Express) {

@@ -1,35 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { CurrentUser } from "../../models/User";
+import React from "react";
 import UserHomePage from "./UserHomePage";
 import PublicHomePage from "./PublicHomePage";
-import { LogInFunc, LogOutFunc } from "../users/useCurrentUser";
-import { AlphabetListing } from "../../models/Alphabet";
-import useNetwork from "../common/useNetwork";
-import { apiPath } from "../../models/Api";
+import { useSelector } from "react-redux";
+import { AppState } from "../../state/appState";
+import { useLoad } from "../../api/apiRequest";
+import { loadAlphabetListings } from "../alphabets/alphabetSlice";
 
-interface IProps {
-  currentUser: CurrentUser | null;
-  logIn: LogInFunc;
-  logOut: LogOutFunc;
-}
+export default function HomePage() {
+  const user = useSelector((state: AppState) => state.currentUser.user);
+  const alphabets = useSelector((state: AppState) => state.alphabets.listings);
 
-export default function HomePage(props: IProps) {
-  const [alphabets, setAlphabets] = useState<AlphabetListing[] | null>(null);
-  const [, request] = useNetwork();
+  useLoad(loadAlphabetListings());
 
-  useEffect(() => {
-    request(axios => axios.get(apiPath("/alphabets")))
-      .then(response => response && setAlphabets(response.data))
-      .catch(err => console.error(err));
-  }, []);
-
-  return props.currentUser ? (
-    <UserHomePage
-      logOut={props.logOut}
-      currentUser={props.currentUser}
-      alphabets={alphabets}
-    />
+  return user ? (
+    <UserHomePage alphabets={alphabets} />
   ) : (
-    <PublicHomePage logIn={props.logIn} alphabets={alphabets} />
+    <PublicHomePage alphabets={alphabets} />
   );
 }

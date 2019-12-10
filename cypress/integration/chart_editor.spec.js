@@ -1,3 +1,5 @@
+import { API_VERSION } from "../../server/dist/client/src/models/Api";
+
 describe("Chart Editor", () => {
   beforeEach(() => {
     cy.logIn();
@@ -7,28 +9,28 @@ describe("Chart Editor", () => {
 
   it("Persists changes", () => {
     cy.withLabel("Add Letters").type("W ");
-    cy.chartSnap("Chart with W");
+    cy.contains(".letter", "W").contains("w");
     cy.contains("Done").click();
-    cy.chartSnap("Chart View with W");
+    cy.contains(".letter", "W").contains("w");
     cy.visit("/alphabets/view/5d4c38e158e6dbb33d7d7b12"); // Reload the page
-    cy.chartSnap("Chart View Reloaded with W");
+    cy.contains(".letter", "W").contains("w");
   });
 
   it("Adds letters", () => {
     const input = () => cy.withLabel("Add Letters");
     input().type("W "); // sep: space
-    cy.chartSnap("Add W");
+    cy.contains(".letter", "W").contains("w");
     input().type("q,"); // sep: comma
-    cy.chartSnap("Add q");
+    cy.contains(".letter", "Q").contains("q");
     input().type("H\n"); // sep: enter
-    cy.chartSnap("Add H");
+    cy.contains(".letter", "H").contains("h");
     input().type("sh "); // digraph
-    cy.chartSnap("Add sh");
+    cy.contains(".letter", "Sh").contains("sh");
     input().type("tch ");
-    cy.chartSnap("Add tch"); // trigraph
+    cy.contains(".letter", "Tch").contains("tch");
 
     cy.contains("Done").click();
-    cy.chartSnap("All done");
+    cy.contains(".letter", "W").contains("w");
   });
 
   it("Edits Titles and footers", () => {
@@ -38,10 +40,12 @@ describe("Chart Editor", () => {
     cy.get(".alphaSubtitle > input").type("With Pepperoni");
     cy.get(".lastRowFiller textarea").type("Copyright maybe?");
     cy.get(".alphafooter textarea").type("I'm at the very bottom");
-    cy.chartSnap("Edit view");
 
     cy.contains("Done").click();
-    cy.chartSnap("Public view");
+    cy.contains(".alphaTitle", "Pizza");
+    cy.contains(".alphaSubtitle", "With Pepperoni");
+    cy.contains(".lastRowFiller", "Copyright maybe?");
+    cy.contains(".alphafooter", "I'm at the very bottom");
   });
 
   it("Edits example words", () => {
@@ -67,16 +71,28 @@ describe("Chart Editor", () => {
 
     cy.contains("Done").click();
     cy.get(lambdaImage);
-    cy.matchImageSnapshot("Chart Editor - Adds images - Lambda apple final");
+
+    cy.request(`/api/v/${API_VERSION}/alphabets/5d4c38e158e6dbb33d7d7b12`).then(
+      response => {
+        const imagePath = response.body.chart.letters[10].imagePath;
+        cy.request(imagePath)
+          .its("headers")
+          .should("include", { "content-type": "image/png" });
+      }
+    );
   });
 
   it("Moves, adds & deletes letters", () => {
     cy.contains(".letter", "Α").click();
 
     // Move the letter
-    cy.withLabel("Letter Position").contains("button", "+").click();
+    cy.withLabel("Letter Position")
+      .contains("button", "+")
+      .click();
     cy.chartSnap("Alpha second");
-    cy.withLabel("Letter Position").contains("button", "-").click();
+    cy.withLabel("Letter Position")
+      .contains("button", "-")
+      .click();
     cy.chartSnap("Alpha first again");
 
     // Add a letter before

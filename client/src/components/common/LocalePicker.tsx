@@ -1,20 +1,17 @@
-import React, { useContext } from "react";
-import I18nContext from "./I18nContext";
-import { availableLocales, Locale } from "../../i18n/i18n";
+import React from "react";
+import { availableLocales } from "../../i18n/i18n";
 import LnkBtn from "./LnkBtn";
 import { capitalize } from "./util";
-import useNetwork from "./useNetwork";
-import { apiPath } from "../../models/Api";
+import { useSelector } from "react-redux";
+import { AppState } from "../../state/appState";
+import { usePush } from "../../api/apiRequest";
+import { pushLocale } from "../../state/currentUserSlice";
 
 export default function LocalePicker() {
-  const { locale, setLocale } = useContext(I18nContext);
+  const locale = useSelector((state: AppState) => state.currentUser.locale);
   const locales = availableLocales();
-  const [, request] = useNetwork();
 
-  const setLocaleAndPost = (locale: Locale) => {
-    setLocale(locale);
-    request(axios => axios.post(apiPath("/users/locale"), { locale }));
-  };
+  const [setLocale] = usePush(pushLocale);
 
   return (
     <div className="compLocalePicker">
@@ -23,10 +20,7 @@ export default function LocalePicker() {
           {loc === locale ? (
             capitalize(loc)
           ) : (
-            <LnkBtn
-              text={capitalize(loc)}
-              onClick={() => setLocaleAndPost(loc)}
-            />
+            <LnkBtn text={capitalize(loc)} onClick={() => setLocale(loc)} />
           )}
           {index < locales.length - 1 && "\u00A0|\u00A0"}
         </span>

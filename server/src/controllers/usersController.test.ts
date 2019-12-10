@@ -2,7 +2,7 @@ import request from "supertest";
 import app from "../app";
 import Data from "../storage/Data";
 import { loggedInAgent, notLoggedInAgent } from "../testHelper";
-import { apiPath } from "../../../client/src/models/Api";
+import { apiPath } from "../../../client/src/api/Api";
 import { interactsWithMail as iwm } from "nodemailer-stub";
 
 beforeEach(Data.loadFixtures);

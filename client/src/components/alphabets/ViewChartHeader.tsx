@@ -1,9 +1,8 @@
 import React from "react";
 import ChartToImage from "./ChartToImage";
-import { Link } from "react-router-dom";
 import { ChartDimens } from "./ViewChartPage";
 import CopyAlphabetButton from "./CopyAlphabetButton";
-import { useTranslation } from "../common/I18nContext";
+import { useTranslation } from "../common/useTranslation";
 
 interface IProps {
   id: string;
