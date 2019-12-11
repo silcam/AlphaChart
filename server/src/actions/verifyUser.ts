@@ -11,19 +11,15 @@ export default async function verifyUser(
   if (!unverifiedUser)
     throw { status: 422, response: { error: "Invalid_code" } };
 
-  const { verification: _v, created, ...user } = unverifiedUser;
-  user._id = user.email;
-  try {
-    await UserData.createUser(user);
-  } catch (err) {
-    if (err.errmsg.includes("duplicate key"))
-      throw {
-        status: 422,
-        response: { error: "User_exists", subs: { email: user.email } }
-      };
-    else throw err;
-  }
+  const existing = await UserData.userByEmail(unverifiedUser.email);
+  if (existing)
+    throw {
+      status: 422,
+      response: { error: "User_exists", subs: { email: unverifiedUser.email } }
+    };
 
+  const { verification: _v, created, _id, ...newUser } = unverifiedUser;
+  const user = await UserData.createUser(newUser);
   UnverifiedUserData.remove(verification);
 
   return user;

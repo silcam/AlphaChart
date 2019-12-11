@@ -12,13 +12,13 @@ const users = [
   {
     name: "Titus",
     email: "titus@yahoo.com",
-    _id: "titus@yahoo.com",
+    _id: new ObjectID("777777777777777777777777"),
     password: "minecraft"
   },
   {
     name: "Lucy",
     email: "lucy@me.com",
-    _id: "lucy@me.com",
+    _id: new ObjectID("555555555555555555555555"),
     password: "princess"
   }
 ];
@@ -26,7 +26,11 @@ const users = [
 const dbUsers = users.map(user => {
   const { password, ...dbUser } = user;
   const { hash, salt } = createPassword(password);
-  return { ...dbUser, passwordHash: hash, passwordSalt: salt };
+  return {
+    ...dbUser,
+    passwordHash: hash,
+    passwordSalt: salt
+  };
 });
 
 const fixtures: Fixtures = {
@@ -99,7 +103,7 @@ const fixtures: Fixtures = {
           { forms: ["Ω", "ω"], exampleWord: "", imagePath: "" }
         ]
       },
-      user: "titus@yahoo.com"
+      _user: new ObjectID("777777777777777777777777")
     }
   ]
 };

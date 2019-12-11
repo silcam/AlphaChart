@@ -23,17 +23,18 @@ export default function AppBanners() {
 
   return (
     <div className="compAppBanners">
-      {banners.map(banner => {
+      {banners.map((banner, index) => {
         switch (banner.type) {
           case "Error":
             return (
               <AppBannerError
+                key={index}
                 error={banner.error}
                 close={() => dispatch(bannerSlice.actions.remove(banner))}
               />
             );
           case "Success":
-            return <AppBannerSuccess banner={banner} />;
+            return <AppBannerSuccess banner={banner} key={index} />;
         }
       })}
     </div>

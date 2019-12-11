@@ -14,8 +14,8 @@ export default function AlphabetsList(props: IProps) {
       {props.alphabets
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(alphabet => (
-          <li key={alphabet._id}>
-            <Link to={`/alphabets/view/${alphabet._id}`}>{alphabet.name}</Link>
+          <li key={alphabet.id}>
+            <Link to={`/alphabets/view/${alphabet.id}`}>{alphabet.name}</Link>
             {!props.hideUser && (
               <span className="username">{alphabet.userDisplayName}</span>
             )}

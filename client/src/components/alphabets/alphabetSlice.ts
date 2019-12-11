@@ -20,7 +20,7 @@ const alphabetSlice = createSlice({
       state.listings = action.payload;
     },
     setAlphabet: (state, action: PayloadAction<Alphabet>) => {
-      state.alphabets[action.payload._id] = action.payload;
+      state.alphabets[action.payload.id] = action.payload;
     }
   }
 });
@@ -52,14 +52,14 @@ export function pushDraftAlphabet(draft: DraftAlphabet) {
 export function pushCopyAlphabet(id: string) {
   return async (_: AppDispatch) => {
     const alphId = await webPost("/alphabets/:id/copy", { id }, null);
-    return alphId && alphId._id;
+    return alphId && alphId.id;
   };
 }
 
 export function pushChart(alphabet: Alphabet) {
-  const { _id, chart } = alphabet;
+  const { id, chart } = alphabet;
   return async (dispatch: AppDispatch) => {
-    const alphabet = await webPost("/alphabets/:id/charts", { id: _id }, chart);
+    const alphabet = await webPost("/alphabets/:id/charts", { id }, chart);
     if (alphabet) dispatch(alphabetSlice.actions.setAlphabet(alphabet));
   };
 }

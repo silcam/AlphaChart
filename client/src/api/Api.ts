@@ -7,7 +7,7 @@ import {
   AlphabetChart
 } from "../models/Alphabet";
 
-export const API_VERSION = 6;
+export const API_VERSION = 7;
 export const OLD_API_STATUS_410 = 410;
 
 export function apiPath(path: string) {
@@ -24,7 +24,7 @@ export interface APIGet {
 }
 
 export interface APIPost {
-  "/alphabets/:id/copy": [{ id: string }, null, { _id: string }];
+  "/alphabets/:id/copy": [{ id: string }, null, { id: string }];
   "/alphabets": [{}, DraftAlphabet, Alphabet];
   "/alphabets/:id/charts": [{ id: string }, AlphabetChart, Alphabet];
   "/users": [{}, NewUser, null];

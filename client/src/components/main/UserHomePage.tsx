@@ -16,9 +16,8 @@ export default function UserHomePage(props: IProps) {
   const user = useSelector((state: AppState) => state.currentUser.user);
   if (!user) throw "Null user in UserHomePage";
 
-  const myAlphabets = alphabets && alphabets.filter(a => a.user === user.email);
-  const otherAlphabets =
-    alphabets && alphabets.filter(a => a.user !== user.email);
+  const myAlphabets = alphabets && alphabets.filter(a => a.user === user.id);
+  const otherAlphabets = alphabets && alphabets.filter(a => a.user !== user.id);
 
   return (
     <div className="HomePage">

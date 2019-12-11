@@ -1,11 +1,14 @@
 import Data from "./Data";
-import { UnverifiedUser } from "../../../client/src/models/User";
+import {
+  UnverifiedUser,
+  NewUnverifiedUser
+} from "../../../client/src/models/User";
 import log from "../common/log";
 
-async function create(user: UnverifiedUser) {
+async function create(user: NewUnverifiedUser): Promise<UnverifiedUser> {
   log.log(`[Query] CREATE Unverified User ${user.email}`);
   const collection = await unverfiedUserCollection();
-  const result = await collection.insertOne(user);
+  const result = await collection.insertOne(user as UnverifiedUser);
   return result.ops[0];
 }
 

@@ -32,7 +32,7 @@ export default function usersController(app: Express) {
     if (user) {
       return toCurrentUser(user);
     } else {
-      req.session!.email = undefined;
+      req.session!.userId = undefined;
       return { locale: req.session!.locale };
     }
   });
@@ -40,7 +40,7 @@ export default function usersController(app: Express) {
   addPostHandler(app, "/users/login", async req => {
     const loginAttempt: LoginAttempt = req.body;
     const user = await login(loginAttempt);
-    req.session!.email = user.email;
+    req.session!.userId = `${user._id}`;
     return toCurrentUser(user);
   });
 
@@ -58,7 +58,7 @@ export default function usersController(app: Express) {
   });
 
   addPostHandler(app, "/users/logout", async req => {
-    req.session!.email = undefined;
+    req.session!.userId = undefined;
     return null;
   });
 }

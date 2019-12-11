@@ -1,5 +1,6 @@
 import { TKey } from "../i18n/en";
 import { Locale } from "../i18n/i18n";
+import { ObjectId } from "bson";
 
 export interface NewUser {
   email: string;
@@ -8,6 +9,7 @@ export interface NewUser {
 }
 
 export interface User {
+  id: string;
   name: string;
 }
 
@@ -18,11 +20,12 @@ export interface CurrentUser extends User {
 
 export type CurrentUserOrNot = CurrentUser | null;
 
-export interface StoredUser extends CurrentUser {
-  _id: string;
+export interface StoredUser extends Omit<CurrentUser, "id"> {
+  _id: ObjectId;
   passwordHash: string;
   passwordSalt: string;
 }
+export type NewStoredUser = Omit<StoredUser, "_id">;
 
 export interface LoginAttempt {
   email: string;
@@ -33,19 +36,26 @@ export interface UnverifiedUser extends StoredUser {
   verification: string;
   created: number;
 }
+export type NewUnverifiedUser = Omit<UnverifiedUser, "_id">;
 
 export function toPublicUser(user: StoredUser): User {
   return {
+    id: `${user._id}`,
     name: user.name
   };
 }
 
 export function toCurrentUser(user: StoredUser): CurrentUser {
   return {
+    id: `${user._id}`,
     name: user.name,
     email: user.email,
     locale: user.locale
   };
+}
+
+export function isCurrentUser(user: any): user is CurrentUser {
+  return typeof user.name === "string" && typeof user.email === "string";
 }
 
 export function validationErrors(user: NewUser, passwordCheck?: string) {
@@ -58,9 +68,5 @@ export function validationErrors(user: NewUser, passwordCheck?: string) {
 }
 
 export function userId(user: CurrentUserOrNot) {
-  return user && user.email;
-}
-
-export function isCurrentUser(user: any): user is CurrentUser {
-  return typeof user.name === "string" && typeof user.email === "string";
+  return user && user.id;
 }

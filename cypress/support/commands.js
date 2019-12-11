@@ -24,13 +24,11 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import { API_VERSION } from "../../server/dist/client/src/models/Api";
+import { API_VERSION } from "../../server/dist/client/src/Api/Api";
 
 // Libraries
 require("@cypress/snapshot").register();
 import "cypress-file-upload";
-import { addMatchImageSnapshotCommand } from "cypress-image-snapshot/command";
-addMatchImageSnapshotCommand();
 
 // Load Fixtures
 beforeEach(() => {

@@ -33,7 +33,7 @@ export default function ImageInput(props: IProps) {
   const onDrop = async (acceptedFiles: File[]) => {
     const imageFile = acceptedFiles[0];
     const imagePath = await saveImage({
-      alphabetId: props.alphabet._id,
+      alphabetId: props.alphabet.id,
       image: imageFile
     });
     if (imagePath) props.setImagePath(imagePath);

@@ -1,4 +1,4 @@
-import { ObjectId } from "bson";
+import { ObjectId, ObjectID } from "bson";
 import { ChartStyles, defaultChartStyles, setRightToLeft } from "./ChartStyles";
 
 export interface AlphabetLetter {
@@ -26,17 +26,30 @@ export interface DraftAlphabet {
 }
 
 export interface Alphabet {
-  _id: string;
+  id: string;
   name: string;
   user: string;
   chart: AlphabetChart;
 }
 
+export interface StoredAlphabet extends Omit<Omit<Alphabet, "id">, "user"> {
+  _id: ObjectId;
+  _user: ObjectId;
+}
+
+export function toAlphabet(sa: StoredAlphabet): Alphabet {
+  const { _id, _user, ...alpha } = sa;
+  return { ...alpha, id: `${_id}`, user: `${_user}` };
+}
+
+export function toStoredAlphabet(alpha: Alphabet): StoredAlphabet {
+  const { id, user, ...sa } = alpha;
+  return { ...alpha, _id: new ObjectID(id), _user: new ObjectID(user) };
+}
+
 export interface AlphabetListing extends Omit<Alphabet, "chart"> {
   userDisplayName: string;
 }
-
-export type StoredAlphabet = Omit<Alphabet, "_id"> & { _id: ObjectId };
 
 export function validDraftAlphabet(alphabet: DraftAlphabet) {
   return (

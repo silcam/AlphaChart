@@ -1,7 +1,8 @@
 import {
   NewUser,
   UnverifiedUser,
-  validationErrors
+  validationErrors,
+  NewUnverifiedUser
 } from "../../../client/src/models/User";
 import { createPassword } from "../common/password";
 import UserData from "../storage/UserData";
@@ -15,7 +16,7 @@ export default async function newUnverifiedUser(
   user: NewUser,
   locale: Locale
 ): Promise<UnverifiedUser> {
-  const existing = await UserData.user(user.email);
+  const existing = await UserData.userByEmail(user.email);
   if (existing)
     throw {
       status: 422,
@@ -34,8 +35,7 @@ export default async function newUnverifiedUser(
   const { hash: verification } = createPassword(
     new Date().valueOf().toString()
   );
-  const unverifiedUser: UnverifiedUser = {
-    _id: verification,
+  const newUnverifiedUser: NewUnverifiedUser = {
     email: user.email,
     name: user.name,
     passwordHash: passwordParams.hash,
@@ -44,7 +44,7 @@ export default async function newUnverifiedUser(
     created: new Date().valueOf()
   };
 
-  await UnverifiedUserData.create(unverifiedUser);
+  const unverifiedUser = await UnverifiedUserData.create(newUnverifiedUser);
   await sendNewUserMail(unverifiedUser, locale);
   return unverifiedUser;
 }

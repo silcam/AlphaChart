@@ -8,7 +8,7 @@ export type LoginErrorType = "Invalid" | "Unverified";
 export default async function login(
   loginAttempt: LoginAttempt
 ): Promise<StoredUser> {
-  const user = await UserData.user(loginAttempt.email);
+  const user = await UserData.userByEmail(loginAttempt.email);
   if (user) {
     if (
       checkPassword(loginAttempt.password, user.passwordHash, user.passwordSalt)

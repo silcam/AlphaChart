@@ -12,7 +12,7 @@ test("Get alphabets", async () => {
   const agent = notLoggedInAgent();
   const response = await agent.get(apiPath("/alphabets"));
   expect(response.body[0].name).toEqual("Ελληνικα");
-  expect(response.body[0]._id).toEqual("5d4c38e158e6dbb33d7d7b12");
+  expect(response.body[0].id).toEqual("5d4c38e158e6dbb33d7d7b12");
 });
 
 test("Get my alphabets", async () => {
@@ -58,7 +58,7 @@ test("Create alphabet", async () => {
   const vowelly = vowellybet();
   const response = await agent.post(apiPath("/alphabets")).send(vowelly);
   const alphabet: Alphabet = response.body;
-  expect(alphabet.user).toEqual("titus@yahoo.com");
+  expect(alphabet.user).toEqual("777777777777777777777777");
   expect(alphabet.name).toEqual("Vowelly");
   expect(alphabet.chart.letters).toEqual(vowelly.chart.letters);
 });
@@ -137,10 +137,10 @@ test("Copy Alphabet", async () => {
   let response = await lucyAgent.post(
     apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/copy")
   );
-  const id = response.body._id;
+  const id = response.body.id;
   response = await lucyAgent.get(apiPath(`/alphabets/${id}`));
   expect(response.body.name).toEqual("Ελληνικα");
-  expect(response.body.user).toEqual("lucy@me.com");
+  expect(response.body.user).toEqual("555555555555555555555555");
 });
 
 test("Copy Alphabet Errors", async () => {

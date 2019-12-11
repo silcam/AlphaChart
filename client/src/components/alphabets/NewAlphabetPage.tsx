@@ -21,7 +21,7 @@ export default function NewAlphabetPage(props: IProps) {
       };
       const alphabet = await saveAlphabet(draft);
       if (alphabet) {
-        const id = alphabet._id;
+        const id = alphabet.id;
         props.history.push(`/alphabets/view/${id}`, { edit: true });
       }
     }

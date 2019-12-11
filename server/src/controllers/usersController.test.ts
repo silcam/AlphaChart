@@ -84,17 +84,18 @@ test("Respond to login attempt by unverified user", async () => {
 });
 
 test("Verify User", async () => {
-  expect.assertions(2);
+  expect.assertions(3);
   const agent = notLoggedInAgent();
   const verification = await submitNewUser(agent);
   const response = await agent
     .post(apiPath("/users/verify"))
     .send({ verification });
   expect(response.status).toBe(200);
-  expect(response.body).toEqual({
+  expect(response.body).toMatchObject({
     name: "Madeleine",
     email: "madeleine@pm.me"
   });
+  expect(response.body.id).toHaveLength(24);
 });
 
 test("Duplicate User Verify", async () => {
@@ -135,7 +136,11 @@ test("Current User - Not logged in", async () => {
 test("Current User", async () => {
   const agent = await loggedInAgent();
   const response = await agent.get(apiPath("/users/current"));
-  expect(response.body).toEqual({ name: "Titus", email: "titus@yahoo.com" });
+  expect(response.body).toEqual({
+    id: "777777777777777777777777",
+    name: "Titus",
+    email: "titus@yahoo.com"
+  });
 });
 
 test("Valid Login", async () => {
@@ -145,7 +150,11 @@ test("Valid Login", async () => {
     email: "titus@yahoo.com",
     password: "minecraft"
   });
-  expect(response.body).toEqual({ name: "Titus", email: "titus@yahoo.com" });
+  expect(response.body).toEqual({
+    id: "777777777777777777777777",
+    name: "Titus",
+    email: "titus@yahoo.com"
+  });
 });
 
 test("InValid Login", async () => {
@@ -188,6 +197,7 @@ test("Post Locale - Logged in", async () => {
   expect(response.status).toBe(200);
   response = await agent.get(apiPath("/users/current"));
   expect(response.body).toEqual({
+    id: "777777777777777777777777",
     name: "Titus",
     email: "titus@yahoo.com",
     locale: "fr"

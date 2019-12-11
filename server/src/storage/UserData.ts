@@ -1,6 +1,7 @@
-import { StoredUser } from "../../../client/src/models/User";
+import { StoredUser, NewStoredUser } from "../../../client/src/models/User";
 import Data from "./Data";
 import log from "../common/log";
+import { ObjectId } from "bson";
 
 async function users(): Promise<StoredUser[]> {
   log.log(`[Query] READ Users`);
@@ -8,16 +9,22 @@ async function users(): Promise<StoredUser[]> {
   return collection.find({}).toArray();
 }
 
-async function user(email: string): Promise<StoredUser | null> {
-  log.log(`[Query] READ User ${email}`);
+async function user(_id: ObjectId): Promise<StoredUser | null> {
+  log.log(`[Query] READ User ${_id}`);
   const collection = await userCollection();
-  return collection.findOne({ _id: email });
+  return collection.findOne({ _id });
 }
 
-async function createUser(user: StoredUser) {
+async function userByEmail(email: string): Promise<StoredUser | null> {
+  log.log(`[Query] READ User ${email}`);
+  const collection = await userCollection();
+  return collection.findOne({ email });
+}
+
+async function createUser(user: NewStoredUser): Promise<StoredUser> {
   log.log("[Query] CREATE User");
   const collection = await userCollection();
-  const result = await collection.insertOne(user);
+  const result = await collection.insertOne(user as StoredUser);
   return result.ops[0];
 }
 
@@ -34,6 +41,7 @@ async function userCollection() {
 export default {
   users,
   user,
+  userByEmail,
   createUser,
   update
 };

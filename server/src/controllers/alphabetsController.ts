@@ -2,7 +2,8 @@ import { Express } from "express";
 import AlphabetData from "../storage/AlphabetData";
 import {
   DraftAlphabet,
-  AlphabetChart
+  AlphabetChart,
+  toAlphabet
 } from "../../../client/src/models/Alphabet";
 import { UploadedFile } from "express-fileupload";
 import fileUpload = require("express-fileupload");
@@ -23,7 +24,7 @@ export default function alphabetsController(app: Express) {
 
   addGetHandler(app, "/alphabets/:id", async req => {
     const alphabet = await AlphabetData.alphabet(req.params.id);
-    if (alphabet) return alphabet;
+    if (alphabet) return toAlphabet(alphabet);
     throw { status: 404 };
   });
 
@@ -32,9 +33,9 @@ export default function alphabetsController(app: Express) {
     const user = await currentUser(req);
     if (alphabet === null) throw { status: 404 };
     if (user === null) throw { status: 401 };
-    if (alphabet.user === user._id) throw { status: 422 };
+    if (alphabet._user.equals(user._id)) throw { status: 422 };
     const newAlphabet = await AlphabetData.copyAlphabet(alphabet, user);
-    return { _id: newAlphabet._id };
+    return { id: `${newAlphabet._id}` };
   });
 
   addPostHandler(app, "/alphabets", async req => {
@@ -43,7 +44,7 @@ export default function alphabetsController(app: Express) {
 
     const draftAlphabet: DraftAlphabet = req.body;
     const alphabet = await AlphabetData.createAlphabet(draftAlphabet, user);
-    return alphabet;
+    return toAlphabet(alphabet);
   });
 
   addPostHandler(app, "/alphabets/:id/charts", async req => {
@@ -51,13 +52,13 @@ export default function alphabetsController(app: Express) {
     const alphabet = await AlphabetData.alphabet(req.params.id);
     if (!alphabet) throw { status: 404 };
 
-    const user = await verifyLogin(req, alphabet.user);
+    const user = await verifyLogin(req, alphabet._user);
     if (!user) throw { status: 401 };
 
     const newAlphabet = await AlphabetData.updateChart(req.params.id, newChart);
     if (!newAlphabet) throw { status: 500 };
 
-    return newAlphabet;
+    return toAlphabet(newAlphabet);
   });
 
   app.post(apiPath("/alphabets/:id/images"), fileUpload(), async (req, res) => {
@@ -66,7 +67,7 @@ export default function alphabetsController(app: Express) {
     if (!alphabet) {
       res.status(404).send();
     } else {
-      const user = await verifyLogin(req, alphabet.user);
+      const user = await verifyLogin(req, alphabet._user);
       if (user) {
         const imagePath = await Images.save(req.params.id, imageFile);
         res.json({ path: imagePath });
