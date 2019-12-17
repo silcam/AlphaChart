@@ -7,45 +7,38 @@ import {
   toAlphabet
 } from "../../../client/src/models/Alphabet";
 import { Collection } from "mongodb";
-import { ObjectID } from "bson";
+import { ObjectID, ObjectId } from "bson";
 import update from "immutability-helper";
-import { StoredUser } from "../../../client/src/models/User";
-import UserData from "./UserData";
 import log from "../common/log";
-import { byId } from "../common/ArrayUtils";
 
-async function alphabets(user?: StoredUser): Promise<AlphabetListing[]> {
+async function alphabets(): Promise<AlphabetListing[]> {
   log.log("[Query] READ Alphabets");
   const collection = await alphabetCollection();
-  const usersById = byId(await UserData.users(), "_id");
-  const findParam = user ? { _user: user._id } : {};
   return collection
-    .find(findParam, { projection: { chart: 0 } })
-    .map(alphabet => ({
-      ...toAlphabet(alphabet),
-      userDisplayName: usersById[`${alphabet._user}`].name
-    }))
+    .find({}, { projection: { chart: 0 } })
+    .map(toAlphabet)
     .toArray();
 }
 
-async function alphabet(id: string): Promise<StoredAlphabet | null> {
-  log.log(`[Query] READ Alphabet ${id}`);
+async function alphabet(_id: ObjectId): Promise<StoredAlphabet | null> {
+  log.log(`[Query] READ Alphabet ${_id}`);
   const collection = await alphabetCollection();
   try {
-    return collection.findOne({ _id: new ObjectID(id) });
+    return collection.findOne({ _id });
   } catch (err) {
     return null;
   }
 }
 
 async function createAlphabet(
-  draftAlphabet: DraftAlphabet,
-  user: StoredUser
+  draftAlphabet: DraftAlphabet
 ): Promise<StoredAlphabet> {
   log.log("[Query] CREATE Alphabet");
+  const { owner, ...draft } = draftAlphabet;
   const alphabet: Omit<StoredAlphabet, "_id"> = {
-    name: draftAlphabet.name,
-    _user: user._id,
+    ...draft,
+    _owner: new ObjectID(owner),
+    _users: [],
     chart: update(draftAlphabet.chart, {
       timestamp: { $set: Date.now().valueOf() }
     })
@@ -78,16 +71,30 @@ async function updateChart(
 
 async function copyAlphabet(
   alphabet: StoredAlphabet,
-  user: StoredUser
+  _owner: ObjectId,
+  ownerType: "user" | "group"
 ): Promise<StoredAlphabet> {
-  log.log(`[Query] Copy chart ${alphabet._id} to user ${user._id}`);
+  log.log(`[Query] Copy chart ${alphabet._id} to ${ownerType} ${_owner}`);
   const newAlphabet: Omit<StoredAlphabet, "_id"> = update(alphabet, {
-    _user: { $set: user._id },
+    $merge: { _owner, ownerType, _users: [] },
     $unset: ["_id"]
   });
   const collection = await alphabetCollection();
   const result = await collection.insertOne(newAlphabet as StoredAlphabet);
   return result.ops[0];
+}
+
+async function shareAlphabet(
+  alphabetId: ObjectId,
+  userId: ObjectId
+): Promise<StoredAlphabet | null> {
+  log.log(`[Query] UPDATE Share chart ${alphabetId} with user ${userId}`);
+  const collection = await alphabetCollection();
+  await collection.updateOne(
+    { _id: alphabetId },
+    { $push: { _users: userId } }
+  );
+  return collection.findOne({ _id: alphabetId });
 }
 
 async function alphabetCollection(): Promise<Collection<StoredAlphabet>> {
@@ -99,5 +106,6 @@ export default {
   alphabets,
   createAlphabet,
   updateChart,
-  copyAlphabet
+  copyAlphabet,
+  shareAlphabet
 };

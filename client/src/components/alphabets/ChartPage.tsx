@@ -6,6 +6,8 @@ import { useLoad } from "../../api/apiRequest";
 import { loadAlphabet } from "./alphabetSlice";
 import { useSelector } from "react-redux";
 import { AppState } from "../../state/appState";
+import { loadUsers } from "../../state/userSlice";
+import { loadGroups } from "../groups/groupSlice";
 
 interface IProps {
   id: string;
@@ -19,6 +21,8 @@ export default function ChartPage(props: IProps) {
     (state: AppState) => state.alphabets.alphabets[props.id]
   );
   useLoad(loadAlphabet(props.id));
+  useLoad(loadUsers());
+  useLoad(loadGroups());
 
   if (alphabet)
     return editing ? (

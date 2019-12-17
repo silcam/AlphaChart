@@ -8,6 +8,7 @@ import apiVersion from "./controllers/apiVersion";
 import testDbController from "./controllers/testDbController";
 import testSentEmailController from "./controllers/testSentEmailController";
 import Log from "./common/log";
+import groupsController from "./controllers/groupsController";
 
 const app = express();
 
@@ -39,6 +40,7 @@ if (process.env.NODE_ENV !== "production") {
 
 alphabetsController(app);
 usersController(app);
+groupsController(app);
 
 // Handle client-side routes
 app.get("*", (req, res) => {

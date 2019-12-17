@@ -5,19 +5,25 @@ import AlphabetsList from "../alphabets/AlphabetsList";
 import { useTranslation } from "../common/useTranslation";
 import { useSelector } from "react-redux";
 import { AppState } from "../../state/appState";
+import { CurrentUser } from "../../models/User";
+import useCanEdit from "../alphabets/useCanEdit";
 
 interface IProps {
-  alphabets: AlphabetListing[] | null;
+  user: CurrentUser;
 }
 
 export default function UserHomePage(props: IProps) {
   const t = useTranslation();
-  const alphabets = props.alphabets;
-  const user = useSelector((state: AppState) => state.currentUser.user);
-  if (!user) throw "Null user in UserHomePage";
+  const alphabets = useSelector((state: AppState) => state.alphabets.listings);
+  const canEdit = useCanEdit();
 
-  const myAlphabets = alphabets && alphabets.filter(a => a.user === user.id);
-  const otherAlphabets = alphabets && alphabets.filter(a => a.user !== user.id);
+  const myAlphabets: AlphabetListing[] = [];
+  const otherAlphabets: AlphabetListing[] = [];
+  alphabets.forEach(alphabet =>
+    canEdit(alphabet)
+      ? myAlphabets.push(alphabet)
+      : otherAlphabets.push(alphabet)
+  );
 
   return (
     <div className="HomePage">
@@ -29,7 +35,7 @@ export default function UserHomePage(props: IProps) {
       <div className="flex-row">
         <div>
           <h2>{t("My_alphabets")}</h2>
-          <AlphabetsList alphabets={myAlphabets} hideUser />
+          <AlphabetsList alphabets={myAlphabets} />
         </div>
         <div>
           <h2>{t("Other_alphabets")}</h2>

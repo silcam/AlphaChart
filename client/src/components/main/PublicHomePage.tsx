@@ -1,16 +1,13 @@
 import React from "react";
 import CreateAccountOrLogIn from "../users/CreateAccountOrLogIn";
 import AlphabetsList from "../alphabets/AlphabetsList";
-import { AlphabetListing } from "../../models/Alphabet";
 import { useTranslation } from "../common/useTranslation";
+import { useSelector } from "react-redux";
+import { AppState } from "../../state/appState";
 
-interface IProps {
-  alphabets: AlphabetListing[] | null;
-}
-
-export default function PublicHomePage(props: IProps) {
+export default function PublicHomePage() {
   const t = useTranslation();
-  const alphabets = props.alphabets;
+  const alphabets = useSelector((state: AppState) => state.alphabets.listings);
 
   return (
     <div className="flex-row compPublicHomePage">

@@ -92,7 +92,20 @@ const fr: Strings = {
   Connection_restored: "Connexion restaurée",
   Server_error: "Erreur de serveur : %{status}",
   Image_too_big: "Cette image est trop grande.",
-  App_error: "Erreur de l'application (Code %{status})"
+  App_error: "Erreur de l'application (Code %{status})",
+  Groups: "Groupes",
+  My_groups: "Mes groupes",
+  Users: "Utilisateurs",
+  Add: "Ajouter",
+  Remove: "Enlever",
+  Create: "Créer",
+  Add_user: "Ajouter un utilisateur",
+  Remove_user: "Enlever un utilisateur",
+  Name_or_email: "Nom ou addresse mail",
+  New_alphabet: "Nouveau alphabet",
+  Language: "Langue",
+  For_account: "Pour compte",
+  By_name: "Par %{name}"
 };
 
 export default fr;

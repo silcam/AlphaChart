@@ -1,6 +1,6 @@
 import request from "supertest";
 import app from "./app";
-import { DraftAlphabet } from "../../client/src/models/Alphabet";
+import { DraftAlphabet, AlphOwnerType } from "../../client/src/models/Alphabet";
 import { apiPath } from "../../client/src/api/Api";
 
 export async function loggedInAgent(name?: string) {
@@ -18,9 +18,14 @@ export function notLoggedInAgent() {
   return request.agent(app);
 }
 
-export function vowellybet(): DraftAlphabet {
+export function vowellybet(
+  owner: string,
+  ownerType: AlphOwnerType = "user"
+): DraftAlphabet {
   return {
     name: "Vowelly",
+    owner,
+    ownerType,
     chart: {
       cols: 2,
       meta: {},

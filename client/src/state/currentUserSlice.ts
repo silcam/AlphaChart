@@ -8,6 +8,7 @@ import {
   NewUser
 } from "../models/User";
 import { webGet, webPost } from "../api/apiRequest";
+import userSlice from "./userSlice";
 
 interface CurrentUserState {
   user: CurrentUser | null;
@@ -63,6 +64,7 @@ export function pushLogout() {
 export function pushVerifyUser(verification: string) {
   return async (dispatch: AppDispatch) => {
     const user = await webPost("/users/verify", {}, { verification });
+    if (user) dispatch(userSlice.actions.addUser(user));
     return user;
   };
 }

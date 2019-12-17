@@ -34,6 +34,12 @@ async function update(user: StoredUser) {
   const result = await collection.replaceOne({ _id: user._id }, user);
 }
 
+async function search(query: string): Promise<StoredUser[]> {
+  log.log(`[Query] SEARCH Users for ${query}`);
+  const collection = await userCollection();
+  return collection.find({ $text: { $search: query } }).toArray();
+}
+
 async function userCollection() {
   return (await Data.db()).collection<StoredUser>("users");
 }
@@ -43,5 +49,6 @@ export default {
   user,
   userByEmail,
   createUser,
-  update
+  update,
+  search
 };

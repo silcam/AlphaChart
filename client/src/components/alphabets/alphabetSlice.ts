@@ -2,7 +2,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   AlphabetListing,
   Alphabet,
-  DraftAlphabet
+  DraftAlphabet,
+  AlphOwnerType,
+  alphabetCompare
 } from "../../models/Alphabet";
 import { AppDispatch } from "../../state/appState";
 import { webGet, webPost, postFile } from "../../api/apiRequest";
@@ -17,7 +19,7 @@ const alphabetSlice = createSlice({
   initialState: { listings: [], alphabets: {} } as AlphabetState,
   reducers: {
     setListings: (state, action: PayloadAction<AlphabetListing[]>) => {
-      state.listings = action.payload;
+      state.listings = action.payload.sort(alphabetCompare);
     },
     setAlphabet: (state, action: PayloadAction<Alphabet>) => {
       state.alphabets[action.payload.id] = action.payload;
@@ -29,7 +31,7 @@ export default alphabetSlice;
 
 export function loadAlphabetListings() {
   return async (dispatch: AppDispatch) => {
-    const listings = await webGet("/alphabets", {});
+    const listings = await webGet("/alphabets");
     if (listings) dispatch(alphabetSlice.actions.setListings(listings));
   };
 }
@@ -49,9 +51,14 @@ export function pushDraftAlphabet(draft: DraftAlphabet) {
   };
 }
 
-export function pushCopyAlphabet(id: string) {
+export function pushCopyAlphabet(params: {
+  id: string;
+  owner: string;
+  ownerType: AlphOwnerType;
+}) {
+  const { id, ...ownerParams } = params;
   return async (_: AppDispatch) => {
-    const alphId = await webPost("/alphabets/:id/copy", { id }, null);
+    const alphId = await webPost("/alphabets/:id/copy", { id }, ownerParams);
     return alphId && alphId.id;
   };
 }

@@ -9,6 +9,36 @@ beforeEach(Data.loadFixtures);
 
 afterEach(Data.deleteDatabase);
 
+test("Get Users", async () => {
+  expect.assertions(2);
+  const agent = notLoggedInAgent();
+  const response = await agent.get(apiPath("/users"));
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual([
+    { name: "Titus", id: "777777777777777777777777" },
+    { name: "Lucy", id: "555555555555555555555555" },
+    { name: "Joel", id: "333333333333333333333333" }
+  ]);
+});
+
+test("Search Users", async () => {
+  expect.assertions(8);
+  const agent = notLoggedInAgent();
+  let response = await agent.get(apiPath("/users/search?q=titus"));
+  expect(response.status).toBe(200);
+  expect(response.body.length).toBe(1);
+  expect(response.body[0].name).toBe("Titus");
+
+  response = await agent.get(apiPath("/users/search?q=lucy@me"));
+  expect(response.status).toBe(200);
+  expect(response.body.length).toBe(1);
+  expect(response.body[0].name).toBe("Lucy");
+
+  response = await agent.get(apiPath("/users/search?q=.com"));
+  expect(response.status).toBe(200);
+  expect(response.body.length).toBe(3);
+});
+
 test("Create new user", async () => {
   expect.assertions(3);
   const agent = request.agent(app);

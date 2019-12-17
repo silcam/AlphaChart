@@ -24,8 +24,9 @@ export default function NavBar(props: IProps) {
 
   return (
     <div className="compNavBar flex-row" style={{ padding: "8px 0" }}>
-      <div className="flex-row">
+      <div className="flex-row linkMenu">
         <Link to="/">{t("Home")}</Link>
+        <Link to="/groups">{t("Groups")}</Link>
         {loading && <Loading small />}
       </div>
       <div className="flex-row">

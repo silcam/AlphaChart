@@ -14,17 +14,19 @@ import { AppDispatch } from "../state/appState";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import loadingSlice from "./loadingSlice";
+import { objKeys } from "../util/objectUtils";
 
 const defaultAxios = Axios.create({ timeout: 5000 });
 
 export async function webGet<T extends GetRoute>(
   route: T,
-  params: APIGet[T][0]
-): Promise<APIGet[T][1] | null> {
-  const finalRoute = apiPath(interpolateParams(route, params));
+  routeParams: APIGet[T][0] = {},
+  getParams?: APIGet[T][1]
+): Promise<APIGet[T][2] | null> {
+  const finalRoute = apiPath(interpolateParams(route, routeParams));
   logRequest("GET", finalRoute);
   try {
-    const response = await defaultAxios.get(finalRoute);
+    const response = await defaultAxios.get(finalRoute, { params: getParams });
     return response.data;
   } catch (err) {
     throwAppError(err);
@@ -82,11 +84,22 @@ function throwAppError(err: any): never {
   throw error;
 }
 
-function interpolateParams(route: string, params: Params) {
-  return Object.keys(params).reduce(
-    (route: string, key) => route.replace(`:${key}`, `${params[key]}`),
+function interpolateParams(
+  route: string,
+  routeParams: Params,
+  getParams?: Params
+) {
+  const path = Object.keys(routeParams).reduce(
+    (route: string, key) => route.replace(`:${key}`, `${routeParams[key]}`),
     route
   );
+  return getParams
+    ? path +
+        "?" +
+        objKeys(getParams)
+          .map(key => `key=${encodeURIComponent(getParams[key])}`)
+          .join("&")
+    : path;
 }
 
 export function useLoad<T>(loader: (dispatch: AppDispatch) => Promise<T>) {

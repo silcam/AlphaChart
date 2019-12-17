@@ -89,7 +89,20 @@ const en = {
   Connection_restored: "Connection restored",
   Server_error: "Server Error: %{status}",
   Image_too_big: "That image is too big.",
-  App_error: "App Error (Code %{status})"
+  App_error: "App Error (Code %{status})",
+  Groups: "Groups",
+  My_groups: "My Groups",
+  Users: "Users",
+  Add: "Add",
+  Remove: "Remove",
+  Create: "Create",
+  Add_user: "Add User",
+  Remove_user: "Remove User",
+  Name_or_email: "Name or email",
+  New_alphabet: "New Alphabet",
+  Language: "Language",
+  For_account: "For account",
+  By_name: "By %{name}"
 };
 
 export type Strings = typeof en;

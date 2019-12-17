@@ -112,6 +112,16 @@ div.compChartToImageOptionsMenu .buttonRow {
     justify-content: space-between;
 }
 
+/* GroupsList */
+
+div.compGroupsIndex {
+    flex-direction: row;
+}
+
+div.compGroupsIndex>div {
+    flex: 1
+}
+
 /* Icon */
 .compIcon {
     cursor: pointer;
@@ -148,8 +158,11 @@ div.compLocalePicker {
 
 /* NavBar */
 
+div.compNavBar .linkMenu a {
+    padding: 0 16px 0 0;
+}
+
 div.compNavBar .compLoading {
-    margin-left: 12px;
     color: #333;
 }
 
@@ -231,6 +244,38 @@ div.compPublicHomePage > div {
 
 div.compPublicHomePage input {
     width: 100%;
+}
+
+/* SearchTextInput */
+
+div.compSearchTextInput {
+    /* position: relative;
+    display: block; */
+}
+
+div.compSearchTextInput ul {
+    background-color: #fff;
+    /* position: absolute; */
+    /* z-index: 10; */
+    list-style: none;
+    padding: 0;
+    /* border-top: 1px solid #aaa; */
+    /* margin-top: -6px; */
+    /* margin-left: 4px; */
+    box-shadow: 2px 4px 4px 0 rgba(0,0,0,0.16) /*, 2px 4px 10px 0 rgba(0,0,0,0.12); */
+}
+
+div.compSearchTextInput ul li {
+    padding: 3px;
+    border: 1px solid #aaa;
+    border-top: none;
+    cursor: pointer;
+}
+
+
+div.compSearchTextInput ul li.selected {
+    background-color: #337ab7;
+    color: #fff;
 }
 
 /* SideMenu */

@@ -2,7 +2,8 @@ import { Express } from "express";
 import {
   NewUser,
   toCurrentUser,
-  LoginAttempt
+  LoginAttempt,
+  toPublicUser
 } from "../../../client/src/models/User";
 import UserData from "../storage/UserData";
 import { currentUser } from "./controllerHelper";
@@ -13,6 +14,17 @@ import { Locale } from "../../../client/src/i18n/i18n";
 import { addGetHandler, addPostHandler } from "./serverApi";
 
 export default function usersController(app: Express) {
+  addGetHandler(app, "/users", async req => {
+    const users = await UserData.users();
+    return users.map(user => toPublicUser(user));
+  });
+
+  addGetHandler(app, "/users/search", async req => {
+    const query = req.query.q;
+    const users = await UserData.search(query);
+    return users.map(u => toPublicUser(u));
+  });
+
   addPostHandler(app, "/users", async req => {
     const newUser: NewUser = req.body;
     const locale: Locale = req.session!.locale || "en";

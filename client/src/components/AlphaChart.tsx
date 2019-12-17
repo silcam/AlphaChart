@@ -9,6 +9,7 @@ import { AppState } from "../state/appState";
 import { useLoad } from "../api/apiRequest";
 import { loadCurrentUser } from "../state/currentUserSlice";
 import AppBanners from "./common/AppBanners";
+import GroupsRoute from "./groups/GroupsRoute";
 
 export default function AlphaChart() {
   const { user, loaded } = useSelector((state: AppState) => state.currentUser);
@@ -22,6 +23,7 @@ export default function AlphaChart() {
         <Switch>
           <Route path="/alphabets" render={() => <AlphabetsRoute />} />
           <Route path="/users" render={() => <UsersRoute />} />
+          <Route path="/groups" render={() => <GroupsRoute />} />
           <Route render={() => <HomePage />} />
         </Switch>
       )}

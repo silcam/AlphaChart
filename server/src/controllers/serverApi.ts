@@ -9,7 +9,7 @@ import { Express, Request, Response } from "express";
 
 export type GetRequestHandler<T extends GetRoute> = (
   req: Request
-) => Promise<APIGet[T][1]>;
+) => Promise<APIGet[T][2]>;
 export type PostRequestHandler<T extends PostRoute> = (
   req: Request
 ) => Promise<APIPost[T][2]>;

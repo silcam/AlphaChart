@@ -15,21 +15,6 @@ test("Get alphabets", async () => {
   expect(response.body[0].id).toEqual("5d4c38e158e6dbb33d7d7b12");
 });
 
-test("Get my alphabets", async () => {
-  expect.assertions(3);
-  let agent = notLoggedInAgent();
-  let response = await agent.get(apiPath("/alphabets/mine"));
-  expect(response.body).toEqual([]);
-
-  agent = await loggedInAgent("Titus");
-  response = await agent.get(apiPath("/alphabets/mine"));
-  expect(response.body[0].name).toEqual("Ελληνικα");
-
-  agent = await loggedInAgent("Lucy");
-  response = await agent.get(apiPath("/alphabets/mine"));
-  expect(response.body).toEqual([]);
-});
-
 test("Get an alphabet", async () => {
   expect.assertions(2);
   const agent = notLoggedInAgent();
@@ -55,25 +40,37 @@ test("Get nonexistant alphabet", async () => {
 test("Create alphabet", async () => {
   expect.assertions(3);
   const agent = await loggedInAgent();
-  const vowelly = vowellybet();
+  const vowelly = vowellybet("777777777777777777777777");
   const response = await agent.post(apiPath("/alphabets")).send(vowelly);
   const alphabet: Alphabet = response.body;
-  expect(alphabet.user).toEqual("777777777777777777777777");
+  expect(alphabet.owner).toEqual("777777777777777777777777");
+  expect(alphabet.name).toEqual("Vowelly");
+  expect(alphabet.chart.letters).toEqual(vowelly.chart.letters);
+});
+
+test("Create alphabet for group", async () => {
+  expect.assertions(3);
+  const agent = await loggedInAgent();
+  const vowelly = vowellybet("111111111111111111111111", "group");
+  const response = await agent.post(apiPath("/alphabets")).send(vowelly);
+  const alphabet: Alphabet = response.body;
+  expect(alphabet.owner).toEqual("111111111111111111111111");
   expect(alphabet.name).toEqual("Vowelly");
   expect(alphabet.chart.letters).toEqual(vowelly.chart.letters);
 });
 
 test("Update alphabet chart", async () => {
-  expect.assertions(3);
+  expect.assertions(4);
   const agent = await loggedInAgent();
-  const vowelly = vowellybet();
+  const vowellyChart = vowellybet("").chart;
   const response = await agent
     .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/charts"))
-    .send(vowelly.chart);
+    .send(vowellyChart);
+  expect(response.status).toBe(200);
   const alphabet: Alphabet = response.body;
   expect(alphabet.name).toEqual("Ελληνικα");
   expect(alphabet.chart.cols).toEqual(2);
-  expect(alphabet.chart.letters).toEqual(vowelly.chart.letters);
+  expect(alphabet.chart.letters).toEqual(vowellyChart.letters);
 });
 
 test("Upload image to alphabet chart", async () => {
@@ -92,12 +89,12 @@ test("Update nonexistant chart", async () => {
   const agent = await loggedInAgent();
 
   let response = await agent
-    .post(apiPath("/alphabets/nonexistant/charts"))
-    .send(vowellybet().chart);
+    .post(apiPath("/alphabets/000000000000000000000000/charts"))
+    .send(vowellybet("777777777777777777777777").chart);
   expect(response.status).toBe(404);
 
   response = await agent
-    .post(apiPath("/alphabets/nonexistant/images"))
+    .post(apiPath("/alphabets/000000000000000000000000/images"))
     .attach("image", "server/src/storage/test/images/apple.png");
   expect(response.status).toBe(404);
 });
@@ -105,18 +102,20 @@ test("Update nonexistant chart", async () => {
 test("Login required to create/modify", async () => {
   expect.assertions(5);
   const agent = notLoggedInAgent();
-  let response = await agent.post(apiPath("/alphabets")).send(vowellybet());
+  let response = await agent
+    .post(apiPath("/alphabets"))
+    .send(vowellybet("777777777777777777777777"));
   expect(response.status).toBe(401);
 
   response = await agent
     .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/charts"))
-    .send(vowellybet().chart);
+    .send(vowellybet("").chart);
   expect(response.status).toBe(401);
 
   const lucyAgent = await loggedInAgent("Lucy");
   response = await lucyAgent
     .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/charts"))
-    .send(vowellybet().chart);
+    .send(vowellybet("").chart);
   expect(response.status).toBe(401);
 
   response = await agent
@@ -131,35 +130,80 @@ test("Login required to create/modify", async () => {
 });
 
 test("Copy Alphabet", async () => {
-  expect.assertions(2);
+  expect.assertions(3);
   const lucyAgent = await loggedInAgent("Lucy");
 
-  let response = await lucyAgent.post(
-    apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/copy")
-  );
+  let response = await lucyAgent
+    .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/copy"))
+    .send({ owner: "555555555555555555555555", ownerType: "user" });
+  expect(response.status).toBe(200);
   const id = response.body.id;
   response = await lucyAgent.get(apiPath(`/alphabets/${id}`));
-  expect(response.body.name).toEqual("Ελληνικα");
-  expect(response.body.user).toEqual("555555555555555555555555");
+  expect(response.status).toBe(200);
+  expect(response.body).toMatchObject({
+    name: "Ελληνικα",
+    owner: "555555555555555555555555"
+  });
 });
 
 test("Copy Alphabet Errors", async () => {
-  expect.assertions(3);
+  expect.assertions(2);
   const agent = notLoggedInAgent();
   const titusAgent = await loggedInAgent();
   const lucyAgent = await loggedInAgent("Lucy");
 
-  let response = await agent.post(
-    apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/copy")
-  );
-  expect(response.status).toBe(401);
+  // let response = await agent
+  //   .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/copy"))
+  //   .send({ owner: "555555555555555555555555", ownerType: "user" });
+  // expect(response.status).toBe(401);
 
-  response = await lucyAgent.post(apiPath("/alphabets/123/copy"));
+  let response = await lucyAgent
+    .post(apiPath("/alphabets/000000000000000000000000/copy"))
+    .send({ owner: "555555555555555555555555", ownerType: "user" });
   expect(response.status).toBe(404);
 
   // Can't copy an alphabet you already own
-  response = await titusAgent.post(
-    apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/copy")
-  );
+  response = await titusAgent
+    .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/copy"))
+    .send({ owner: "777777777777777777777777", ownerType: "user" });
   expect(response.status).toBe(422);
+});
+
+test("Share alphabet", async () => {
+  expect.assertions(2);
+  const agent = await loggedInAgent();
+  const response = await agent
+    .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/share"))
+    .send({ userId: "555555555555555555555555" });
+  expect(response.status).toBe(200);
+  expect(response.body.users).toContain("555555555555555555555555");
+});
+
+test("Share alphabet errors", async () => {
+  expect.assertions(4);
+  const agent = await loggedInAgent();
+
+  // Wrong alphabet id
+  let response = await agent
+    .post(apiPath("/alphabets/000000000000000000000000/share"))
+    .send({ userId: "555555555555555555555555" });
+  expect(response.status).toBe(404);
+
+  // Wrong user id
+  response = await agent
+    .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/share"))
+    .send({ userId: "000000000000000000000000" });
+  expect(response.status).toBe(404);
+
+  // Does not control alphabet
+  response = await agent
+    .post(apiPath("/alphabets/123abc123abc123abc123abc/share"))
+    .send({ userId: "333333333333333333333333" });
+  expect(response.status).toBe(401);
+
+  // Not logged in
+  response = await notLoggedInAgent()
+    .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/share"))
+    .send({ userId: "333333333333333333333333" });
+  expect(response.status).toBe(401);
 });

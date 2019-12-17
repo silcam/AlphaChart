@@ -41,6 +41,7 @@ async function loadFixtures() {
   for (let i = 0; i < collections.length; ++i) {
     const key = collections[i];
     const collection = await database.createCollection(key);
+    if (key == "users") collection.createIndex({ email: "text", name: "text" });
     await collection.deleteMany({});
     await collection.insertMany(fixtures[key]);
   }

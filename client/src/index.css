@@ -23,6 +23,11 @@ div {
   justify-content: space-between;
 }
 
+.flex-row-left {
+  flex-direction: row;
+  justify-content: start;
+}
+
 div#page-root {
   width: 100%;
   max-width: 800px;
@@ -76,6 +81,12 @@ button.red:active {
   background-color: #c9302cdd;
 }
 
+button.mini {
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 4px;
+}
+
 label {
   font-weight: 200;
   margin-right: 8px;
@@ -88,11 +99,27 @@ ul {
 
 ul.list-row > li {
   display: inline-block;
-  margin: 0 4px;
+  margin: 0 8px;
 }
 
 li {
   list-style: none;
+}
+
+ul.std {
+  font-size: 1.3em;
+}
+
+.std-h {
+  margin-bottom: 0.2em;
+}
+
+.indent {
+  padding-left: 16px;
+}
+
+.space-kids > * {
+  margin-bottom: 16px;
 }
 
 /******** 

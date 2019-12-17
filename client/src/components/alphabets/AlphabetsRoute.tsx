@@ -9,7 +9,9 @@ export default function AlphabetsRoute() {
     <Switch>
       <Route
         path="/alphabets/new"
-        render={({ history }) => <NewAlphabetPage history={history} />}
+        render={({ history, location }) => (
+          <NewAlphabetPage history={history} location={location} />
+        )}
       />
       <Route
         path="/alphabets/view/:id"

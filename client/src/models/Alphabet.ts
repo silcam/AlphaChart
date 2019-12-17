@@ -1,5 +1,7 @@
-import { ObjectId, ObjectID } from "bson";
+import { ObjectId } from "bson";
 import { ChartStyles, defaultChartStyles, setRightToLeft } from "./ChartStyles";
+import { Group } from "./Group";
+import { User } from "./User";
 
 export interface AlphabetLetter {
   forms: string[];
@@ -20,36 +22,48 @@ export interface AlphabetChart {
   styles: ChartStyles;
 }
 
+export type AlphOwnerType = "user" | "group";
 export interface DraftAlphabet {
   name: string;
   chart: AlphabetChart;
+  owner: string;
+  ownerType: AlphOwnerType;
 }
 
 export interface Alphabet {
   id: string;
   name: string;
-  user: string;
+  owner: string;
+  ownerType: AlphOwnerType;
+  users: string[];
   chart: AlphabetChart;
 }
 
-export interface StoredAlphabet extends Omit<Omit<Alphabet, "id">, "user"> {
+export interface StoredAlphabet {
   _id: ObjectId;
-  _user: ObjectId;
+  name: string;
+  _owner: ObjectId;
+  ownerType: AlphOwnerType;
+  _users: ObjectId[];
+  chart: AlphabetChart;
 }
 
 export function toAlphabet(sa: StoredAlphabet): Alphabet {
-  const { _id, _user, ...alpha } = sa;
-  return { ...alpha, id: `${_id}`, user: `${_user}` };
+  const { _id, _owner, _users, ...alph } = sa;
+  return {
+    ...alph,
+    id: _id.toHexString(),
+    owner: _owner.toHexString(),
+    users: _users.map(id => id.toHexString())
+  };
 }
 
-export function toStoredAlphabet(alpha: Alphabet): StoredAlphabet {
-  const { id, user, ...sa } = alpha;
-  return { ...alpha, _id: new ObjectID(id), _user: new ObjectID(user) };
-}
+// export function toStoredAlphabet(alpha: Alphabet): StoredAlphabet {
+//   const { id, user, ...sa } = alpha;
+//   return { ...alpha, _id: new ObjectID(id), _user: new ObjectID(user) };
+// }
 
-export interface AlphabetListing extends Omit<Alphabet, "chart"> {
-  userDisplayName: string;
-}
+export type AlphabetListing = Omit<Alphabet, "chart">;
 
 export function validDraftAlphabet(alphabet: DraftAlphabet) {
   return (
@@ -61,13 +75,19 @@ export function validDraftAlphabet(alphabet: DraftAlphabet) {
   );
 }
 
-export function blankAlphabet(name: string): DraftAlphabet {
+export function blankAlphabet(
+  name: string,
+  userId: string,
+  ownerType: AlphOwnerType = "user"
+): DraftAlphabet {
   const rightToLeft = /[א-ת؀-ۿ]/.test(name);
   const styles = rightToLeft
     ? setRightToLeft(defaultChartStyles(), rightToLeft)
     : defaultChartStyles();
   return {
     name,
+    owner: userId,
+    ownerType,
     chart: {
       timestamp: Date.now().valueOf(),
       cols: 5,
@@ -84,4 +104,20 @@ export function blankAlphabetLetter(): AlphabetLetter {
     exampleWord: "",
     imagePath: ""
   };
+}
+
+export function alphabetCompare(
+  a: AlphabetListing,
+  b: AlphabetListing
+): number {
+  return a.name.localeCompare(b.name);
+}
+
+export function alphabetOwner(
+  alphabet: AlphabetListing,
+  users: User[],
+  groups: Group[]
+): Group | User | undefined {
+  const list = alphabet.ownerType == "user" ? users : groups;
+  return list.find(item => item.id == alphabet.owner);
 }

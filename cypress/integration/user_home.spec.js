@@ -5,6 +5,12 @@ describe("User Home Page", () => {
     cy.contains("h2", "My Alphabets")
       .closest("div")
       .contains("Ελληνικα");
+    cy.contains("h2", "My Alphabets")
+      .closest("div")
+      .contains("Gude");
+    cy.contains("h2", "My Alphabets")
+      .closest("div")
+      .contains("Bana");
     cy.contains("h2", "Other Alphabets")
       .closest("div")
       .contains("Ελληνικα")
