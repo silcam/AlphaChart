@@ -79,6 +79,10 @@ export default function Chart(props: IProps) {
             <div className="alpharow" key={rowIndex} style={chartStyles.row}>
               {row.map((abletter, letterIndex) => {
                 const index = flatIndex(chart.cols, rowIndex, letterIndex);
+                const widthStyle =
+                  letterIndex == row.length - 1
+                    ? { flexGrow: 1, flexShrink: 1 }
+                    : { width: `${cellWidth}%` };
                 return (
                   <div
                     className={`alphacell ${
@@ -87,7 +91,7 @@ export default function Chart(props: IProps) {
                     key={letterIndex}
                     style={{
                       ...chartStyles.table,
-                      width: `${cellWidth}%`
+                      ...widthStyle
                     }}
                     data-selected={index === props.selectedIndex}
                     onClick={() =>
@@ -168,7 +172,8 @@ export default function Chart(props: IProps) {
                   style={{
                     ...chartStyles.table,
                     ...chartStyles.lastRowFiller,
-                    width: `${(chart.cols - row.length) * cellWidth}%`
+                    flexGrow: 1,
+                    flexShrink: 1
                   }}
                 >
                   {props.edit ? (
