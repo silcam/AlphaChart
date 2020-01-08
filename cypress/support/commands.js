@@ -27,7 +27,7 @@
 import { API_VERSION } from "../../server/dist/client/src/Api/Api";
 
 // Libraries
-require("@cypress/snapshot").register();
+// require("@cypress/snapshot").register();
 import "cypress-file-upload";
 
 // Load Fixtures
@@ -60,12 +60,4 @@ Cypress.Commands.add("logIn", user => {
       loginAttempt = { email: "titus@yahoo.com", password: "minecraft" };
   }
   cy.request("POST", `/api/v/${API_VERSION}/users/login`, loginAttempt);
-});
-
-// Snapshot commands
-Cypress.Commands.add("chartSnap", name => {
-  cy.get(".compChart").snapshot({ name });
-});
-Cypress.Commands.add("sideMenuSnap", name => {
-  cy.get(".side-menu").snapshot({ name });
 });

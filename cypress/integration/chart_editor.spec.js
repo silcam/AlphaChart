@@ -50,10 +50,9 @@ describe("Chart Editor", () => {
 
   it("Edits example words", () => {
     cy.get(":nth-child(4) > :nth-child(1) input[type='text']").type("Λογος");
-    cy.chartSnap("With Logos");
 
     cy.contains("Done").click();
-    cy.chartSnap("All done");
+    cy.contains(".exampleWord", "Λογος");
   });
 
   it("Adds images", () => {
@@ -89,28 +88,25 @@ describe("Chart Editor", () => {
     cy.withLabel("Letter Position")
       .contains("button", "+")
       .click();
-    cy.chartSnap("Alpha second");
+    cy.get(":nth-child(2) > :nth-child(2) > .letter").contains("α");
     cy.withLabel("Letter Position")
       .contains("button", "-")
       .click();
-    cy.chartSnap("Alpha first again");
+    cy.get(":nth-child(2) > :nth-child(1) > .letter").contains("α");
 
     // Add a letter before
     cy.contains("button", "New letter before Α").click();
     cy.placeholder("Add form").type("F");
-    cy.chartSnap("F as first letter");
+    cy.get(":nth-child(2) > :nth-child(1) > .letter").contains("F");
 
     // Add a letter after
     cy.contains("button", "New letter after F").click();
     cy.placeholder("Add form").type("J");
-    cy.chartSnap("J as second letter");
+    cy.get(":nth-child(2) > :nth-child(2) > .letter").contains("J");
 
     // Delete a letter
     cy.contains("button", "Delete J").click();
-    cy.chartSnap("No more J");
-
-    cy.contains("Done").click();
-    cy.chartSnap("All done");
+    cy.contains(".letter", "J").should("not.exist");
   });
 
   it("Edits letter forms", () => {
@@ -120,33 +116,38 @@ describe("Chart Editor", () => {
       .get("input[value='Α']")
       .clear()
       .type("Q");
-    cy.chartSnap("A to Q");
-    cy.sideMenuSnap("SM A to Q");
+    cy.get(":nth-child(2) > :nth-child(1) > .letter").contains("Q");
+    cy.get(":nth-child(2) > :nth-child(1) > .letter")
+      .contains("Α")
+      .should("not.exist");
+
     cy.get(".side-menu")
       .get("input[value='α']")
       .clear()
       .type("q");
-    cy.chartSnap("a to q");
-    cy.sideMenuSnap("SM a to q");
+    cy.get(":nth-child(2) > :nth-child(1) > .letter").contains("q");
+    cy.get(":nth-child(2) > :nth-child(1) > .letter")
+      .contains("α")
+      .should("not.exist");
+
     cy.get(".side-menu input[value='']")
       .clear()
       .type("qw");
-    cy.chartSnap("Third form - qw");
-    cy.sideMenuSnap("SM Third form qw");
-
-    cy.contains("Done").click();
-    cy.chartSnap("All done");
+    cy.get(":nth-child(2) > :nth-child(1) > .letter").contains("qw");
+    cy.get(".side-menu")
+      .find("li > input")
+      .should("have.length", 4);
   });
 
   it("Adds and deletes columns", () => {
     // Edit columns
     cy.contains("button", "+").click();
-    cy.chartSnap("With 6 columns");
+    cy.get(":nth-child(2) > :last-child > .letter").contains("Ζ");
     cy.contains("Done").click();
-    cy.chartSnap("Regular view with 6 columns");
+    cy.get(":nth-child(2) > :last-child > .letter").contains("Ζ");
     cy.contains("Edit").click();
     cy.contains("button", "-").click();
-    cy.chartSnap("Back to 5 columns");
+    cy.get(":nth-child(3) > :first-child > .letter").contains("Ζ");
   });
 
   it("Opens and closes menus", () => {

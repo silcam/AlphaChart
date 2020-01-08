@@ -15,35 +15,34 @@ describe("Chart Editor Settings", () => {
       "font-family",
       "CharisSIL-Literacy"
     );
-    cy.chartSnap("With Charis font");
   });
 
   it("Changes Title font size", () => {
-    cy.get(".alphaTitle").should("have.css", "font-size", "48px");
+    cy.get(".alphaTitle").then(styleChecker("fontSize", "3em"));
     cy.withLabel("Title Font Size")
       .contains("button", "+")
       .click();
-    cy.get(".alphaTitle").should("have.css", "font-size", "49.6px");
+    cy.get(".alphaTitle").then(styleChecker("fontSize", "3.1em"));
   });
 
   it("Changes Subtitle font size", () => {
-    cy.get(".alphaSubtitle").should("have.css", "font-size", "25.6px");
+    cy.get(".alphaSubtitle").then(styleChecker("fontSize", "1.6em"));
     cy.withLabel("Subtitle Font Size")
       .contains("button", "+")
       .click();
-    cy.get(".alphaSubtitle").should("have.css", "font-size", "27.2px");
+    cy.get(".alphaSubtitle").then(styleChecker("fontSize", "1.7em"));
   });
 
   it("Changes Title position", () => {
     cy.withLabel("Title Position").select("Left");
-    cy.chartSnap("Titles Left");
+    cy.get(".alphaTitle").should("have.css", "text-align", "left");
     cy.withLabel("Title Position").select("Right");
-    cy.chartSnap("Titles Right");
+    cy.get(".alphaTitle").should("have.css", "text-align", "right");
   });
 
   it("Can hide the top alphabet", () => {
     cy.withLabel("Show Top Alphabet").click();
-    cy.chartSnap("Without top alphabet");
+    cy.get(".alphasummary").should("be.hidden");
 
     // Should hide these inputs
     cy.contains("label", "Top Alphabet Font Size").should("not.exist");
@@ -55,46 +54,61 @@ describe("Chart Editor Settings", () => {
     cy.withLabel("Top Alphabet Font Size")
       .contains("button", "+")
       .click();
-    cy.chartSnap("Top Alphabet font 17");
+    cy.get(".alphasummary").then(styleChecker("fontSize", "1.7em"));
   });
 
   it("Changes Top Alphabet spacing", () => {
     cy.withLabel("Top Alphabet Spacing")
       .contains("button", "+")
       .click();
-    cy.chartSnap("Ever so slightly more spacing");
+    cy.get(".alphasummary > div").should("have.css", "padding", "0px 1px");
   });
 
   it("Changes Top Alphabet Style", () => {
     cy.withLabel("Top Alphabet Style").select("Α");
-    cy.chartSnap("Uppercase Letters up top");
+    cy.contains(".alphasummary", "Α");
+    cy.contains(".alphasummary", "α").should("not.exist");
   });
 
   it("Changes Letter font size", () => {
     cy.withLabel("Letter Font Size")
       .contains("button", "+")
       .click();
-    cy.chartSnap("Letter font 31");
+    cy.get(".letter").then(styleChecker("fontSize", "3.1em"));
   });
 
   it("Changes Letter order and position", () => {
+    const checkStyles = (justifyContent, flexDirection) => {
+      cy.get(".letter")
+        .should("have.css", "justifyContent", justifyContent)
+        .should("have.css", "flexDirection", flexDirection);
+    };
+    checkStyles("flex-start", "row");
+
     cy.withLabel("Reverse Letters").click();
-    cy.chartSnap("aA Left");
+    checkStyles("flex-end", "row-reverse");
+
     cy.withLabel("Letter Position").select("Center");
-    cy.chartSnap("aA Center");
+    checkStyles("center", "row-reverse");
+
     cy.withLabel("Letter Position").select("Split");
-    cy.chartSnap("aA Split");
+    checkStyles("space-between", "row-reverse");
+
     cy.withLabel("Letter Position").select("Right");
-    cy.chartSnap("aA Right");
+    checkStyles("flex-start", "row-reverse");
+
     cy.withLabel("Reverse Letter").click();
-    cy.chartSnap("Aa Right");
+    checkStyles("flex-end", "row");
   });
 
   it("Changes Example Word font size", () => {
     cy.withLabel("Example Word Font Size")
       .contains("button", "+")
       .click();
-    cy.chartSnap("Example Word font 11");
+    cy.contains("Done").click();
+    cy.get(".exampleWord").then(nodes =>
+      expect(nodes[0].parentNode.style.fontSize).to.equal("1.1em")
+    );
   });
 
   it("Unbolds the key letter", () => {
@@ -103,20 +117,16 @@ describe("Chart Editor Settings", () => {
       .clear()
       .type("Δογ");
     cy.contains("Done").click();
-    cy.contains(".exampleWord span", "Δ").should(
-      "have.css",
-      "font-weight",
-      "700"
+    cy.contains(".exampleWord span", "Δ").then(
+      styleChecker("fontWeight", "bold")
     );
 
     cy.contains("Edit").click();
     cy.contains("Chart Settings").click();
     cy.withLabel("Bold Key Letter").click();
     cy.contains("Done").click();
-    cy.contains(".exampleWord span", "Δ").should(
-      "have.css",
-      "font-weight",
-      "400"
+    cy.contains(".exampleWord span", "Δ").then(
+      styleChecker("fontWeight", "normal")
     );
   });
 
@@ -124,25 +134,43 @@ describe("Chart Editor Settings", () => {
     cy.withLabel("Last Row Filler Font Size")
       .contains("button", "+")
       .click();
-    cy.chartSnap("Lasw Row Filler font 11");
+    cy.get(".lastRowFiller").then(styleChecker("fontSize", "1.1em"));
   });
 
   it("Changes Footer font size", () => {
     cy.withLabel("Footer Font Size")
       .contains("button", "+")
       .click();
-    cy.chartSnap("Footer font 11");
+    cy.get(".alphafooter").then(styleChecker("fontSize", "1.1em"));
   });
 
   it("Sets border thickness and color", () => {
+    const selectors = [
+      ".alphatable",
+      ".alphasummary",
+      ".alphacell",
+      ".lastRowFiller",
+      ".alphafooter"
+    ];
+    selectors.forEach(selector => {
+      cy.get(selector).should("have.css", "border-width", "1px");
+      cy.get(selector).should("have.css", "border-color", "rgb(221, 221, 221)");
+    });
+
     cy.withLabel("Border Thickness")
       .contains("button", "+")
       .click();
+    selectors.forEach(selector =>
+      cy.get(selector).should("have.css", "border-width", "2px")
+    );
+
     cy.withLabel("Border Color").click();
     cy.get("input[value='#DDDDDD']")
       .clear()
       .type("#0000FF");
-    cy.chartSnap("Thick blue border");
+    selectors.forEach(selector => {
+      cy.get(selector).should("have.css", "border-color", "rgb(0, 0, 255)");
+    });
   });
 
   it("Adjusts image size and position", () => {
@@ -152,14 +180,14 @@ describe("Chart Editor Settings", () => {
       .click()
       .click()
       .click();
-    cy.chartSnap("Boat image 83%");
+    cy.get("img[alt='Boat']").then(styleChecker("width", "83%"));
 
     cy.withLabel("Image Position")
       .contains("button", "+")
       .click()
       .click()
       .click();
-    cy.chartSnap("Boat image bumped up 3px");
+    cy.get("img[alt='Boat']").should("have.css", "padding-bottom", "3px");
   });
 
   it("Switches to Right-to-Left", () => {
@@ -177,6 +205,11 @@ describe("Chart Editor Settings", () => {
     );
     cy.get(".lastRowFiller").should("have.css", "text-align", "right");
     cy.get(".alphafooter").should("have.css", "text-align", "right");
-    cy.chartSnap("Right to Left");
   });
 });
+
+function styleChecker(style, value) {
+  return nodes => {
+    expect(nodes[0].style[style]).to.equal(value);
+  };
+}
