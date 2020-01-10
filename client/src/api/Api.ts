@@ -47,7 +47,12 @@ export interface APIPost {
     { owner: string; ownerType: "user" | "group" },
     { id: string }
   ];
-  "/alphabets/:id/share": [{ id: string }, { userId: string }, Alphabet];
+  "/alphabets/:id/share": [
+    { id: string },
+    { userId: string },
+    Pick<ApiPayload, "alphabets" | "groups" | "users">
+  ];
+  "/alphabets/:id/unshare": [{ id: string }, { userId: string }, Alphabet];
   "/alphabets": [{}, DraftAlphabet, Alphabet];
   "/alphabets/:id/charts": [{ id: string }, AlphabetChart, Alphabet];
   "/users": [{}, NewUser, null];

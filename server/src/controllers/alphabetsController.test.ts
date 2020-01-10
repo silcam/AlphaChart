@@ -207,7 +207,9 @@ test("Share alphabet", async () => {
     .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/share"))
     .send({ userId: "555555555555555555555555" });
   expect(response.status).toBe(200);
-  expect(response.body.users).toContain("555555555555555555555555");
+  expect(response.body.alphabets[0].users).toContain(
+    "555555555555555555555555"
+  );
 });
 
 test("Share alphabet errors", async () => {
@@ -235,6 +237,46 @@ test("Share alphabet errors", async () => {
   // Not logged in
   response = await notLoggedInAgent()
     .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/share"))
+    .send({ userId: "333333333333333333333333" });
+  expect(response.status).toBe(401);
+});
+
+test("Unshare alphabet", async () => {
+  expect.assertions(2);
+  const agent = await loggedInAgent("Lucy");
+  const response = await agent
+    .post(apiPath("/alphabets/123abc123abc123abc123abc/unshare"))
+    .send({ userId: "777777777777777777777777" });
+  expect(response.status).toBe(200);
+  expect(response.body.users).toEqual([]);
+});
+
+test("Unshare alphabet errors", async () => {
+  expect.assertions(5);
+  const agent = await loggedInAgent("Lucy");
+
+  // Wrong alphabet id
+  let response = await agent
+    .post(apiPath("/alphabets/000000000000000000000000/unshare"))
+    .send({ userId: "555555555555555555555555" });
+  expect(response.status).toBe(404);
+
+  // Wrong user id is no-op
+  response = await agent
+    .post(apiPath("/alphabets/123abc123abc123abc123abc/unshare"))
+    .send({ userId: "000000000000000000000000" });
+  expect(response.status).toBe(200);
+  expect(response.body.users).toEqual(["777777777777777777777777"]);
+
+  // Does not control alphabet
+  response = await agent
+    .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/unshare"))
+    .send({ userId: "333333333333333333333333" });
+  expect(response.status).toBe(401);
+
+  // Not logged in
+  response = await notLoggedInAgent()
+    .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/unshare"))
     .send({ userId: "333333333333333333333333" });
   expect(response.status).toBe(401);
 });

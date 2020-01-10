@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Group } from "../../models/Group";
 import { useTranslation } from "../common/useTranslation";
-import SearchTextInput from "../common/SearchTextInput";
-import { webGet, usePush } from "../../api/apiRequest";
+import { usePush } from "../../api/apiRequest";
 import { pushGroupAddUser } from "./groupSlice";
 import { User } from "../../models/User";
+import UserSearchInput from "../users/UserSearchInput";
 
 interface IProps {
   group: Group;
@@ -25,19 +25,9 @@ export default function AddUserForm(props: IProps) {
   return (
     <div className="flex-row-left">
       <label>{t("Add_user")}:</label>
-      <SearchTextInput
-        sendQuery={q =>
-          webGet("/users/search", {}, { q }).then(response =>
-            response
-              ? response.users.filter(u => !props.group.users.includes(u.id))
-              : null
-          )
-        }
-        updateValue={(u: User | null) => setSelectedUser(u)}
-        itemId={u => u.id}
-        itemDisplay={u => u.name}
-        allowBlank
-        placeholder={t("Name_or_email")}
+      <UserSearchInput
+        updateValue={setSelectedUser}
+        filter={user => !props.group.users.includes(user.id)}
       />
       <button className="mini" onClick={save} disabled={!selectedUser}>
         {t("Save")}

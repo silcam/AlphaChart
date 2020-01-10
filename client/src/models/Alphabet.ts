@@ -1,6 +1,6 @@
 import { ObjectId } from "bson";
 import { ChartStyles, defaultChartStyles, setRightToLeft } from "./ChartStyles";
-import { Group } from "./Group";
+import { Group, isGroup } from "./Group";
 import { User } from "./User";
 
 export interface AlphabetLetter {
@@ -127,4 +127,14 @@ export function alphabetOwner(
 ): Group | User | undefined {
   const list = alphabet.ownerType === "user" ? users : groups;
   return list.find(item => item.id === alphabet.owner);
+}
+
+export function isOwner(
+  alphabet: AlphabetListing,
+  owner: User | Group
+): boolean {
+  return (
+    alphabet.owner === owner.id &&
+    alphabet.ownerType === (isGroup(owner) ? "group" : "user")
+  );
 }

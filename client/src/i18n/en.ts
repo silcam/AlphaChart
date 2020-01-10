@@ -25,7 +25,7 @@ const en = {
   Done: "Done",
   Unknown_error: "Unknown error",
   Edit_chart: "Edit Chart",
-  Copy_to_my_alphabets: "Copy to My Alphabets",
+  Copy_to: "Copy to",
   Save_chart_image: "Save Chart Image",
   Image_options: "Image Options",
   Width: "Width",
@@ -107,7 +107,10 @@ const en = {
   Create_group: "Create Group",
   Name: "Name",
   Manage: "Manage",
-  Confirm_remove_user_from_group: "Remove %{userName} from %{groupName}?"
+  Confirm_remove_user_from_group: "Remove %{userName} from %{groupName}?",
+  Guest_users: "Guest Users",
+  Share_explanation: "These users can edit this alphabet chart.",
+  User_added: "Added %{name}."
 };
 
 export type Strings = typeof en;

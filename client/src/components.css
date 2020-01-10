@@ -112,6 +112,21 @@ div.compChartToImageOptionsMenu .buttonRow {
     justify-content: space-between;
 }
 
+/* CopyAlphabetButton */
+
+div.compCopyAlphabetButton table {
+    width: max-content;
+}
+
+div.compCopyAlphabetButton td {
+    padding: 2px 4px;
+    cursor: pointer;
+}
+
+div.compCopyAlphabetButton td:hover {
+    color: #1892ef;
+}
+
 /* GroupsList */
 
 div.compGroupsIndex .rowDiv {
@@ -210,6 +225,12 @@ div.compOptionButton {
     position: relative;
 }
 
+div.compOptionButtonSimple {
+    position: relative;
+    display: block;
+    margin: 4px;
+}
+
 div.compOptionButton>button{
     background: none;
     margin: 0;
@@ -224,7 +245,12 @@ div.compOptionButton>button:first-child {
     border-right: 1px solid #ddd;
 }
 
-div.compOptionButton div.contextMenu {
+div.compOptionButtonSimple > button {
+    margin: 0;
+}
+
+div.compOptionButton div.contextMenu,
+div.compOptionButtonSimple div.contextMenu {
     position: absolute;
     right: 0;
     background-color: white;
@@ -244,6 +270,18 @@ div.compPublicHomePage > div {
 
 div.compPublicHomePage input {
     width: 100%;
+}
+
+/* Red X */
+
+span.compRedX a {
+    color: #c9302c;
+    font-size: larger;
+}
+
+span.compRedX a:hover {
+    font-weight: bold;
+    text-decoration: none;
 }
 
 /* SearchTextInput */

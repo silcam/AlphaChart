@@ -8,6 +8,6 @@ describe("New Group Page", () => {
     cy.placeholder("Name").type("More Pizza I Say");
     cy.contains("Save").click();
     cy.contains("h1", "More Pizza I Say").should("exist");
-    cy.contains("li", "Titus").should("exist");
+    cy.contains("div.compGroupsIndex li", "Titus").should("exist");
   });
 });

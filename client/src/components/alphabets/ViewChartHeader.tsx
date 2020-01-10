@@ -3,18 +3,28 @@ import ChartToImage from "./ChartToImage";
 import { ChartDimens } from "./ViewChartPage";
 import CopyAlphabetButton from "./CopyAlphabetButton";
 import { useTranslation } from "../common/useTranslation";
-import { AlphabetInflated } from "../../models/Alphabet";
+import { AlphabetInflated, isOwner } from "../../models/Alphabet";
+import useMyGroups from "../groups/useMyGroups";
+import { useAppSelector } from "../../state/appState";
+import GuestUsersMenu from "./GuestUsersMenu";
+import useCanEdit from "./useCanEdit";
 
 interface IProps {
   alphabet: AlphabetInflated;
   setChartDimens: (d: ChartDimens | null) => void;
-  canEdit: boolean;
-  loggedIn: boolean;
   setEditing: (e: boolean) => void;
 }
 
 export default function ViewChartHeader(props: IProps) {
   const t = useTranslation();
+  const user = useAppSelector(state => state.currentUser.user);
+  const myGroups = useMyGroups();
+
+  const canEdit = useCanEdit()(props.alphabet);
+  const canShare =
+    (user && isOwner(props.alphabet, user)) ||
+    myGroups.some(g => isOwner(props.alphabet, g));
+
   return (
     <div
       className="flex-row"
@@ -32,15 +42,17 @@ export default function ViewChartHeader(props: IProps) {
         </h3>
       </div>
       <div className="flex-row">
-        <div>
-          {props.canEdit ? (
-            <button onClick={() => props.setEditing(true)}>
-              {t("Edit_chart")}
-            </button>
-          ) : props.loggedIn ? (
-            <CopyAlphabetButton id={props.alphabet.id} />
-          ) : null}
-        </div>
+        {canEdit && (
+          <button onClick={() => props.setEditing(true)}>
+            {t("Edit_chart")}
+          </button>
+        )}
+        <CopyAlphabetButton
+          alphabet={props.alphabet}
+          user={user}
+          myGroups={myGroups}
+        />
+        {canShare && <GuestUsersMenu alphabet={props.alphabet} />}
         <ChartToImage setChartDimens={props.setChartDimens} />
       </div>
     </div>

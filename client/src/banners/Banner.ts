@@ -6,4 +6,4 @@ export type AppBanner =
       type: "Error";
       error: AppError;
     }
-  | { type: "Success"; message: TKey };
+  | { type: "Success"; message: string };

@@ -72,11 +72,29 @@ export default function alphabetsController(app: Express) {
     const alphabet = await AlphabetData.alphabet(alphabetId);
     const receiver = await UserData.user(receiverId);
     if (!alphabet || !receiver) throw { status: 404 };
-    if (!user || (await cannotControlAlphabet(user, alphabet)))
-      throw { status: 401 };
+    if (await cannotControlAlphabet(user, alphabet)) throw { status: 401 };
     const newAlphabet = await AlphabetData.shareAlphabet(
       alphabet._id,
       receiver._id
+    );
+    if (!newAlphabet) throw { status: 500 };
+    return {
+      alphabets: [toAlphabet(newAlphabet)],
+      users: await usersForAlphabets([newAlphabet]),
+      groups: await groupsForAlphabets([newAlphabet])
+    };
+  });
+
+  addPostHandler(app, "/alphabets/:id/unshare", async req => {
+    const unshareUserId: ObjectId = new ObjectID(req.body.userId);
+    const alphabetId: ObjectId = new ObjectID(req.params.id);
+    const user = await currentUser(req);
+    const alphabet = await AlphabetData.alphabet(alphabetId);
+    if (!alphabet) throw { status: 404 };
+    if (await cannotControlAlphabet(user, alphabet)) throw { status: 401 };
+    const newAlphabet = await AlphabetData.unshareAlphabet(
+      alphabetId,
+      unshareUserId
     );
     if (!newAlphabet) throw { status: 500 };
     return toAlphabet(newAlphabet);

@@ -4,7 +4,7 @@ describe("Public Chart View", () => {
     cy.contains("Ελληνικα").click();
     cy.url().should("include", "/alphabets/view/5d4c38e158e6dbb33d7d7b12");
     cy.get(".compChart");
-    cy.contains("Copy to My Alphabets").should("not.exist");
+    cy.contains("button", "Copy to").should("not.exist");
     cy.contains("Save Chart Image");
   });
 
@@ -14,7 +14,8 @@ describe("Public Chart View", () => {
     cy.contains("Ελληνικα").click();
     cy.url().should("include", "/alphabets/view/5d4c38e158e6dbb33d7d7b12");
     cy.get(".compChart");
-    cy.contains("Copy to My Alphabets");
-    cy.contains("Save Chart Image");
+    cy.contains("button", "Edit Chart").should("not.exist");
+    cy.contains("button", "Copy to").should("exist");
+    cy.contains("button", "Save Chart Image").should("exist");
   });
 });

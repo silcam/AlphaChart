@@ -22,3 +22,19 @@ export default function OptionButton(props: IProps) {
     </div>
   );
 }
+
+export function OptionButtonSimple(props: Omit<IProps, "onMainClick">) {
+  const [showMenu, setShowMenu] = useState(false);
+  const toggleShowMenu = () => setShowMenu(!showMenu);
+
+  return (
+    <div className="compOptionButtonSimple">
+      <button onClick={toggleShowMenu}>{`${props.buttonText} ▼`}</button>
+      {showMenu && (
+        <div className="contextMenu">
+          {props.renderContextMenu({ hideMenu: () => setShowMenu(false) })}
+        </div>
+      )}
+    </div>
+  );
+}

@@ -28,7 +28,7 @@ const fr: Strings = {
   Done: "Terminer",
   Unknown_error: "Erreur inattendu",
   Edit_chart: "Éditer",
-  Copy_to_my_alphabets: "Copier dans mes alphebets",
+  Copy_to: "Copier à",
   Save_chart_image: "Enregister image du tableau",
   Image_options: "Options de l'image",
   Width: "Largeur",
@@ -110,7 +110,11 @@ const fr: Strings = {
   Create_group: "Créer un groupe",
   Name: "Nom",
   Manage: "Gérer",
-  Confirm_remove_user_from_group: "Enlever %{userName} du groupe %{groupName} ?"
+  Confirm_remove_user_from_group:
+    "Enlever %{userName} du groupe %{groupName} ?",
+  Guest_users: "Invités",
+  Share_explanation: "Ces utilisateurs peuvent editer ce tablaeu alphabétique.",
+  User_added: "%{name} a été ajouté."
 };
 
 export default fr;

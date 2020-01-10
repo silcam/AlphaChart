@@ -77,6 +77,27 @@ export function pushCopyAlphabet(params: {
   };
 }
 
+export function pushShareAlphabet(params: { id: string; userId: string }) {
+  const { id, userId } = params;
+  return async (dispatch: AppDispatch) => {
+    const payload = await webPost("/alphabets/:id/share", { id }, { userId });
+    if (payload) dispatch(loadAction(payload));
+    return !!payload;
+  };
+}
+
+export function pushUnshareAlphabet(params: { id: string; userId: string }) {
+  const { id, userId } = params;
+  return async (dispatch: AppDispatch) => {
+    const alphabet = await webPost(
+      "/alphabets/:id/unshare",
+      { id },
+      { userId }
+    );
+    if (alphabet) dispatch(alphabetSlice.actions.setAlphabet(alphabet));
+  };
+}
+
 export function pushChart(alphabet: Alphabet) {
   const { id, chart } = alphabet;
   return async (dispatch: AppDispatch) => {

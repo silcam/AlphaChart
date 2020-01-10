@@ -55,6 +55,9 @@ Cypress.Commands.add("logIn", user => {
     case "Lucy":
       loginAttempt = { email: "lucy@me.com", password: "princess" };
       break;
+    case "Joel":
+      loginAttempt = { email: "joel@aol.com", password: "rockets" };
+      break;
     case "Titus":
     default:
       loginAttempt = { email: "titus@yahoo.com", password: "minecraft" };

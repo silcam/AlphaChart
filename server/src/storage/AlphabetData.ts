@@ -116,6 +116,19 @@ async function shareAlphabet(
   return collection.findOne({ _id: alphabetId });
 }
 
+async function unshareAlphabet(
+  alphabetId: ObjectId,
+  userId: ObjectId
+): Promise<StoredAlphabet | null> {
+  log.log(`[Query] UPDATE Unshare chart ${alphabetId} with user ${userId}`);
+  const collection = await alphabetCollection();
+  await collection.updateOne(
+    { _id: alphabetId },
+    { $pull: { _users: userId } }
+  );
+  return collection.findOne({ _id: alphabetId });
+}
+
 async function alphabetCollection(): Promise<Collection<StoredAlphabet>> {
   return (await Data.db()).collection("alphabets");
 }
@@ -128,5 +141,6 @@ export default {
   createAlphabet,
   updateChart,
   copyAlphabet,
-  shareAlphabet
+  shareAlphabet,
+  unshareAlphabet
 };

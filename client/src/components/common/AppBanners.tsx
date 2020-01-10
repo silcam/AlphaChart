@@ -47,7 +47,7 @@ function AppBannerSuccess(props: { banner: AppBanner }) {
 
   return (
     <div className="banner successBanner">
-      <div>{t(props.banner.message)}</div>
+      <div>{props.banner.message}</div>
     </div>
   );
 }
@@ -64,7 +64,7 @@ function AppBannerError(props: { error: AppError; close: () => void }) {
           dispatch(
             bannerSlice.actions.add({
               type: "Success",
-              message: "Connection_restored"
+              message: t("Connection_restored")
             })
           );
         } catch (err) {

@@ -3,24 +3,36 @@ import { useHistory } from "react-router-dom";
 import { useTranslation } from "../common/useTranslation";
 import { usePush } from "../../api/apiRequest";
 import { pushCopyAlphabet } from "./alphabetSlice";
-import { useSelector } from "react-redux";
-import { AppState } from "../../state/appState";
+import { OptionButtonSimple } from "../common/OptionButton";
+import { Alphabet, isOwner } from "../../models/Alphabet";
+import { User, CurrentUser } from "../../models/User";
+import { Group, isGroup } from "../../models/Group";
 
 interface IProps {
-  id: string;
+  alphabet: Alphabet;
+  user: CurrentUser | null;
+  myGroups: Group[];
 }
 
 export default function CopyAlphabetButton(props: IProps) {
   const t = useTranslation();
   const history = useHistory();
-  const [copy, loading] = usePush(pushCopyAlphabet);
-  const user = useSelector((state: AppState) => state.currentUser.user);
+  const [copy] = usePush(pushCopyAlphabet);
+  const user = props.user;
+  const myGroups = props.myGroups;
 
-  const copyAlphabet = async () => {
+  if (!user) return null;
+
+  const copyToOptions: (User | Group)[] = [...myGroups, user].filter(
+    opt => !isOwner(props.alphabet, opt)
+  );
+  if (copyToOptions.length === 0) return null;
+
+  const copyAlphabet = async (to: User | Group) => {
     const newId = await copy({
-      id: props.id,
-      owner: user!.id,
-      ownerType: "user"
+      id: props.alphabet.id,
+      owner: to.id,
+      ownerType: isGroup(to) ? "group" : "user"
     });
     if (newId) {
       history.push(`/alphabets/view/${newId}`);
@@ -28,8 +40,24 @@ export default function CopyAlphabetButton(props: IProps) {
   };
 
   return (
-    <button onClick={copyAlphabet} disabled={loading}>
-      {loading ? t("Loading") : t("Copy_to_my_alphabets")}
-    </button>
+    <div className="compCopyAlphabetButton">
+      <OptionButtonSimple
+        buttonText={t("Copy_to")}
+        renderContextMenu={({ hideMenu }) => (
+          <table>
+            <tbody>
+              {copyToOptions.map(opt => (
+                <tr key={opt.id}>
+                  <td onClick={() => copyAlphabet(opt)}>{opt.name}</td>
+                </tr>
+              ))}
+              <tr>
+                <td onClick={hideMenu}>{t("Cancel")}</td>
+              </tr>
+            </tbody>
+          </table>
+        )}
+      />
+    </div>
   );
 }

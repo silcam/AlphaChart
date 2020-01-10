@@ -5,17 +5,17 @@ import GroupData from "../storage/GroupData";
 // Invert the logic, so that forgetting `await` does not result in false positives
 
 export default async function cannotEditAlphabet(
-  user: StoredUser,
+  user: StoredUser | null,
   alphabet: StoredAlphabet
 ) {
-  return !(await canEditAlphabet(user, alphabet));
+  return !user || !(await canEditAlphabet(user, alphabet));
 }
 
 export async function cannotControlAlphabet(
-  user: StoredUser,
+  user: StoredUser | null,
   alphabet: StoredAlphabet
 ) {
-  return !(await canControlAlphabet(user, alphabet));
+  return !user || !(await canControlAlphabet(user, alphabet));
 }
 
 async function canEditAlphabet(user: StoredUser, alphabet: StoredAlphabet) {

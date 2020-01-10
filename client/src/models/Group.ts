@@ -37,4 +37,13 @@ export function groupCompare(a: Group, b: Group): number {
   return a.name.localeCompare(b.name);
 }
 
+export function isGroup(group: any): group is Group {
+  return (
+    typeof group === "object" &&
+    typeof group.id === "string" &&
+    typeof group.name === "string" &&
+    typeof group.users === "object"
+  );
+}
+
 // export function toStoredGroup()
