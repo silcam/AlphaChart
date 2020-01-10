@@ -105,7 +105,12 @@ const fr: Strings = {
   New_alphabet: "Nouveau alphabet",
   Language: "Langue",
   For_account: "Pour compte",
-  By_name: "Par %{name}"
+  By_name: "Par %{name}",
+  New_group: "Nouveau groupe",
+  Create_group: "Créer un groupe",
+  Name: "Nom",
+  Manage: "Gérer",
+  Confirm_remove_user_from_group: "Enlever %{userName} du groupe %{groupName} ?"
 };
 
 export default fr;

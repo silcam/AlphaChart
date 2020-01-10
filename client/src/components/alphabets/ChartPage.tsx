@@ -4,10 +4,7 @@ import ViewChartPage from "./ViewChartPage";
 import { useLocation } from "react-router-dom";
 import { useLoad } from "../../api/apiRequest";
 import { loadAlphabet } from "./alphabetSlice";
-import { useSelector } from "react-redux";
-import { AppState } from "../../state/appState";
-import { loadUsers } from "../../state/userSlice";
-import { loadGroups } from "../groups/groupSlice";
+import { useAlphabet } from "./useAlphabets";
 
 interface IProps {
   id: string;
@@ -17,12 +14,8 @@ export default function ChartPage(props: IProps) {
   const location = useLocation();
   const [editing, setEditing] = useState(location.state && location.state.edit);
 
-  const alphabet = useSelector(
-    (state: AppState) => state.alphabets.alphabets[props.id]
-  );
+  const alphabet = useAlphabet(props.id);
   useLoad(loadAlphabet(props.id));
-  useLoad(loadUsers());
-  useLoad(loadGroups());
 
   if (alphabet)
     return editing ? (

@@ -3,10 +3,11 @@ import Data from "./Data";
 import log from "../common/log";
 import { ObjectId, ObjectID } from "bson";
 
-async function groups(): Promise<StoredGroup[]> {
+async function groups(_ids?: ObjectID[]): Promise<StoredGroup[]> {
   log.log(`[Query] READ groups`);
   const collection = await groupCollection();
-  return collection.find({}).toArray();
+  const query = _ids ? { _id: { $in: _ids } } : {};
+  return collection.find(query).toArray();
 }
 
 async function group(_id: ObjectID): Promise<StoredGroup | null> {

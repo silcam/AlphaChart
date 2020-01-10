@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import htmlToImage, { OptionsType } from "html-to-image";
 import { saveAs } from "file-saver";
 import OptionButton from "../common/OptionButton";

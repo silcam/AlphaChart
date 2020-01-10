@@ -23,12 +23,14 @@ export default function AddUserForm(props: IProps) {
   };
 
   return (
-    <div className="space-kids">
+    <div className="flex-row-left">
       <label>{t("Add_user")}:</label>
       <SearchTextInput
         sendQuery={q =>
-          webGet("/users/search", {}, { q }).then(users =>
-            users ? users.filter(u => !props.group.users.includes(u.id)) : users
+          webGet("/users/search", {}, { q }).then(response =>
+            response
+              ? response.users.filter(u => !props.group.users.includes(u.id))
+              : null
           )
         }
         updateValue={(u: User | null) => setSelectedUser(u)}
@@ -37,14 +39,9 @@ export default function AddUserForm(props: IProps) {
         allowBlank
         placeholder={t("Name_or_email")}
       />
-      <div className="flex-row-left">
-        <button className="mini" onClick={save} disabled={!selectedUser}>
-          {t("Save")}
-        </button>
-        <button className="mini red" onClick={props.done}>
-          {t("Cancel")}
-        </button>
-      </div>
+      <button className="mini" onClick={save} disabled={!selectedUser}>
+        {t("Save")}
+      </button>
     </div>
   );
 }

@@ -1,12 +1,8 @@
-import { CurrentUser, NewUser, LoginAttempt, User } from "../models/User";
+import { CurrentUser, NewUser, LoginAttempt } from "../models/User";
 import { Locale } from "../i18n/i18n";
-import {
-  AlphabetListing,
-  Alphabet,
-  DraftAlphabet,
-  AlphabetChart
-} from "../models/Alphabet";
+import { Alphabet, DraftAlphabet, AlphabetChart } from "../models/Alphabet";
 import { Group, NewGroup } from "../models/Group";
+import { LoadAction } from "../state/LoadAction";
 
 export const API_VERSION = 7;
 export const OLD_API_STATUS_410 = 410;
@@ -17,15 +13,32 @@ export function apiPath(path: string) {
 
 export type Params = { [key: string]: string | number };
 
+type ApiPayload = Required<LoadAction["payload"]>;
+
 export interface APIGet {
-  "/alphabets": [{}, {}, AlphabetListing[]];
-  "/alphabets/mine": [{}, {}, AlphabetListing[]];
-  "/alphabets/:id": [{ id: string }, {}, Alphabet];
-  "/users": [{}, {}, User[]];
-  "/users/current": [{}, {}, CurrentUser | { locale: Locale }];
-  "/users/search": [{}, { q: string }, User[]];
-  "/groups": [{}, {}, Group[]];
-  "/users/:id/groups": [{ id: string }, {}, Group[]];
+  "/alphabets": [
+    {},
+    {},
+    Pick<ApiPayload, "alphabetListings" | "users" | "groups">
+  ];
+  "/alphabets/:id": [
+    { id: string },
+    {},
+    Pick<ApiPayload, "alphabets" | "groups" | "users">
+  ];
+  // "/users": [{}, {}, User[]];
+  "/users/current": [
+    {},
+    {},
+    Pick<ApiPayload, "currentUser" | "groups" | "alphabetListings">
+  ];
+  "/users/search": [{}, { q: string }, Pick<ApiPayload, "users">];
+  "/groups": [
+    {},
+    {},
+    Pick<ApiPayload, "alphabetListings" | "users" | "groups">
+  ];
+  // "/users/:id/groups": [{ id: string }, {}, Group[]];
 }
 
 export interface APIPost {
@@ -39,12 +52,24 @@ export interface APIPost {
   "/alphabets/:id/charts": [{ id: string }, AlphabetChart, Alphabet];
   "/users": [{}, NewUser, null];
   "/users/verify": [{}, { verification: string }, CurrentUser];
-  "/users/login": [{}, LoginAttempt, CurrentUser];
+  "/users/login": [
+    {},
+    LoginAttempt,
+    Pick<ApiPayload, "currentUser" | "groups" | "alphabetListings">
+  ];
   "/users/locale": [{}, { locale: Locale }, null];
   "/users/logout": [{}, null, null];
   "/groups": [{}, NewGroup, Group];
-  "/groups/:id/addUser": [{ id: string }, { id: string }, Group];
-  "/groups/:id/removeUser": [{ id: string }, { id: string }, Group];
+  "/groups/:id/addUser": [
+    { id: string },
+    { id: string },
+    Pick<ApiPayload, "alphabetListings" | "users" | "groups">
+  ];
+  "/groups/:id/removeUser": [
+    { id: string },
+    { id: string },
+    Pick<ApiPayload, "alphabetListings" | "users" | "groups">
+  ];
 }
 
 export type GetRoute = keyof APIGet;

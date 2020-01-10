@@ -1,23 +1,28 @@
 import { loggedInAgent, notLoggedInAgent } from "../testHelper";
 import { apiPath } from "../../../client/src/api/Api";
 import Data from "../storage/Data";
+import { User } from "../../../client/src/models/User";
 
 beforeEach(Data.loadFixtures);
 
-afterEach(Data.deleteDatabase);
+afterAll(Data.deleteDatabase);
 
 test("Get groups", async () => {
-  expect.assertions(2);
+  expect.assertions(5);
   const agent = notLoggedInAgent();
   const response = await agent.get(apiPath("/groups"));
   expect(response.status).toBe(200);
-  expect(response.body).toEqual([
+  expect(response.body.groups).toEqual([
     {
       id: "111111111111111111111111",
       name: "Boys Team",
       users: ["777777777777777777777777", "333333333333333333333333"]
     }
   ]);
+  expect(response.body.alphabetListings[0]).toMatchObject({ name: "Bana" });
+  const usernames = response.body.users.map((u: User) => u.name);
+  expect(usernames).toContain("Titus");
+  expect(usernames).toContain("Joel");
 });
 
 test("Create Group", async () => {
@@ -44,13 +49,14 @@ test("Must be logged in to create group", async () => {
 });
 
 test("Add Group User", async () => {
-  expect.assertions(2);
+  expect.assertions(3);
   const agent = await loggedInAgent();
   const response = await agent
     .post(apiPath("/groups/111111111111111111111111/addUser"))
     .send({ id: "555555555555555555555555" });
   expect(response.status).toBe(200);
-  expect(response.body.users).toContain("555555555555555555555555");
+  expect(response.body.groups[0].users).toContain("555555555555555555555555");
+  expect(response.body.users.length).toBe(3);
 });
 
 test("Must be group member to add user", async () => {
@@ -87,13 +93,16 @@ test("Add to group - nonexistant user", async () => {
 });
 
 test("Remove Group User", async () => {
-  expect.assertions(2);
+  expect.assertions(3);
   const agent = await loggedInAgent();
   const response = await agent
     .post(apiPath("/groups/111111111111111111111111/removeUser"))
     .send({ id: "333333333333333333333333" });
   expect(response.status).toBe(200);
-  expect(response.body.users).not.toContain("333333333333333333333333");
+  expect(response.body.groups[0].users.length).toBe(1);
+  expect(response.body.groups[0].users).not.toContain(
+    "333333333333333333333333"
+  );
 });
 
 test("Must be group member to remove user", async () => {
@@ -127,7 +136,7 @@ test("Remove from group - user not in group is no-op", async () => {
     .post(apiPath("/groups/111111111111111111111111/removeUser"))
     .send({ id: "555555555555555555555555" });
   expect(response.status).toBe(200);
-  expect(response.body.users).toEqual([
+  expect(response.body.groups[0].users).toEqual([
     "777777777777777777777777",
     "333333333333333333333333"
   ]);

@@ -73,7 +73,8 @@ describe("Chart Editor", () => {
 
     cy.request(`/api/v/${API_VERSION}/alphabets/5d4c38e158e6dbb33d7d7b12`).then(
       response => {
-        const imagePath = response.body.chart.letters[10].imagePath;
+        const imagePath =
+          response.body.alphabets[0].chart.letters[10].imagePath;
         cy.request(imagePath)
           .its("headers")
           .should("include", { "content-type": "image/png" });

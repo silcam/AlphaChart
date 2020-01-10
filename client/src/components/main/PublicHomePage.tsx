@@ -2,12 +2,11 @@ import React from "react";
 import CreateAccountOrLogIn from "../users/CreateAccountOrLogIn";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { useTranslation } from "../common/useTranslation";
-import { useSelector } from "react-redux";
-import { AppState } from "../../state/appState";
+import { useAlphabetListings } from "../alphabets/useAlphabets";
 
 export default function PublicHomePage() {
   const t = useTranslation();
-  const alphabets = useSelector((state: AppState) => state.alphabets.listings);
+  const alphabets = useAlphabetListings();
 
   return (
     <div className="flex-row compPublicHomePage">

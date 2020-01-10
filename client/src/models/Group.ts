@@ -1,9 +1,16 @@
 import { ObjectId } from "bson";
+import { User } from "./User";
+import { AlphabetListing } from "./Alphabet";
 
 export interface Group {
   id: string;
   name: string;
   users: string[];
+}
+
+export interface GroupInflated extends Group {
+  userObjs: User[];
+  alphabetObjs: AlphabetListing[];
 }
 
 export interface StoredGroup {

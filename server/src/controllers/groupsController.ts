@@ -4,16 +4,21 @@ import GroupData from "../storage/GroupData";
 import {
   toGroup,
   NewGroup,
-  NewStoredGroup
+  NewStoredGroup,
+  StoredGroup
 } from "../../../client/src/models/Group";
 import { currentUser } from "./controllerHelper";
 import { ObjectID } from "mongodb";
 import UserData from "../storage/UserData";
+import { flat } from "../../../client/src/util/arrayUtils";
+import AlphabetData from "../storage/AlphabetData";
+import { toAlphabet } from "../../../client/src/models/Alphabet";
+import { toPublicUser } from "../../../client/src/models/User";
 
 export default function groupsController(app: Express) {
   addGetHandler(app, "/groups", async req => {
     const groups = await GroupData.groups();
-    return groups.map(g => toGroup(g));
+    return groupResponse(groups);
   });
 
   addPostHandler(app, "/groups", async req => {
@@ -37,7 +42,7 @@ export default function groupsController(app: Express) {
 
     const newGroup = await GroupData.addUser(group._id, newUser._id);
     if (!newGroup) throw { status: 500 };
-    return toGroup(newGroup);
+    return groupResponse([newGroup]);
   });
 
   addPostHandler(app, "/groups/:id/removeUser", async req => {
@@ -51,6 +56,18 @@ export default function groupsController(app: Express) {
 
     const newGroup = await GroupData.removeUser(group._id, removeUserId);
     if (!newGroup) throw { status: 500 };
-    return toGroup(newGroup);
+    return groupResponse([newGroup]);
   });
+}
+
+async function groupResponse(groups: StoredGroup[]) {
+  return {
+    groups: groups.map(toGroup),
+    users: (await UserData.users(flat(groups.map(g => g._users)))).map(
+      toPublicUser
+    ),
+    alphabetListings: (
+      await AlphabetData.alphabetsByGroup(groups.map(g => g._id))
+    ).map(toAlphabet)
+  };
 }

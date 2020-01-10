@@ -8,6 +8,8 @@ import {
 } from "../../models/Alphabet";
 import { AppDispatch } from "../../state/appState";
 import { webGet, webPost, postFile } from "../../api/apiRequest";
+import { LoadAction, loadAction } from "../../state/LoadAction";
+import { modelListMerge } from "../../util/arrayUtils";
 
 interface AlphabetState {
   listings: AlphabetListing[];
@@ -18,11 +20,23 @@ const alphabetSlice = createSlice({
   name: "alphabets",
   initialState: { listings: [], alphabets: {} } as AlphabetState,
   reducers: {
-    setListings: (state, action: PayloadAction<AlphabetListing[]>) => {
-      state.listings = action.payload.sort(alphabetCompare);
-    },
     setAlphabet: (state, action: PayloadAction<Alphabet>) => {
       state.alphabets[action.payload.id] = action.payload;
+    }
+  },
+  extraReducers: {
+    ACLoad: (state, action: LoadAction) => {
+      if (action.payload.alphabets) {
+        action.payload.alphabets.reduce((alphabetsById, alphabet) => {
+          alphabetsById[alphabet.id] = alphabet;
+          return alphabetsById;
+        }, state.alphabets);
+      }
+      state.listings = modelListMerge(
+        state.listings,
+        action.payload.alphabetListings,
+        alphabetCompare
+      );
     }
   }
 });
@@ -31,15 +45,15 @@ export default alphabetSlice;
 
 export function loadAlphabetListings() {
   return async (dispatch: AppDispatch) => {
-    const listings = await webGet("/alphabets");
-    if (listings) dispatch(alphabetSlice.actions.setListings(listings));
+    const payload = await webGet("/alphabets");
+    if (payload) dispatch(loadAction(payload));
   };
 }
 
 export function loadAlphabet(id: string) {
   return async (dispatch: AppDispatch) => {
-    const alphabet = await webGet("/alphabets/:id", { id });
-    if (alphabet) dispatch(alphabetSlice.actions.setAlphabet(alphabet));
+    const payload = await webGet("/alphabets/:id", { id });
+    if (payload) dispatch(loadAction(payload));
   };
 }
 

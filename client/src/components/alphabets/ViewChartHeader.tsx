@@ -3,17 +3,14 @@ import ChartToImage from "./ChartToImage";
 import { ChartDimens } from "./ViewChartPage";
 import CopyAlphabetButton from "./CopyAlphabetButton";
 import { useTranslation } from "../common/useTranslation";
-import { Group } from "../../models/Group";
-import { User } from "../../models/User";
-import { Alphabet } from "../../models/Alphabet";
+import { AlphabetInflated } from "../../models/Alphabet";
 
 interface IProps {
-  alphabet: Alphabet;
+  alphabet: AlphabetInflated;
   setChartDimens: (d: ChartDimens | null) => void;
   canEdit: boolean;
   loggedIn: boolean;
   setEditing: (e: boolean) => void;
-  owner?: Group | User;
 }
 
 export default function ViewChartHeader(props: IProps) {
@@ -28,7 +25,9 @@ export default function ViewChartHeader(props: IProps) {
       <div className="flex-row">
         <h3>
           <label>
-            {props.owner ? t("By_name", { name: props.owner.name }) : ""}
+            {props.alphabet.ownerObj
+              ? t("By_name", { name: props.alphabet.ownerObj.name })
+              : ""}
           </label>
         </h3>
       </div>

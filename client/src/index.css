@@ -122,6 +122,12 @@ ul.std {
   margin-bottom: 16px;
 }
 
+hr {
+  border-color: #ddd;
+  width: 80%;
+  margin-left: 0;
+}
+
 /******** 
       TABLES
  *******/

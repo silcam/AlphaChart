@@ -3,20 +3,39 @@ import {
   StoredAlphabet,
   DraftAlphabet,
   AlphabetChart,
-  AlphabetListing,
-  toAlphabet
+  StoredAlphabetListing
 } from "../../../client/src/models/Alphabet";
 import { Collection } from "mongodb";
 import { ObjectID, ObjectId } from "bson";
 import update from "immutability-helper";
 import log from "../common/log";
 
-async function alphabets(): Promise<AlphabetListing[]> {
+async function alphabets(): Promise<StoredAlphabetListing[]> {
+  log.log("[Query] READ Alphabets");
+  const collection = await alphabetCollection();
+  return collection.find({}, { projection: { chart: 0 } }).toArray();
+}
+
+async function alphabetsByGroup(
+  groupIds: ObjectID[]
+): Promise<StoredAlphabetListing[]> {
   log.log("[Query] READ Alphabets");
   const collection = await alphabetCollection();
   return collection
-    .find({}, { projection: { chart: 0 } })
-    .map(toAlphabet)
+    .find(
+      { ownerType: "group", _owner: { $in: groupIds } },
+      { projection: { chart: 0 } }
+    )
+    .toArray();
+}
+
+async function alphabetsByUser(
+  userId: ObjectID
+): Promise<StoredAlphabetListing[]> {
+  log.log("[Query] READ Alphabets");
+  const collection = await alphabetCollection();
+  return collection
+    .find({ $or: [{ ownerType: "user", _owner: userId }, { _users: userId }] })
     .toArray();
 }
 
@@ -104,6 +123,8 @@ async function alphabetCollection(): Promise<Collection<StoredAlphabet>> {
 export default {
   alphabet,
   alphabets,
+  alphabetsByGroup,
+  alphabetsByUser,
   createAlphabet,
   updateChart,
   copyAlphabet,

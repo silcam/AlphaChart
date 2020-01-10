@@ -11,7 +11,10 @@ interface IProps {
 export default function GroupList(props: IProps) {
   return (
     <div>
-      <h2>{props.title}</h2>
+      <h2 className="std-h">
+        {props.title} <hr />
+      </h2>
+
       <ul className="std indent">
         {props.groups.map(group => (
           <li key={group.id}>

@@ -1,21 +1,17 @@
 import React from "react";
-import { AlphabetListing, alphabetOwner } from "../../models/Alphabet";
+import { AlphabetListingInflated } from "../../models/Alphabet";
 import { Link } from "react-router-dom";
 import Loading from "../common/Loading";
 import { useSelector } from "react-redux";
 import { AppState } from "../../state/appState";
-import { User } from "../../models/User";
-import { Group } from "../../models/Group";
 
 interface IProps {
-  alphabets: AlphabetListing[] | null;
+  alphabets: AlphabetListingInflated[] | null;
   hideUser?: boolean;
 }
 
 export default function AlphabetsList(props: IProps) {
   const user = useSelector((state: AppState) => state.currentUser.user);
-  const users = useSelector((state: AppState) => state.users);
-  const groups = useSelector((state: AppState) => state.groups);
 
   return props.alphabets ? (
     <ul className="compAlphabetsList">
@@ -24,7 +20,7 @@ export default function AlphabetsList(props: IProps) {
           <Link to={`/alphabets/view/${alphabet.id}`}>{alphabet.name}</Link>
           {!props.hideUser && (
             <span className="username">
-              {alphabetUserName(alphabet, users, groups, user ? user.id : "")}
+              {alphabetUserName(alphabet, user ? user.id : "")}
             </span>
           )}
         </li>
@@ -35,12 +31,8 @@ export default function AlphabetsList(props: IProps) {
   );
 }
 
-function alphabetUserName(
-  alphabet: AlphabetListing,
-  users: User[],
-  groups: Group[],
-  userId: string
-) {
-  const owner = alphabetOwner(alphabet, users, groups);
-  return owner && owner.id !== userId ? owner.name : "";
+function alphabetUserName(alphabet: AlphabetListingInflated, userId: string) {
+  return alphabet.ownerObj && alphabet.ownerObj.id !== userId
+    ? alphabet.ownerObj.name
+    : "";
 }

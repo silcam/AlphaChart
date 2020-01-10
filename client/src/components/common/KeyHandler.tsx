@@ -8,3 +8,7 @@ export default function keyHandler(listeners: Listeners) {
     }
   };
 }
+
+export function enterHandler(action: () => void) {
+  return keyHandler({ Enter: action });
+}

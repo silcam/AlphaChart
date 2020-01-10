@@ -48,6 +48,11 @@ export interface StoredAlphabet {
   chart: AlphabetChart;
 }
 
+export interface AlphabetInflated extends Alphabet {
+  ownerObj: User | Group | undefined;
+  userObjs: User[];
+}
+
 export function toAlphabet(sa: StoredAlphabet): Alphabet {
   const { _id, _owner, _users, ...alph } = sa;
   return {
@@ -63,7 +68,9 @@ export function toAlphabet(sa: StoredAlphabet): Alphabet {
 //   return { ...alpha, _id: new ObjectID(id), _user: new ObjectID(user) };
 // }
 
+export type StoredAlphabetListing = Omit<StoredAlphabet, "chart">;
 export type AlphabetListing = Omit<Alphabet, "chart">;
+export type AlphabetListingInflated = Omit<AlphabetInflated, "chart">;
 
 export function validDraftAlphabet(alphabet: DraftAlphabet) {
   return (
@@ -118,6 +125,6 @@ export function alphabetOwner(
   users: User[],
   groups: Group[]
 ): Group | User | undefined {
-  const list = alphabet.ownerType == "user" ? users : groups;
-  return list.find(item => item.id == alphabet.owner);
+  const list = alphabet.ownerType === "user" ? users : groups;
+  return list.find(item => item.id === alphabet.owner);
 }

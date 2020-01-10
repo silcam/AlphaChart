@@ -3,10 +3,11 @@ import Data from "./Data";
 import log from "../common/log";
 import { ObjectId } from "bson";
 
-async function users(): Promise<StoredUser[]> {
+async function users(ids?: ObjectId[]): Promise<StoredUser[]> {
   log.log(`[Query] READ Users`);
   const collection = await userCollection();
-  return collection.find({}).toArray();
+  const query = ids ? { _id: { $in: ids } } : {};
+  return collection.find(query).toArray();
 }
 
 async function user(_id: ObjectId): Promise<StoredUser | null> {

@@ -102,7 +102,12 @@ const en = {
   New_alphabet: "New Alphabet",
   Language: "Language",
   For_account: "For account",
-  By_name: "By %{name}"
+  By_name: "By %{name}",
+  New_group: "New Group",
+  Create_group: "Create Group",
+  Name: "Name",
+  Manage: "Manage",
+  Confirm_remove_user_from_group: "Remove %{userName} from %{groupName}?"
 };
 
 export type Strings = typeof en;

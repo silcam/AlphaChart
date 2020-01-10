@@ -9,6 +9,7 @@ import {
 } from "../models/User";
 import { webGet, webPost } from "../api/apiRequest";
 import userSlice from "./userSlice";
+import { loadAction, LoadAction } from "./LoadAction";
 
 interface CurrentUserState {
   user: CurrentUser | null;
@@ -23,17 +24,18 @@ const currentUserSlice = createSlice({
     setLocale: (state, action: PayloadAction<Locale>) => {
       state.locale = action.payload;
     },
-    setUser: (
-      state,
-      action: PayloadAction<CurrentUser | { locale: Locale } | null>
-    ) => {
-      const user = action.payload || { locale: undefined };
-      if (isCurrentUser(user)) state.user = user;
-      if (user.locale) state.locale = user.locale;
-      state.loaded = true;
-    },
     logout: state => {
       state.user = null;
+    }
+  },
+  extraReducers: {
+    ACLoad: (state, action: LoadAction) => {
+      const user = action.payload.currentUser;
+      if (user) {
+        if (isCurrentUser(user)) state.user = user;
+        if (user.locale) state.locale = user.locale;
+        state.loaded = true;
+      }
     }
   }
 });
@@ -42,15 +44,15 @@ export default currentUserSlice;
 
 export function loadCurrentUser() {
   return async (dispatch: AppDispatch) => {
-    const user = await webGet("/users/current", {});
-    dispatch(currentUserSlice.actions.setUser(user));
+    const payload = await webGet("/users/current", {});
+    if (payload) dispatch(loadAction(payload));
   };
 }
 
 export function pushLogin(login: LoginAttempt) {
   return async (dispatch: AppDispatch) => {
-    const user = await webPost("/users/login", {}, login);
-    dispatch(currentUserSlice.actions.setUser(user));
+    const payload = await webPost("/users/login", {}, login);
+    if (payload) dispatch(loadAction(payload));
   };
 }
 

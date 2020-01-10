@@ -18,7 +18,7 @@ interface IProps {
 export default function ImageInput(props: IProps) {
   const dispatch = useDispatch();
   const [saveImage, loading] = usePush(pushChartImage, err => {
-    if (err.type == "HTTP" && err.status == 413) {
+    if (err.type === "HTTP" && err.status === 413) {
       dispatch(
         bannerSlice.actions.add({
           type: "Error",

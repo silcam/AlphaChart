@@ -17,7 +17,7 @@ describe("My Group Page", () => {
   });
 
   it("Adds Users", () => {
-    cy.contains("button", "Add").click();
+    cy.contains("button", "Manage").click();
     cy.placeholder("Name or email").type("lucy");
     cy.contains("li", "Lucy").click();
     cy.contains("Save").click();
@@ -26,10 +26,24 @@ describe("My Group Page", () => {
   });
 
   it("Removes users", () => {
-    cy.contains("button", "Remove").click();
-    cy.get("select").select("Joel");
-    cy.contains("Save").click();
+    cy.contains("button", "Manage").click();
+    cy.contains("ul", "T");
+    cy.contains("li", "Joel")
+      .find("button")
+      .click();
     cy.contains("li", "Joel").should("not.exist");
-    cy.contains("button", "Remove").should("not.exist");
+  });
+
+  it("Links to New Group Page", () => {
+    cy.contains("Create").click();
+    cy.contains("New Group").should("exist");
+  });
+
+  it("Links to New Alphabet Page", () => {
+    cy.contains("button", "Add").click();
+    cy.contains("h2", "New Alphabet").should("exist");
+    cy.contains("label", "Boys Team")
+      .find("input")
+      .should("be.checked");
   });
 });

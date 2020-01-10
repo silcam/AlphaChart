@@ -5,6 +5,7 @@ import loadingSlice from "../api/loadingSlice";
 import alphabetSlice from "../components/alphabets/alphabetSlice";
 import groupSlice from "../components/groups/groupSlice";
 import userSlice from "./userSlice";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 const reducer = combineReducers({
   currentUser: currentUserSlice.reducer,
@@ -19,5 +20,6 @@ const store = configureStore({ reducer });
 
 export type AppState = ReturnType<typeof reducer>;
 export type AppDispatch = typeof store.dispatch;
+export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
 
 export default store;

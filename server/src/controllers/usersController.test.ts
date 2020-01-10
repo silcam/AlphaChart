@@ -7,36 +7,36 @@ import { interactsWithMail as iwm } from "nodemailer-stub";
 
 beforeEach(Data.loadFixtures);
 
-afterEach(Data.deleteDatabase);
+afterAll(Data.deleteDatabase);
 
-test("Get Users", async () => {
-  expect.assertions(2);
-  const agent = notLoggedInAgent();
-  const response = await agent.get(apiPath("/users"));
-  expect(response.status).toBe(200);
-  expect(response.body).toEqual([
-    { name: "Titus", id: "777777777777777777777777" },
-    { name: "Lucy", id: "555555555555555555555555" },
-    { name: "Joel", id: "333333333333333333333333" }
-  ]);
-});
+// test("Get Users", async () => {
+//   expect.assertions(2);
+//   const agent = notLoggedInAgent();
+//   const response = await agent.get(apiPath("/users"));
+//   expect(response.status).toBe(200);
+//   expect(response.body).toEqual([
+//     { name: "Titus", id: "777777777777777777777777" },
+//     { name: "Lucy", id: "555555555555555555555555" },
+//     { name: "Joel", id: "333333333333333333333333" }
+//   ]);
+// });
 
 test("Search Users", async () => {
   expect.assertions(8);
   const agent = notLoggedInAgent();
   let response = await agent.get(apiPath("/users/search?q=titus"));
   expect(response.status).toBe(200);
-  expect(response.body.length).toBe(1);
-  expect(response.body[0].name).toBe("Titus");
+  expect(response.body.users.length).toBe(1);
+  expect(response.body.users[0].name).toBe("Titus");
 
   response = await agent.get(apiPath("/users/search?q=lucy@me"));
   expect(response.status).toBe(200);
-  expect(response.body.length).toBe(1);
-  expect(response.body[0].name).toBe("Lucy");
+  expect(response.body.users.length).toBe(1);
+  expect(response.body.users[0].name).toBe("Lucy");
 
   response = await agent.get(apiPath("/users/search?q=.com"));
   expect(response.status).toBe(200);
-  expect(response.body.length).toBe(3);
+  expect(response.body.users.length).toBe(3);
 });
 
 test("Create new user", async () => {
@@ -158,33 +158,43 @@ test("Verify with invalid (already used) code", async () => {
 });
 
 test("Current User - Not logged in", async () => {
+  expect.assertions(1);
   const agent = request.agent(app);
   const response = await agent.get(apiPath("/users/current"));
-  expect(response.body).toEqual({});
+  expect(response.body).toEqual({
+    currentUser: {},
+    groups: [],
+    alphabetListings: []
+  });
 });
 
 test("Current User", async () => {
+  expect.assertions(3);
   const agent = await loggedInAgent();
   const response = await agent.get(apiPath("/users/current"));
-  expect(response.body).toEqual({
+  expect(response.body.currentUser).toEqual({
     id: "777777777777777777777777",
     name: "Titus",
     email: "titus@yahoo.com"
   });
+  expect(response.body.groups[0].name).toBe("Boys Team");
+  expect(response.body.alphabetListings.length).toBe(3);
 });
 
 test("Valid Login", async () => {
-  expect.assertions(1);
+  expect.assertions(3);
   const agent = request.agent(app);
   const response = await agent.post(apiPath("/users/login")).send({
     email: "titus@yahoo.com",
     password: "minecraft"
   });
-  expect(response.body).toEqual({
+  expect(response.body.currentUser).toEqual({
     id: "777777777777777777777777",
     name: "Titus",
     email: "titus@yahoo.com"
   });
+  expect(response.body.groups.length).toBe(1);
+  expect(response.body.alphabetListings.length).toBe(3);
 });
 
 test("InValid Login", async () => {
@@ -204,7 +214,7 @@ test("Logout", async () => {
   let response = await agent.post(apiPath("/users/logout"));
   expect(response.status).toBe(200);
   response = await agent.get(apiPath("/users/current"));
-  expect(response.body).toEqual({});
+  expect(response.body.currentUser).toEqual({});
 });
 
 test("Post Locale - Not logged in", async () => {
@@ -215,7 +225,7 @@ test("Post Locale - Not logged in", async () => {
     .send({ locale: "fr" });
   expect(response.status).toBe(200);
   response = await agent.get(apiPath("/users/current"));
-  expect(response.body).toEqual({ locale: "fr" });
+  expect(response.body.currentUser).toEqual({ locale: "fr" });
 });
 
 test("Post Locale - Logged in", async () => {
@@ -226,7 +236,7 @@ test("Post Locale - Logged in", async () => {
     .send({ locale: "fr" });
   expect(response.status).toBe(200);
   response = await agent.get(apiPath("/users/current"));
-  expect(response.body).toEqual({
+  expect(response.body.currentUser).toEqual({
     id: "777777777777777777777777",
     name: "Titus",
     email: "titus@yahoo.com",

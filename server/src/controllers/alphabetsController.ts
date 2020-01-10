@@ -3,7 +3,9 @@ import AlphabetData from "../storage/AlphabetData";
 import {
   DraftAlphabet,
   AlphabetChart,
-  toAlphabet
+  toAlphabet,
+  StoredAlphabet,
+  StoredAlphabetListing
 } from "../../../client/src/models/Alphabet";
 import { UploadedFile } from "express-fileupload";
 import fileUpload = require("express-fileupload");
@@ -16,17 +18,30 @@ import cannotEditAlphabet, {
   cannotControlAlphabet
 } from "../actions/cannotEditAlphabet";
 import UserData from "../storage/UserData";
+import { toPublicUser, User } from "../../../client/src/models/User";
+import { Group, toGroup } from "../../../client/src/models/Group";
+import GroupData from "../storage/GroupData";
 
 export default function alphabetsController(app: Express) {
   addGetHandler(app, "/alphabets", async req => {
-    return AlphabetData.alphabets();
+    const listings = await AlphabetData.alphabets();
+    return {
+      alphabetListings: listings.map(toAlphabet),
+      users: await usersForAlphabets(listings),
+      groups: await groupsForAlphabets(listings)
+    };
   });
 
   addGetHandler(app, "/alphabets/:id", async req => {
     try {
       const id = new ObjectID(req.params.id);
       const alphabet = await AlphabetData.alphabet(id);
-      if (alphabet) return toAlphabet(alphabet);
+      if (alphabet)
+        return {
+          alphabets: [toAlphabet(alphabet)],
+          users: await usersForAlphabets([alphabet]),
+          groups: await groupsForAlphabets([alphabet])
+        };
     } catch (err) {
       // 404
     }
@@ -105,4 +120,26 @@ export default function alphabetsController(app: Express) {
       }
     }
   });
+}
+
+async function usersForAlphabets(
+  alphabets: StoredAlphabetListing[]
+): Promise<User[]> {
+  const ids = alphabets.reduce(
+    (ids, alphabet) =>
+      alphabet.ownerType == "group"
+        ? [...ids, ...alphabet._users]
+        : [...ids, ...alphabet._users, alphabet._owner],
+    [] as ObjectID[]
+  );
+  return (await UserData.users(ids)).map(toPublicUser);
+}
+
+async function groupsForAlphabets(
+  alphabets: StoredAlphabetListing[]
+): Promise<Group[]> {
+  const groupIds = alphabets
+    .filter(a => a.ownerType == "group")
+    .map(a => a._owner);
+  return (await GroupData.groups(groupIds)).map(toGroup);
 }

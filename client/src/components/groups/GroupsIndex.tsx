@@ -5,7 +5,8 @@ import GroupList from "./GroupList";
 import { Group } from "../../models/Group";
 import { useTranslation } from "../common/useTranslation";
 import GroupView from "./GroupView";
-import MyGroupView from "./MyGroupView";
+import useGroups from "./useGroups";
+import { Link } from "react-router-dom";
 
 interface IProps {
   id?: string;
@@ -15,7 +16,7 @@ export default function GroupsIndex(props: IProps) {
   const t = useTranslation();
   const user = useSelector((state: AppState) => state.currentUser.user);
   const userId = user ? user.id : "";
-  const groups = useSelector((state: AppState) => state.groups);
+  const groups = useGroups();
   const myGroups: Group[] = [];
   const otherGroups: Group[] = [];
   groups.forEach(g =>
@@ -25,27 +26,32 @@ export default function GroupsIndex(props: IProps) {
 
   return (
     <div className="compGroupsIndex">
-      <div>
-        {myGroups.length > 0 && (
+      <Link to="/groups/new">
+        <button>{t("Create_group")}</button>
+      </Link>
+      <div className="rowDiv">
+        <div>
+          {myGroups.length > 0 && (
+            <GroupList
+              groups={myGroups}
+              title={t("My_groups")}
+              selectedId={props.id}
+            />
+          )}
           <GroupList
-            groups={myGroups}
-            title={t("My_groups")}
+            groups={otherGroups}
+            title={t("Groups")}
             selectedId={props.id}
           />
-        )}
-        <GroupList
-          groups={otherGroups}
-          title={t("Groups")}
-          selectedId={props.id}
-        />
-      </div>
-      <div>
-        {group &&
-          (group.users.includes(userId) ? (
-            <MyGroupView group={group} user={user!} />
-          ) : (
-            <GroupView group={group} />
-          ))}
+        </div>
+        <div>
+          {group &&
+            (group.users.includes(userId) ? (
+              <GroupView group={group} user={user!} />
+            ) : (
+              <GroupView group={group} />
+            ))}
+        </div>
       </div>
     </div>
   );

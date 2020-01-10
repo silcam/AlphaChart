@@ -1,28 +1,59 @@
 import Data from "../storage/Data";
 import { loggedInAgent, vowellybet, notLoggedInAgent } from "../testHelper";
 import { Alphabet } from "../../../client/src/models/Alphabet";
+import { User } from "../../../client/src/models/User";
 import { apiPath } from "../../../client/src/api/Api";
 
 beforeEach(Data.loadFixtures);
 
-afterEach(Data.deleteDatabase);
+afterAll(Data.deleteDatabase);
 
 test("Get alphabets", async () => {
-  expect.assertions(2);
+  expect.assertions(3);
   const agent = notLoggedInAgent();
   const response = await agent.get(apiPath("/alphabets"));
-  expect(response.body[0].name).toEqual("Ελληνικα");
-  expect(response.body[0].id).toEqual("5d4c38e158e6dbb33d7d7b12");
+  expect(response.body.alphabetListings[0]).toMatchObject({
+    name: "Ελληνικα",
+    id: "5d4c38e158e6dbb33d7d7b12"
+  });
+  expect(response.body.users.length).toEqual(2);
+  expect(response.body.groups.length).toEqual(1);
 });
 
 test("Get an alphabet", async () => {
-  expect.assertions(2);
+  expect.assertions(3);
   const agent = notLoggedInAgent();
   const response = await agent.get(
     apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12")
   );
   expect(response.status).toBe(200);
-  expect(response.body.name).toEqual("Ελληνικα");
+  expect(response.body.alphabets[0].name).toEqual("Ελληνικα");
+  expect(response.body.users[0].name).toEqual("Titus");
+});
+
+test("Get an alphabet with guest users", async () => {
+  expect.assertions(3);
+  const agent = notLoggedInAgent();
+  const response = await agent.get(
+    apiPath("/alphabets/123abc123abc123abc123abc")
+  );
+  expect(response.status).toBe(200);
+  expect(response.body.alphabets[0].name).toEqual("Gude");
+  expect(response.body.users.map((u: User) => u.name)).toEqual([
+    "Lucy",
+    "Titus"
+  ]);
+});
+
+test("Get a group alphabet", async () => {
+  expect.assertions(3);
+  const agent = notLoggedInAgent();
+  const response = await agent.get(
+    apiPath("/alphabets/789def789def789def789def")
+  );
+  expect(response.status).toBe(200);
+  expect(response.body.alphabets[0].name).toEqual("Bana");
+  expect(response.body.groups[0].name).toEqual("Boys Team");
 });
 
 test("Get nonexistant alphabet", async () => {
@@ -140,7 +171,7 @@ test("Copy Alphabet", async () => {
   const id = response.body.id;
   response = await lucyAgent.get(apiPath(`/alphabets/${id}`));
   expect(response.status).toBe(200);
-  expect(response.body).toMatchObject({
+  expect(response.body.alphabets[0]).toMatchObject({
     name: "Ελληνικα",
     owner: "555555555555555555555555"
   });

@@ -3,7 +3,8 @@ import {
   NewUser,
   toCurrentUser,
   LoginAttempt,
-  toPublicUser
+  toPublicUser,
+  StoredUser
 } from "../../../client/src/models/User";
 import UserData from "../storage/UserData";
 import { currentUser } from "./controllerHelper";
@@ -12,17 +13,21 @@ import verifyUser from "../actions/verifyUser";
 import login from "../actions/login";
 import { Locale } from "../../../client/src/i18n/i18n";
 import { addGetHandler, addPostHandler } from "./serverApi";
+import GroupData from "../storage/GroupData";
+import { toGroup } from "../../../client/src/models/Group";
+import AlphabetData from "../storage/AlphabetData";
+import { toAlphabet } from "../../../client/src/models/Alphabet";
 
 export default function usersController(app: Express) {
-  addGetHandler(app, "/users", async req => {
-    const users = await UserData.users();
-    return users.map(user => toPublicUser(user));
-  });
+  // addGetHandler(app, "/users", async req => {
+  //   const users = await UserData.users();
+  //   return users.map(user => toPublicUser(user));
+  // });
 
   addGetHandler(app, "/users/search", async req => {
     const query = req.query.q;
     const users = await UserData.search(query);
-    return users.map(u => toPublicUser(u));
+    return { users: users.map(u => toPublicUser(u)) };
   });
 
   addPostHandler(app, "/users", async req => {
@@ -42,10 +47,14 @@ export default function usersController(app: Express) {
   addGetHandler(app, "/users/current", async req => {
     const user = await currentUser(req);
     if (user) {
-      return toCurrentUser(user);
+      return currentUserResponse(user);
     } else {
       req.session!.userId = undefined;
-      return { locale: req.session!.locale };
+      return {
+        currentUser: { locale: req.session!.locale },
+        groups: [],
+        alphabetListings: []
+      };
     }
   });
 
@@ -53,7 +62,7 @@ export default function usersController(app: Express) {
     const loginAttempt: LoginAttempt = req.body;
     const user = await login(loginAttempt);
     req.session!.userId = `${user._id}`;
-    return toCurrentUser(user);
+    return currentUserResponse(user);
   });
 
   addPostHandler(app, "/users/locale", async req => {
@@ -73,4 +82,15 @@ export default function usersController(app: Express) {
     req.session!.userId = undefined;
     return null;
   });
+}
+
+async function currentUserResponse(user: StoredUser) {
+  const groups = await GroupData.groupsByUser(user._id);
+  return {
+    currentUser: toCurrentUser(user),
+    groups: groups.map(toGroup),
+    alphabetListings: (await AlphabetData.alphabetsByUser(user._id))
+      .concat(await AlphabetData.alphabetsByGroup(groups.map(g => g._id)))
+      .map(toAlphabet)
+  };
 }

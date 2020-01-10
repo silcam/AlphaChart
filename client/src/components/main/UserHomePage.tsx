@@ -1,12 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { AlphabetListing } from "../../models/Alphabet";
+import { AlphabetListingInflated } from "../../models/Alphabet";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { useTranslation } from "../common/useTranslation";
-import { useSelector } from "react-redux";
-import { AppState } from "../../state/appState";
 import { CurrentUser } from "../../models/User";
 import useCanEdit from "../alphabets/useCanEdit";
+import { useAlphabetListings } from "../alphabets/useAlphabets";
 
 interface IProps {
   user: CurrentUser;
@@ -14,11 +13,11 @@ interface IProps {
 
 export default function UserHomePage(props: IProps) {
   const t = useTranslation();
-  const alphabets = useSelector((state: AppState) => state.alphabets.listings);
+  const alphabets = useAlphabetListings();
   const canEdit = useCanEdit();
 
-  const myAlphabets: AlphabetListing[] = [];
-  const otherAlphabets: AlphabetListing[] = [];
+  const myAlphabets: AlphabetListingInflated[] = [];
+  const otherAlphabets: AlphabetListingInflated[] = [];
   alphabets.forEach(alphabet =>
     canEdit(alphabet)
       ? myAlphabets.push(alphabet)

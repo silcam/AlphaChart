@@ -114,11 +114,11 @@ div.compChartToImageOptionsMenu .buttonRow {
 
 /* GroupsList */
 
-div.compGroupsIndex {
+div.compGroupsIndex .rowDiv {
     flex-direction: row;
 }
 
-div.compGroupsIndex>div {
+div.compGroupsIndex .rowDiv > div {
     flex: 1
 }
 
@@ -326,7 +326,6 @@ div.settings-side-menu div.input {
 
 div.settings-side-menu hr {
     width: 100%;
-    border-color: #ddd;
 }
 
 div.settings-side-menu h1 {
