@@ -1,4 +1,5 @@
 import update from "immutability-helper";
+import { stripExt } from "../util/stringUtils";
 
 export const defaultFonts = [
   "Andika",
@@ -106,7 +107,22 @@ export function stylesForImage(
   styles: ChartStyles,
   imagePath: string
 ): ImageStyles {
-  return (styles.images && styles.images[imagePath]) || defaultImageStyles();
+  return (
+    (styles.images && styles.images[stripExt(imagePath)]) ||
+    defaultImageStyles()
+  );
+}
+
+export function setStylesForImages(
+  styles: ChartStyles,
+  imagePath: string,
+  imageStyles: ImageStyles
+): ChartStyles {
+  return update(styles, {
+    images: {
+      [stripExt(imagePath)]: { $set: imageStyles }
+    }
+  });
 }
 
 export function completeStyles(mergeStyles: ChartStyles): ChartStylesStrict {

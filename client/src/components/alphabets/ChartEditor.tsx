@@ -14,7 +14,11 @@ import SettingsSideMenu from "./SettingsSideMenu";
 import { useTranslation } from "../common/useTranslation";
 import useUndo from "../common/useUndo";
 import UndoRedo from "../common/UndoRedo";
-import { stylesForImage, completeStyles } from "../../models/ChartStyles";
+import {
+  stylesForImage,
+  completeStyles,
+  setStylesForImages
+} from "../../models/ChartStyles";
 
 interface IProps {
   alphabet: Alphabet;
@@ -141,11 +145,11 @@ export default function ChartEditor(props: IProps) {
               chart.letters[selectedIndex].imagePath
             )}
             setImageStyles={styles => {
-              const chartStyles = update(completeStyles(chart.styles), {
-                images: {
-                  [chart.letters[selectedIndex].imagePath]: { $set: styles }
-                }
-              });
+              const chartStyles = setStylesForImages(
+                completeStyles(chart.styles),
+                chart.letters[selectedIndex].imagePath,
+                styles
+              );
               setChart(update(chart, { styles: { $set: chartStyles } }));
             }}
           />

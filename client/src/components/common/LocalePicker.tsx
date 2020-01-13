@@ -1,7 +1,7 @@
 import React from "react";
 import { availableLocales } from "../../i18n/i18n";
 import LnkBtn from "./LnkBtn";
-import { capitalize } from "./util";
+import { capitalize } from "../../util/stringUtils";
 import { useSelector } from "react-redux";
 import { AppState } from "../../state/appState";
 import { usePush } from "../../api/apiRequest";
