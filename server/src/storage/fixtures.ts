@@ -66,37 +66,37 @@ const fixtures: Fixtures = {
           {
             forms: ["Β", "β"],
             exampleWord: "Boat",
-            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/download.jpg"
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/boat.jpg"
           },
           {
             forms: ["Γ", "γ"],
             exampleWord: "Cat",
-            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/download.png"
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/cat.png"
           },
           {
             forms: ["Δ", "δ"],
             exampleWord: "Dog",
-            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/download-1.png"
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/dog.png"
           },
           {
             forms: ["Ε", "ε"],
             exampleWord: "Eagle",
-            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/download-1.jpg"
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/eagle.jpg"
           },
           {
             forms: ["Ζ", "ζ"],
             exampleWord: "Fox",
-            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/download-2.jpg"
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/fox.jpg"
           },
           {
             forms: ["Η", "η"],
             exampleWord: "Grapes",
-            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/download-2.png"
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/grapes.png"
           },
           {
             forms: ["Θ", "θ"],
             exampleWord: "House",
-            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/download-3.jpg"
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/house.jpg"
           },
           { forms: ["Ι", "ι"], exampleWord: "", imagePath: "" },
           { forms: ["Κ", "κ"], exampleWord: "", imagePath: "" },
