@@ -114,7 +114,10 @@ const fr: Strings = {
     "Enlever %{userName} du groupe %{groupName} ?",
   Guest_users: "Invités",
   Share_explanation: "Ces utilisateurs peuvent editer ce tablaeu alphabétique.",
-  User_added: "%{name} a été ajouté."
+  User_added: "%{name} a été ajouté.",
+  Ok: "OK",
+  Browser_not_supported:
+    "Il faut Chrome, Firefox ou Edge pour exporter les images."
 };
 
 export default fr;

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import htmlToImage, { OptionsType } from "html-to-image";
 import { saveAs } from "file-saver";
-import OptionButton from "../common/OptionButton";
+import { OptionButtonSimple } from "../common/OptionButton";
 import { ChartDimens } from "./ViewChartPage";
 import ColorInput from "../common/ColorInput";
 import { useTranslation } from "../common/useTranslation";
 import { throwAppError, asAppError } from "../../AppError/AppError";
 import { useDispatch } from "react-redux";
 import bannerSlice from "../../banners/bannerSlice";
+import { detect } from "detect-browser";
 
 const CHART_ID = "compChart";
 const DEFAULT_FONT_SIZE = 16;
@@ -18,20 +19,10 @@ interface IProps {
 
 export default function ChartToImage(props: IProps) {
   const t = useTranslation();
-  const dispatch = useDispatch();
 
   return (
     <div>
-      <OptionButton
-        onMainClick={() => {
-          try {
-            makeImage();
-          } catch (err) {
-            dispatch(
-              bannerSlice.actions.add({ type: "Error", error: asAppError(err) })
-            );
-          }
-        }}
+      <OptionButtonSimple
         buttonText={t("Save_chart_image")}
         renderContextMenu={({ hideMenu }) => (
           <OptionsMenu
@@ -87,6 +78,14 @@ function OptionsMenu(props: IOptionsMenuProps) {
   const inputValid = !!dimensions[0] && (!enableBGColor || bgColorValid);
   const [saving, setSaving] = useState(false);
   const dispatch = useDispatch();
+
+  if (!browserSupported())
+    return (
+      <div className="optMenuHeader h-pad">
+        <p>{t("Browser_not_supported")}</p>
+        <button onClick={props.hideMenu}>{t("Ok")}</button>
+      </div>
+    );
 
   return (
     <div className="compChartToImageOptionsMenu">
@@ -176,4 +175,9 @@ async function makeImage(opts: OptionsType = { backgroundColor: "#ffffff" }) {
     console.error(err);
     throwAppError({ type: "Alphachart", code: "2" });
   }
+}
+
+function browserSupported() {
+  const browser = detect();
+  return browser && ["chrome", "firefox", "edge"].includes(browser.name);
 }

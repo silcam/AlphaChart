@@ -122,6 +122,11 @@ ul.std {
   margin-bottom: 16px;
 }
 
+.h-pad {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
 hr {
   border-color: #ddd;
   width: 80%;

@@ -110,7 +110,9 @@ const en = {
   Confirm_remove_user_from_group: "Remove %{userName} from %{groupName}?",
   Guest_users: "Guest Users",
   Share_explanation: "These users can edit this alphabet chart.",
-  User_added: "Added %{name}."
+  User_added: "Added %{name}.",
+  Ok: "OK",
+  Browser_not_supported: "Use Chrome, Edge or Firefox to export chart images."
 };
 
 export type Strings = typeof en;
