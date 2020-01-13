@@ -80,7 +80,7 @@ export default function Chart(props: IProps) {
               {row.map((abletter, letterIndex) => {
                 const index = flatIndex(chart.cols, rowIndex, letterIndex);
                 const widthStyle =
-                  letterIndex == row.length - 1
+                  letterIndex == chart.cols - 1
                     ? { flexGrow: 1, flexShrink: 1 }
                     : { width: `${cellWidth}%` };
                 return (
