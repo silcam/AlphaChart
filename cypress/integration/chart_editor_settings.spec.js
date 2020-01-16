@@ -61,7 +61,7 @@ describe("Chart Editor Settings", () => {
     cy.withLabel("Top Alphabet Spacing")
       .contains("button", "+")
       .click();
-    cy.get(".alphasummary > div").should("have.css", "padding", "0px 1px");
+    cy.get(".alphasummary > div").should("have.css", "padding", "0px 1.28px");
   });
 
   it("Changes Top Alphabet Style", () => {
@@ -146,29 +146,35 @@ describe("Chart Editor Settings", () => {
 
   it("Sets border thickness and color", () => {
     const selectors = [
-      ".alphatable",
-      ".alphasummary",
+      ".alpharow:first-child",
       ".alphacell",
       ".lastRowFiller",
       ".alphafooter"
     ];
+    cy.get(".alphatable").should(
+      "have.css",
+      "border-color",
+      "rgb(221, 221, 221)"
+    );
+    cy.get(".alphatable").should("have.css", "border-width", "2px 2px 0px 0px");
     selectors.forEach(selector => {
-      cy.get(selector).should("have.css", "border-width", "1px");
+      cy.get(selector).should("have.css", "border-width", "0px 0px 2px 2px");
       cy.get(selector).should("have.css", "border-color", "rgb(221, 221, 221)");
     });
 
     cy.withLabel("Border Thickness")
       .contains("button", "+")
       .click();
+    cy.get(".alphatable").should("have.css", "border-width", "4px 4px 0px 0px");
     selectors.forEach(selector =>
-      cy.get(selector).should("have.css", "border-width", "2px")
+      cy.get(selector).should("have.css", "border-width", "0px 0px 4px 4px")
     );
 
     cy.withLabel("Border Color").click();
     cy.get("input[value='#DDDDDD']")
       .clear()
       .type("#0000FF");
-    selectors.forEach(selector => {
+    [...selectors, ".alphatable"].forEach(selector => {
       cy.get(selector).should("have.css", "border-color", "rgb(0, 0, 255)");
     });
   });
@@ -187,7 +193,7 @@ describe("Chart Editor Settings", () => {
       .click()
       .click()
       .click();
-    cy.get("img[alt='Boat']").should("have.css", "padding-bottom", "3px");
+    cy.get("img[alt='Boat']").should("have.css", "padding-bottom", "6px");
   });
 
   it("Switches to Right-to-Left", () => {

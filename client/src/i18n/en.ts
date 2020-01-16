@@ -26,7 +26,6 @@ const en = {
   Unknown_error: "Unknown error",
   Edit_chart: "Edit Chart",
   Copy_to: "Copy to",
-  Save_chart_image: "Save Chart Image",
   Image_options: "Image Options",
   Width: "Width",
   Height: "Height",
@@ -112,7 +111,24 @@ const en = {
   Share_explanation: "These users can edit this alphabet chart.",
   User_added: "Added %{name}.",
   Ok: "OK",
-  Browser_not_supported: "Use Chrome, Edge or Firefox to export chart images."
+  Browser_not_supported:
+    "This browser is not supported. Use Chrome, Edge or Firefox to export chart images.",
+  Export_chart: "Export Chart",
+  Text_size: "Text Size",
+  Extra_vertical_space: "Extra Vertical Space",
+  Extra_horizontal_space: "Extra Horizontal Space",
+  Transparent: "Transparent",
+  Save_image: "Save Image",
+  Paper_options: "Paper Options",
+  Dimensions: "Dimensions",
+  Target: "Target",
+  Actual: "Actual",
+  Paper_size: "Paper Size",
+  Landscape: "Landscape",
+  Custom_size: "Custom Size",
+  Units: "Units",
+  DPI: "DPI",
+  Custom: "Custom"
 };
 
 export type Strings = typeof en;

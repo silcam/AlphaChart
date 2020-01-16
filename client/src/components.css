@@ -127,6 +127,46 @@ div.compCopyAlphabetButton td:hover {
     color: #1892ef;
 }
 
+/* ExportChart */
+
+div.compExportChart {
+    height: 100vh;
+    flex-direction: row;
+    background-color: #999;
+}
+
+div.compExportChart .controls {
+    padding: 12px;
+    background-color: #1892ef;
+    color: #fff;
+}
+
+div.compExportChart .controls a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+div.compExportChart .controls button {
+    color: #1892ef;
+    background-color: #fff;
+}
+
+div.compExportChart .controls button:active {
+    background-color: #eee;
+}
+
+div.compExportChart .preview {
+    flex-grow: 1;
+}
+
+div.compExportChart pre {
+    margin: 0;
+}
+
+div.compExportChart div.compColorInput .color-picker-preview {
+    align-self: flex-start;
+}
+
 /* GroupsList */
 
 div.compGroupsIndex .rowDiv {
@@ -373,6 +413,19 @@ div.settings-side-menu h1 {
 div.settings-side-menu input,
 div.settings-side-menu select {
     font-size: 20px;
+}
+
+/* TargetDimsPicker */ 
+
+div.compTargetDimsPicker .customDims label {
+    margin-top: 4px;
+}
+
+div.compTargetDimsPicker .customDims input[type='text'] {
+    background-color: inherit;
+    color: inherit;
+    text-align: right;
+    width: 3em;
 }
 
 /* UndoRedo */

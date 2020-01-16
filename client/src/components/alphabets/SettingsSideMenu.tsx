@@ -6,7 +6,9 @@ import {
   completeStyles,
   TextAlign,
   isRightToLeft,
-  setRightToLeft
+  setRightToLeft,
+  setBorderColor,
+  setBorderWidth
 } from "../../models/ChartStyles";
 import update from "immutability-helper";
 import FontSizeInput from "./FontSizeInput";
@@ -142,7 +144,9 @@ export default function SettingsSideMenu(props: IProps) {
                 styles.alphabetSummaryLetter.padding.replace(/^0 /, "")
               )}
               setValue={v =>
-                updateStyles("alphabetSummaryLetter", { padding: `0 ${v}px` })
+                updateStyles("alphabetSummaryLetter", {
+                  padding: `0 ${v * 0.05}em`
+                })
               }
               noType
               minimum={0}
@@ -239,14 +243,14 @@ export default function SettingsSideMenu(props: IProps) {
       <div className="input">
         <label>{t("Last_row_filler_font_size")}:</label>
         <FontSizeInput
-          fontSize={styles.lastRowFiller.fontSize!}
+          fontSize={styles.lastRowFiller.fontSize}
           setFontSize={fontSize => updateStyles("lastRowFiller", { fontSize })}
         />
       </div>
       <div className="input">
         <label>{t("Footer_font_size")}:</label>
         <FontSizeInput
-          fontSize={styles.footer.fontSize!}
+          fontSize={styles.footer.fontSize}
           setFontSize={fontSize => updateStyles("footer", { fontSize })}
         />
       </div>
@@ -256,15 +260,17 @@ export default function SettingsSideMenu(props: IProps) {
       <div className="input">
         <label>{t("Border_color")}:</label>
         <ColorInput
-          color={styles.table.borderColor!}
-          setColor={borderColor => updateStyles("table", { borderColor })}
+          color={styles.table.outer.borderColor}
+          setColor={borderColor =>
+            props.setStyles(setBorderColor(styles, borderColor))
+          }
         />
       </div>
       <div className="input">
         <label>{t("Border_thickness")}:</label>
         <NumberPicker
-          value={parseInt(styles.table.borderWidth!)}
-          setValue={v => updateStyles("table", { borderWidth: `${v}px` })}
+          value={Math.round(parseFloat(styles.table.outer.borderWidth) / 0.125)}
+          setValue={v => props.setStyles(setBorderWidth(styles, v * 0.125))}
           noType
           minimum={0}
         />

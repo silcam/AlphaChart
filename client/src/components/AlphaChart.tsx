@@ -4,19 +4,20 @@ import HomePage from "./main/HomePage";
 import AlphabetsRoute from "./alphabets/AlphabetsRoute";
 import UsersRoute from "./users/UsersRoute";
 import NavBar from "./common/NavBar";
-import { useSelector } from "react-redux";
-import { AppState } from "../state/appState";
+import { useAppSelector } from "../state/appState";
 import { useLoad } from "../api/apiRequest";
 import { loadCurrentUser } from "../state/currentUserSlice";
 import AppBanners from "./common/AppBanners";
 import GroupsRoute from "./groups/GroupsRoute";
 
 export default function AlphaChart() {
-  const { user, loaded } = useSelector((state: AppState) => state.currentUser);
+  const { user, loaded } = useAppSelector(state => state.currentUser);
   useLoad(loadCurrentUser());
+  const fullScreen = useAppSelector(state => state.page.fullScreen);
+  const pageRootStyle = fullScreen ? { maxWidth: "100%" } : {};
 
   return (
-    <div id="page-root">
+    <div id="page-root" style={pageRootStyle}>
       <NavBar user={user} />
       <AppBanners />
       {loaded && (

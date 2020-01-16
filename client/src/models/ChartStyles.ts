@@ -25,9 +25,16 @@ export interface ChartStylesStrict {
     textAlign: TextAlign;
   };
   table: {
-    borderStyle: "solid";
-    borderWidth: string;
-    borderColor: string;
+    outer: {
+      borderStyle: "solid";
+      borderWidth: string;
+      borderColor: string;
+    };
+    inner: {
+      borderStyle: "solid";
+      borderWidth: string;
+      borderColor: string;
+    };
   };
   row: {
     flexDirection: "row" | "row-reverse";
@@ -40,6 +47,7 @@ export interface ChartStylesStrict {
   images: {
     [imagePath: string]: ImageStyles;
   };
+  imageContainer: { margin: string; padding: string };
   alphabetSummary: {
     display: "flex" | "none";
     fontSize: string;
@@ -78,7 +86,18 @@ export function defaultChartStyles(): ChartStylesStrict {
     chart: { fontFamily: "AndikaNewBasic" },
     title: { fontSize: "3em", textAlign: "center" },
     subtitle: { fontSize: "1.6em", textAlign: "center" },
-    table: { borderStyle: "solid", borderWidth: "1px", borderColor: "#ddd" },
+    table: {
+      outer: {
+        borderStyle: "solid",
+        borderWidth: "0.125em 0.125em 0 0",
+        borderColor: "#ddd"
+      },
+      inner: {
+        borderStyle: "solid",
+        borderWidth: "0 0 0.125em 0.125em",
+        borderColor: "#ddd"
+      }
+    },
     row: { flexDirection: "row" },
     letter: {
       fontSize: "3em",
@@ -86,8 +105,9 @@ export function defaultChartStyles(): ChartStylesStrict {
       justifyContent: "flex-start"
     },
     images: {},
+    imageContainer: { margin: "0 0em", padding: "0 0em" },
     alphabetSummary: { display: "flex", fontSize: "1.6em" },
-    alphabetSummaryLetter: { padding: "0 0px" },
+    alphabetSummaryLetter: { padding: "0 0em" },
     exampleWord: { fontSize: "1em" },
     exampleWordKeyLetter: { fontWeight: "bold" },
     lastRowFiller: { fontSize: "1em", textAlign: "left" },
@@ -196,5 +216,45 @@ export function setRightToLeft(
     row: { flexDirection: { $set: rightToLeft ? "row-reverse" : "row" } },
     lastRowFiller: { textAlign: { $set: rightToLeft ? "right" : "left" } },
     footer: { textAlign: { $set: rightToLeft ? "right" : "left" } }
+  });
+}
+
+export function setVerticalImagePadding(
+  styles: ChartStylesStrict,
+  vValue: number
+) {
+  return update(styles, {
+    imageContainer: { padding: { $set: `${vValue * 0.0625}em 0` } }
+  });
+}
+
+export function setHorizontalImagePadding(
+  styles: ChartStylesStrict,
+  hValue: number
+) {
+  return update(styles, {
+    imageContainer: { margin: { $set: `0 ${hValue * 0.0625}em` } }
+  });
+}
+
+export function setBorderWidth(styles: ChartStylesStrict, borderWidth: number) {
+  return update(styles, {
+    table: {
+      outer: {
+        $merge: { borderWidth: `${borderWidth}em ${borderWidth}em 0 0` }
+      },
+      inner: {
+        $merge: { borderWidth: `0 0 ${borderWidth}em ${borderWidth}em` }
+      }
+    }
+  });
+}
+
+export function setBorderColor(styles: ChartStylesStrict, borderColor: string) {
+  return update(styles, {
+    table: {
+      outer: { borderColor: { $set: borderColor } },
+      inner: { borderColor: { $set: borderColor } }
+    }
   });
 }

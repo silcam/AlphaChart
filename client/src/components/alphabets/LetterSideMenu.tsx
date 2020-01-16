@@ -85,11 +85,13 @@ export default function LetterSideMenu(props: IProps) {
           <div className="flex-row" style={{ marginBottom: "12px" }}>
             <label>{t("Image_position")}:</label>
             <NumberPicker
-              value={parseInt(props.imageStyles.paddingBottom)}
+              value={Math.round(
+                parseFloat(props.imageStyles.paddingBottom) / 0.125
+              )}
               setValue={v =>
                 props.setImageStyles(
                   update(props.imageStyles, {
-                    paddingBottom: { $set: `${v}px` }
+                    paddingBottom: { $set: `${v * 0.125}em` }
                   })
                 )
               }

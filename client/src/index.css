@@ -87,6 +87,12 @@ button.mini {
   border-radius: 4px;
 }
 
+button.big {
+  font-size: 20px;
+  padding: 12px;
+  align-self: stretch;
+}
+
 label {
   font-weight: 200;
   margin-right: 8px;

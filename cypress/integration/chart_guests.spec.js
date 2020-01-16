@@ -13,7 +13,7 @@ describe("Guest User Menu", () => {
 
     cy.logIn("Titus");
     cy.visit("/alphabets/view/123abc123abc123abc123abc");
-    cy.contains("button", "Save Chart Image");
+    cy.contains("button", "Export Chart");
     cy.contains("button", "Edit").should("not.exist");
   });
 

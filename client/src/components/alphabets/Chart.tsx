@@ -32,7 +32,7 @@ export default function Chart(props: IProps) {
     props.setChart(update(chart, { meta: { $merge: meta } }));
 
   return (
-    <div className="compChart" id="compChart" style={chartStyles.chart}>
+    <div className="compChart" style={chartStyles.chart}>
       <div className="alphaTitle" style={chartStyles.title}>
         {props.edit ? (
           <input
@@ -59,21 +59,30 @@ export default function Chart(props: IProps) {
           )}
         </div>
       )}
-      <div>
-        <div className="alphatable" style={chartStyles.table}>
+      <div className="alphaTableContainer">
+        <div
+          className="alphatable"
+          style={{
+            ...chartStyles.table.outer
+          }}
+        >
           <div
-            className="alpharow alphasummary"
+            className="alpharow"
             style={{
-              ...chartStyles.table,
-              ...chartStyles.alphabetSummary,
+              ...chartStyles.table.inner,
               ...chartStyles.row
             }}
           >
-            {chart.letters.map((letter, index) => (
-              <div key={index} style={chartStyles.alphabetSummaryLetter}>
-                {letter.forms[alphabetSummaryForm(chartStyles)]}
-              </div>
-            ))}
+            <div
+              className="alphasummary"
+              style={{ ...chartStyles.alphabetSummary, ...chartStyles.row }}
+            >
+              {chart.letters.map((letter, index) => (
+                <div key={index} style={chartStyles.alphabetSummaryLetter}>
+                  {letter.forms[alphabetSummaryForm(chartStyles)]}
+                </div>
+              ))}
+            </div>
           </div>
           {alphabetTable.map((row, rowIndex) => (
             <div className="alpharow" key={rowIndex} style={chartStyles.row}>
@@ -90,7 +99,7 @@ export default function Chart(props: IProps) {
                     }`}
                     key={letterIndex}
                     style={{
-                      ...chartStyles.table,
+                      ...chartStyles.table.inner,
                       ...widthStyle
                     }}
                     data-selected={index === props.selectedIndex}
@@ -114,7 +123,7 @@ export default function Chart(props: IProps) {
 
                     <div className="flex-space" />
 
-                    <div>
+                    <div style={chartStyles.imageContainer}>
                       {props.edit ? (
                         <ImageInput
                           alphabet={props.alphabet}
@@ -141,7 +150,7 @@ export default function Chart(props: IProps) {
                     <div
                       style={{
                         ...chartStyles.exampleWord,
-                        marginTop: "8px"
+                        marginTop: "0.5em"
                       }}
                     >
                       {props.edit ? (
@@ -170,7 +179,7 @@ export default function Chart(props: IProps) {
                 <div
                   className="alphacell lastRowFiller"
                   style={{
-                    ...chartStyles.table,
+                    ...chartStyles.table.inner,
                     ...chartStyles.lastRowFiller,
                     flexGrow: 1,
                     flexShrink: 1
@@ -197,7 +206,7 @@ export default function Chart(props: IProps) {
               text={chart.meta.lastRowFiller}
               setText={lastRowFiller => updateMeta({ lastRowFiller })}
               styles={{
-                ...chartStyles.table,
+                ...chartStyles.table.inner,
                 ...chartStyles.lastRowFiller
               }}
             />
@@ -208,7 +217,7 @@ export default function Chart(props: IProps) {
               text={chart.meta.footer}
               setText={footer => updateMeta({ footer })}
               styles={{
-                ...chartStyles.table,
+                ...chartStyles.table.inner,
                 ...chartStyles.footer
               }}
             />

@@ -6,6 +6,7 @@ import alphabetSlice from "../components/alphabets/alphabetSlice";
 import groupSlice from "../components/groups/groupSlice";
 import userSlice from "./userSlice";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
+import pageSlice from "./pageSlice";
 
 const reducer = combineReducers({
   currentUser: currentUserSlice.reducer,
@@ -13,7 +14,8 @@ const reducer = combineReducers({
   loading: loadingSlice.reducer,
   alphabets: alphabetSlice.reducer,
   groups: groupSlice.reducer,
-  users: userSlice.reducer
+  users: userSlice.reducer,
+  page: pageSlice.reducer
 });
 
 const store = configureStore({ reducer });

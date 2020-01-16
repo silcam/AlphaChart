@@ -8,8 +8,7 @@ import { usePush } from "../../api/apiRequest";
 import { pushLogout } from "../../state/currentUserSlice";
 import { useTranslation } from "./useTranslation";
 import Loading from "./Loading";
-import { useSelector } from "react-redux";
-import { AppState } from "../../state/appState";
+import { useAppSelector } from "../../state/appState";
 
 interface IProps {
   user: CurrentUser | null;
@@ -19,8 +18,11 @@ export default function NavBar(props: IProps) {
   const t = useTranslation();
   const history = useHistory();
   const [logOut] = usePush(pushLogout);
-  const loadingCount = useSelector((state: AppState) => state.loading);
+  const loadingCount = useAppSelector(state => state.loading);
   const loading = loadingCount > 0;
+  const fullScreen = useAppSelector(state => state.page.fullScreen);
+
+  if (fullScreen) return null;
 
   return (
     <div className="compNavBar flex-row" style={{ padding: "8px 0" }}>

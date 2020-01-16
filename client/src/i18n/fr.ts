@@ -29,7 +29,6 @@ const fr: Strings = {
   Unknown_error: "Erreur inattendu",
   Edit_chart: "Éditer",
   Copy_to: "Copier à",
-  Save_chart_image: "Enregister image du tableau",
   Image_options: "Options de l'image",
   Width: "Largeur",
   Height: "Hauteur",
@@ -117,7 +116,23 @@ const fr: Strings = {
   User_added: "%{name} a été ajouté.",
   Ok: "OK",
   Browser_not_supported:
-    "Il faut Chrome, Firefox ou Edge pour exporter les images."
+    "Ce navigateur n'est pas compatible. Utilisez Chrome, Firefox ou Edge pour exporter les images.",
+  Export_chart: "Exporter",
+  Text_size: "Taille du texte",
+  Extra_vertical_space: "Plus d'espace verticale",
+  Extra_horizontal_space: "Plus d'espace horizontale",
+  Transparent: "Transparent",
+  Save_image: "Enregistrer l'image",
+  Paper_options: "Options du papier",
+  Dimensions: "Dimensions",
+  Target: "Visées   ",
+  Actual: "Actuelles",
+  Paper_size: "Taille du page",
+  Landscape: "Paysage",
+  Custom_size: "Dimensions",
+  Units: "Unités",
+  DPI: "DPI",
+  Custom: "Autre"
 };
 
 export default fr;

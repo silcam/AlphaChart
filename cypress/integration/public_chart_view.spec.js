@@ -5,7 +5,7 @@ describe("Public Chart View", () => {
     cy.url().should("include", "/alphabets/view/5d4c38e158e6dbb33d7d7b12");
     cy.get(".compChart");
     cy.contains("button", "Copy to").should("not.exist");
-    cy.contains("Save Chart Image");
+    cy.contains("Export Chart");
   });
 
   it("Visits chart (logged in as not-the-owner)", () => {
@@ -16,6 +16,6 @@ describe("Public Chart View", () => {
     cy.get(".compChart");
     cy.contains("button", "Edit Chart").should("not.exist");
     cy.contains("button", "Copy to").should("exist");
-    cy.contains("button", "Save Chart Image").should("exist");
+    cy.contains("button", "Export Chart").should("exist");
   });
 });

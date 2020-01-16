@@ -1,5 +1,4 @@
 import React from "react";
-import ChartToImage from "./ChartToImage";
 import { ChartDimens } from "./ViewChartPage";
 import CopyAlphabetButton from "./CopyAlphabetButton";
 import { useTranslation } from "../common/useTranslation";
@@ -12,7 +11,9 @@ import useCanEdit from "./useCanEdit";
 interface IProps {
   alphabet: AlphabetInflated;
   setChartDimens: (d: ChartDimens | null) => void;
-  setEditing: (e: boolean) => void;
+  setEditing: () => void;
+  setExporting: () => void;
+  disableExport: boolean;
 }
 
 export default function ViewChartHeader(props: IProps) {
@@ -43,9 +44,7 @@ export default function ViewChartHeader(props: IProps) {
       </div>
       <div className="flex-row">
         {canEdit && (
-          <button onClick={() => props.setEditing(true)}>
-            {t("Edit_chart")}
-          </button>
+          <button onClick={props.setEditing}>{t("Edit_chart")}</button>
         )}
         <CopyAlphabetButton
           alphabet={props.alphabet}
@@ -53,7 +52,9 @@ export default function ViewChartHeader(props: IProps) {
           myGroups={myGroups}
         />
         {canShare && <GuestUsersMenu alphabet={props.alphabet} />}
-        <ChartToImage setChartDimens={props.setChartDimens} />
+        <button onClick={props.setExporting} disabled={props.disableExport}>
+          {t("Export_chart")}
+        </button>
       </div>
     </div>
   );

@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { AlphabetInflated } from "../../models/Alphabet";
 import Chart from "./Chart";
 import ViewChartHeader from "./ViewChartHeader";
+import ExportChart from "./ExportChart";
+import { useDispatch } from "react-redux";
+import pageSlice from "../../state/pageSlice";
+import { detect } from "detect-browser";
+import { useTranslation } from "../common/useTranslation";
 
 interface IProps {
   id: string;
@@ -15,16 +20,40 @@ export interface ChartDimens {
 }
 
 export default function ViewChartPage(props: IProps) {
+  const t = useTranslation();
   const [chartDimens, setChartDimens] = useState<ChartDimens | null>(null);
   const alphabet = props.alphabet;
+  const dispatch = useDispatch();
+  const [exporting, _setExporting] = useState(false);
+  const setExporting = (ex: boolean) => {
+    dispatch(pageSlice.actions.setFullScreen(ex));
+    _setExporting(ex);
+  };
+  const [displayBrowserWarning, setDisplayBrowserWarning] = useState(false);
+  const checkBrowserAndSetExporting = () => {
+    if (browserSupported()) setExporting(true);
+    else setDisplayBrowserWarning(true);
+  };
+
+  if (exporting)
+    return (
+      <ExportChart alphabet={props.alphabet} done={() => setExporting(false)} />
+    );
 
   return (
     <div style={{ paddingBottom: "30px" }}>
       <ViewChartHeader
         alphabet={props.alphabet}
         setChartDimens={setChartDimens}
-        setEditing={props.setEditing}
+        setEditing={() => props.setEditing(true)}
+        setExporting={checkBrowserAndSetExporting}
+        disableExport={displayBrowserWarning}
       />
+      {displayBrowserWarning && (
+        <p className="error" style={{ textAlign: "center" }}>
+          {t("Browser_not_supported")}
+        </p>
+      )}
       <div
         style={
           chartDimens
@@ -39,4 +68,9 @@ export default function ViewChartPage(props: IProps) {
       </div>
     </div>
   );
+}
+
+function browserSupported() {
+  const browser = detect();
+  return browser && ["chrome", "firefox", "edge"].includes(browser.name);
 }

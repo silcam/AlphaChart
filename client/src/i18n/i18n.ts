@@ -1,4 +1,4 @@
-import en, { Strings, TKey } from "./en";
+import en, { Strings, TKey, isTKey } from "./en";
 import fr from "./fr";
 
 const strings = {
@@ -31,4 +31,11 @@ export type TFunc = (key: TKey, subs?: { [key: string]: string }) => string;
 
 export function tForLocale(locale: keyof typeof strings): TFunc {
   return (key, subs) => translate(strings[locale], key, subs);
+}
+
+export function nonStrictT(t: TFunc): (str: string) => string {
+  return (str: string) => {
+    if (isTKey(str)) return t(str);
+    return str;
+  };
 }

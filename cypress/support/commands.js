@@ -48,6 +48,14 @@ Cypress.Commands.add("withLabel", label =>
     .first()
 );
 
+// Find item by label
+Cypress.Commands.add("inLabel", label =>
+  cy
+    .contains("label", label)
+    .find("input, select")
+    .first()
+);
+
 // Log in
 Cypress.Commands.add("logIn", user => {
   let loginAttempt;
