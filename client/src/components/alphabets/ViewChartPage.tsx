@@ -29,11 +29,6 @@ export default function ViewChartPage(props: IProps) {
     dispatch(pageSlice.actions.setFullScreen(ex));
     _setExporting(ex);
   };
-  const [displayBrowserWarning, setDisplayBrowserWarning] = useState(false);
-  const checkBrowserAndSetExporting = () => {
-    if (browserSupported()) setExporting(true);
-    else setDisplayBrowserWarning(true);
-  };
 
   if (exporting)
     return (
@@ -46,14 +41,9 @@ export default function ViewChartPage(props: IProps) {
         alphabet={props.alphabet}
         setChartDimens={setChartDimens}
         setEditing={() => props.setEditing(true)}
-        setExporting={checkBrowserAndSetExporting}
-        disableExport={displayBrowserWarning}
+        setExporting={() => setExporting(true)}
       />
-      {displayBrowserWarning && (
-        <p className="error" style={{ textAlign: "center" }}>
-          {t("Browser_not_supported")}
-        </p>
-      )}
+
       <div
         style={
           chartDimens
@@ -68,9 +58,4 @@ export default function ViewChartPage(props: IProps) {
       </div>
     </div>
   );
-}
-
-function browserSupported() {
-  const browser = detect();
-  return browser && ["chrome", "firefox", "edge"].includes(browser.name);
 }

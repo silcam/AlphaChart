@@ -13,7 +13,6 @@ interface IProps {
   setChartDimens: (d: ChartDimens | null) => void;
   setEditing: () => void;
   setExporting: () => void;
-  disableExport: boolean;
 }
 
 export default function ViewChartHeader(props: IProps) {
@@ -52,9 +51,7 @@ export default function ViewChartHeader(props: IProps) {
           myGroups={myGroups}
         />
         {canShare && <GuestUsersMenu alphabet={props.alphabet} />}
-        <button onClick={props.setExporting} disabled={props.disableExport}>
-          {t("Export_chart")}
-        </button>
+        <button onClick={props.setExporting}>{t("Export_chart")}</button>
       </div>
     </div>
   );

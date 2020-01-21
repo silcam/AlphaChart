@@ -11,23 +11,19 @@ import {
 } from "../../models/ChartStyles";
 import ExportChartDims from "./ExportChartDims";
 import ColorInput from "../common/ColorInput";
-import { throwAppError, asAppError } from "../../AppError/AppError";
-import htmlToImage from "html-to-image";
 import { saveAs } from "file-saver";
 import {
   defaultPageDims,
   Dims,
   contentInPixels,
-  pdfDoc,
-  PageDims
+  PageDims,
+  pageInPixels
 } from "./PageDims";
 import TargetDimsPicker from "./TargetDimsPicker";
 import { inTolerance } from "../../util/numberUtils";
 import update from "immutability-helper";
-import { Dispatch } from "redux";
-import bannerSlice from "../../banners/bannerSlice";
-import { useDispatch } from "react-redux";
-import jspdf from "jspdf";
+import { apiPath } from "../../api/Api";
+import Axios from "axios";
 
 interface IProps {
   alphabet: Alphabet;
@@ -36,7 +32,6 @@ interface IProps {
 
 export default function ExportChart(props: IProps) {
   const t = useTranslation();
-  const dispatch = useDispatch();
 
   const [settingPageDims, setSettingPageDims] = useState(true);
   const [pageDims, setPageDims] = useState(defaultPageDims());
@@ -70,17 +65,12 @@ export default function ExportChart(props: IProps) {
   const [exportingPdf, setExportingPdf] = useState(false);
   const exportImage = async () => {
     setExportingImage(true);
-    await makeImage(transparentBG ? undefined : bgColor, dispatch, true);
+    await makeImage(transparentBG);
     setExportingImage(false);
   };
   const exportPdf = async () => {
     setExportingPdf(true);
-    await makePdf(
-      transparentBG ? undefined : bgColor,
-      pageDims,
-      actChartDims,
-      dispatch
-    );
+    await makePDF(pageDims, actChartDims);
     setExportingPdf(false);
   };
 
@@ -91,12 +81,7 @@ export default function ExportChart(props: IProps) {
       previewScale,
       setPreviewScale
     );
-    scale(
-      targetDims,
-      nodeDims("chartToExport").map(deviceUnscale) as Dims,
-      chartScale,
-      setChartScale
-    );
+    scale(targetDims, nodeDims("chartToExport"), chartScale, setChartScale);
   };
 
   useEffect(() => {
@@ -113,7 +98,7 @@ export default function ExportChart(props: IProps) {
   });
 
   useEffect(() => {
-    const newActChartDims = nodeDims("chartToExport").map(deviceUnscale);
+    const newActChartDims = nodeDims("chartToExport");
     if (!newActChartDims.every((val, i) => val === actChartDims[i]))
       setActChartDims(newActChartDims as Dims);
   });
@@ -194,10 +179,11 @@ export default function ExportChart(props: IProps) {
       <div className="preview" id="previewWindow">
         <div
           id="chartToPreview"
-          style={{
-            ...chartContainerStyles(previewScale, baseFont),
-            backgroundColor: transparentBG ? "#999" : bgColor
-          }}
+          style={chartContainerStyles(
+            previewScale,
+            baseFont,
+            transparentBG ? "#999" : bgColor
+          )}
         >
           <Chart alphabet={props.alphabet} chart={chart} setChart={() => {}} />
         </div>
@@ -207,7 +193,11 @@ export default function ExportChart(props: IProps) {
         <div style={{ position: "absolute", left: "100%" }}>
           <div
             id="chartToExport"
-            style={chartContainerStyles(deviceScale(chartScale), baseFont)}
+            style={chartContainerStyles(
+              chartScale,
+              baseFont,
+              transparentBG ? null : bgColor
+            )}
           >
             <Chart
               alphabet={props.alphabet}
@@ -221,11 +211,16 @@ export default function ExportChart(props: IProps) {
   );
 }
 
-function chartContainerStyles(scale: number, baseFont: number) {
+function chartContainerStyles(
+  scale: number,
+  baseFont: number,
+  bgColor: string | null
+) {
   return {
     fontSize: `${baseFont * scale}px`,
     width: `${800 * scale}px`,
-    margin: "0 auto"
+    margin: "0 auto",
+    backgroundColor: bgColor ? bgColor : undefined
   };
 }
 
@@ -259,44 +254,24 @@ function nodeDims(id: string): Dims {
   return node ? [node.offsetWidth, node.offsetHeight] : [1, 1];
 }
 
-function deviceScale(value: number) {
-  return value / window.devicePixelRatio;
+async function makeImage(transparentBG: boolean) {
+  const html = document.getElementById("chartToExport")!.outerHTML;
+  const response = await Axios.post(
+    apiPath("/export/image"),
+    { html, transparentBG },
+    {
+      responseType: "blob"
+    }
+  );
+  saveAs(new Blob([response.data]), "chart.png");
 }
 
-function deviceUnscale(value: number) {
-  return value * window.devicePixelRatio;
-}
-
-async function makeImage(
-  backgroundColor: string | undefined,
-  dispatch: Dispatch,
-  save: boolean = false
-) {
-  try {
-    const opts = backgroundColor ? { backgroundColor } : {};
-    const chartNode = document.getElementById("chartToExport");
-    if (!chartNode) throwAppError({ type: "Alphachart", code: "1" });
-    const dataUrl = await htmlToImage.toPng(chartNode!, opts);
-    if (save) saveAs(dataUrl, "chart.png");
-    console.log(`DATA URL: ${dataUrl}`);
-    return dataUrl;
-  } catch (err) {
-    console.error(err);
-    dispatch(
-      bannerSlice.actions.add({ type: "Error", error: asAppError(err) })
-    );
-  }
-}
-
-async function makePdf(
-  backgroundColor: string | undefined,
-  pageDims: PageDims,
-  imageDims: Dims,
-  dispatch: Dispatch
-) {
-  const imageUrl = await makeImage(backgroundColor, dispatch);
-  if (imageUrl) {
-    const doc = pdfDoc(pageDims, imageDims, imageUrl);
-    await doc.save("chart.pdf", { returnPromise: true });
-  }
+async function makePDF(pageDims: PageDims, imageDims: Dims) {
+  const html = document.getElementById("chartToExport")!.outerHTML;
+  const response = await Axios.post(
+    apiPath("/export/pdf"),
+    { html, pageDims: pageInPixels(pageDims), imageDims },
+    { responseType: "blob" }
+  );
+  saveAs(new Blob([response.data]), "chart.pdf");
 }

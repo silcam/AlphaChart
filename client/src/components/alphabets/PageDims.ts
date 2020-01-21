@@ -1,5 +1,3 @@
-import jsPDF from "jspdf";
-
 export type Dims = [number, number];
 
 export const PaperSizes = <const>[
@@ -85,21 +83,6 @@ export function defaultPageDims(merge?: Partial<PageDims>): PageDims {
 
 export function dpiOptions() {
   return [100, 150, 200, 250, 300];
-}
-
-export function pdfDoc(pageDims: PageDims, imageDims: Dims, imageUrl: string) {
-  const pagePx = pageInPixels(pageDims);
-  const imageXY = dimsMap(pagePx, (pageDim, i) => (pageDim - imageDims[i]) / 2);
-  const orientation = pagePx[0] > pagePx[1] ? "landscape" : "portrait";
-  const pdf = new jsPDF({ unit: "pt", format: pagePx, orientation }).addImage(
-    imageUrl,
-    "PNG",
-    imageXY[0],
-    imageXY[1],
-    imageDims[0],
-    imageDims[1]
-  );
-  return pdf;
 }
 
 export function dimsMap<T>(

@@ -42,12 +42,12 @@ describe("Export Chart", () => {
 
   it("Responds to options", () => {
     cy.acceptA4();
-    cy.contains("2190 x 2864").should("exist");
+    cy.contains("2190 x 2852").should("exist");
 
     cy.withLabel("Columns")
       .contains("button", "+")
       .click();
-    cy.contains("2190 x 2338").should("exist");
+    cy.contains("2190 x 2328").should("exist");
 
     cy.withLabel("Text Size")
       .contains("button", "-")
@@ -57,12 +57,12 @@ describe("Export Chart", () => {
     cy.withLabel("Vertical Space")
       .contains("+")
       .click();
-    cy.contains("2190 x 2254").should("exist");
+    cy.contains("2190 x 2255").should("exist");
 
     cy.withLabel("Horizontal Space")
       .contains("+")
       .click();
-    cy.contains("2190 x 2244").should("exist");
+    cy.contains("2190 x 2243").should("exist");
 
     cy.get(".color-picker-preview").click();
     cy.get("input[value='#FFFFFF']")
@@ -98,11 +98,17 @@ describe("Export Chart", () => {
     cy.visit("/alphabets/view/123abc123abc123abc123abc");
     cy.contains("Export Chart").click();
     cy.acceptA4();
-    cy.contains("Save").click();
+    cy.contains("Save Image").click();
     cy.contains("button", "Saving...").should("exist");
     cy.contains("button", "Save Image").should("not.exist");
     cy.contains("button", "Saving...").should("not.exist");
     cy.contains("button", "Save Image").should("exist");
+
+    cy.contains("Save PDF").click();
+    cy.contains("button", "Saving...").should("exist");
+    cy.contains("button", "Save PDF").should("not.exist");
+    cy.contains("button", "Saving...").should("not.exist");
+    cy.contains("button", "Save PDF").should("exist");
   });
 });
 

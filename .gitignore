@@ -29,3 +29,7 @@ yarn-error.log*
 # migrations
 /.migrate
 /cypress/videos
+
+# Export png/pdf files
+/tmp/export/*.pdf
+/tmp/export/*.png
