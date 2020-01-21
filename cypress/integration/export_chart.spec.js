@@ -19,12 +19,12 @@ describe("Export Chart", () => {
   it("Picks paper options", () => {
     cy.contains("label", "Landscape").click();
     cy.contains("OK").click();
-    cy.contains("Target : 3510 x 2490").should("exist");
+    cy.contains("Target : 3210 x 2190").should("exist");
 
     cy.contains("Paper Options").click();
     cy.withLabel("DPI").select("150");
     cy.contains("OK").click();
-    cy.contains("Target : 1755 x 1245").should("exist");
+    cy.contains("Target : 1605 x 1095").should("exist");
 
     cy.contains("Paper Options").click();
     cy.withLabel("Paper Size").select("Custom");
@@ -42,27 +42,27 @@ describe("Export Chart", () => {
 
   it("Responds to options", () => {
     cy.acceptA4();
-    cy.contains("2490 x 3246").should("exist");
+    cy.contains("2190 x 2864").should("exist");
 
     cy.withLabel("Columns")
       .contains("button", "+")
       .click();
-    cy.contains("2490 x 2650").should("exist");
+    cy.contains("2190 x 2338").should("exist");
 
     cy.withLabel("Text Size")
       .contains("button", "-")
       .click();
-    cy.contains("2490 x 2534").should("exist");
+    cy.contains("2190 x 2234").should("exist");
 
     cy.withLabel("Vertical Space")
       .contains("+")
       .click();
-    cy.contains("2490 x 2558").should("exist");
+    cy.contains("2190 x 2254").should("exist");
 
     cy.withLabel("Horizontal Space")
       .contains("+")
       .click();
-    cy.contains("2490 x 2544").should("exist");
+    cy.contains("2190 x 2244").should("exist");
 
     cy.get(".color-picker-preview").click();
     cy.get("input[value='#FFFFFF']")
@@ -100,9 +100,9 @@ describe("Export Chart", () => {
     cy.acceptA4();
     cy.contains("Save").click();
     cy.contains("button", "Saving...").should("exist");
-    cy.contains("button", "Save").should("not.exist");
+    cy.contains("button", "Save Image").should("not.exist");
     cy.contains("button", "Saving...").should("not.exist");
-    cy.contains("button", "Save").should("exist");
+    cy.contains("button", "Save Image").should("exist");
   });
 });
 

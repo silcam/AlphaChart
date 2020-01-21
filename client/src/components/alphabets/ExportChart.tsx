@@ -14,13 +14,20 @@ import ColorInput from "../common/ColorInput";
 import { throwAppError, asAppError } from "../../AppError/AppError";
 import htmlToImage from "html-to-image";
 import { saveAs } from "file-saver";
-import { defaultPageDims, inPixels, Dims } from "./PageDims";
+import {
+  defaultPageDims,
+  Dims,
+  contentInPixels,
+  pdfDoc,
+  PageDims
+} from "./PageDims";
 import TargetDimsPicker from "./TargetDimsPicker";
 import { inTolerance } from "../../util/numberUtils";
 import update from "immutability-helper";
 import { Dispatch } from "redux";
 import bannerSlice from "../../banners/bannerSlice";
 import { useDispatch } from "react-redux";
+import jspdf from "jspdf";
 
 interface IProps {
   alphabet: Alphabet;
@@ -33,7 +40,7 @@ export default function ExportChart(props: IProps) {
 
   const [settingPageDims, setSettingPageDims] = useState(true);
   const [pageDims, setPageDims] = useState(defaultPageDims());
-  const targetDims = inPixels(pageDims);
+  const targetDims = contentInPixels(pageDims);
 
   const [actChartDims, setActChartDims] = useState<Dims>([1, 1]);
   const [previewScale, setPreviewScale] = useState(1);
@@ -59,11 +66,22 @@ export default function ExportChart(props: IProps) {
     }
   });
 
-  const [exporting, setExporting] = useState(false);
+  const [exportingImage, setExportingImage] = useState(false);
+  const [exportingPdf, setExportingPdf] = useState(false);
   const exportImage = async () => {
-    setExporting(true);
-    await makeImage(transparentBG ? undefined : bgColor, dispatch);
-    setExporting(false);
+    setExportingImage(true);
+    await makeImage(transparentBG ? undefined : bgColor, dispatch, true);
+    setExportingImage(false);
+  };
+  const exportPdf = async () => {
+    setExportingPdf(true);
+    await makePdf(
+      transparentBG ? undefined : bgColor,
+      pageDims,
+      actChartDims,
+      dispatch
+    );
+    setExportingPdf(false);
   };
 
   const rescale = () => {
@@ -151,8 +169,19 @@ export default function ExportChart(props: IProps) {
               </label>
             </div>
 
-            <button className="big" onClick={exportImage} disabled={exporting}>
-              {exporting ? t("Saving") : t("Save_image")}
+            <button
+              className="big"
+              onClick={exportImage}
+              disabled={exportingImage || exportingPdf}
+            >
+              {exportingImage ? t("Saving") : t("Save_image")}
+            </button>
+            <button
+              className="big"
+              onClick={exportPdf}
+              disabled={exportingImage || exportingPdf}
+            >
+              {exportingPdf ? t("Saving") : t("Save_pdf")}
             </button>
 
             <button className="big" onClick={props.done}>
@@ -240,18 +269,34 @@ function deviceUnscale(value: number) {
 
 async function makeImage(
   backgroundColor: string | undefined,
-  dispatch: Dispatch
+  dispatch: Dispatch,
+  save: boolean = false
 ) {
   try {
     const opts = backgroundColor ? { backgroundColor } : {};
     const chartNode = document.getElementById("chartToExport");
     if (!chartNode) throwAppError({ type: "Alphachart", code: "1" });
     const dataUrl = await htmlToImage.toPng(chartNode!, opts);
-    saveAs(dataUrl, "chart.png");
+    if (save) saveAs(dataUrl, "chart.png");
+    console.log(`DATA URL: ${dataUrl}`);
+    return dataUrl;
   } catch (err) {
     console.error(err);
     dispatch(
       bannerSlice.actions.add({ type: "Error", error: asAppError(err) })
     );
+  }
+}
+
+async function makePdf(
+  backgroundColor: string | undefined,
+  pageDims: PageDims,
+  imageDims: Dims,
+  dispatch: Dispatch
+) {
+  const imageUrl = await makeImage(backgroundColor, dispatch);
+  if (imageUrl) {
+    const doc = pdfDoc(pageDims, imageDims, imageUrl);
+    await doc.save("chart.pdf", { returnPromise: true });
   }
 }

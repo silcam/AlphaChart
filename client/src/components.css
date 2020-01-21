@@ -139,6 +139,7 @@ div.compExportChart .controls {
     padding: 12px;
     background-color: #1892ef;
     color: #fff;
+    overflow-y: scroll;
 }
 
 div.compExportChart .controls a {

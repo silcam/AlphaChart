@@ -1,3 +1,5 @@
+import jsPDF from "jspdf";
+
 export type Dims = [number, number];
 
 export const PaperSizes = <const>[
@@ -20,6 +22,7 @@ export interface PageDims {
   customSize: Dims;
   customUnits: UnitOfLength;
   dpi: number;
+  margin: number;
 }
 
 // Numbers in inches
@@ -33,6 +36,10 @@ const paperSizes = {
   "8.5x11": [8.5, 11]
 };
 
+export function usingPx(pageDims: PageDims) {
+  return pageDims.paperSize === "Custom" && pageDims.customUnits === "px";
+}
+
 function convertDPI(pageDims: PageDims) {
   switch (pageDims.customUnits) {
     case "px":
@@ -45,17 +52,23 @@ function convertDPI(pageDims: PageDims) {
   }
 }
 
-export function inPixels(pageDims: PageDims): Dims {
+export function pageInPixels(pageDims: PageDims): Dims {
   if (pageDims.paperSize === "Custom") {
     const dotsPerUnit = convertDPI(pageDims);
-    return pageDims.customSize.map(val =>
-      Math.round(val * dotsPerUnit)
-    ) as Dims;
+    return dimsMap(pageDims.customSize, val => Math.round(val * dotsPerUnit));
   }
-  const pixDims = paperSizes[pageDims.paperSize].map(val =>
+  const pixDims = dimsMap(paperSizes[pageDims.paperSize] as Dims, val =>
     Math.round(val * pageDims.dpi)
   );
-  return (pageDims.landscape ? pixDims.reverse() : pixDims) as Dims;
+  return pageDims.landscape ? dimsRev(pixDims) : pixDims;
+}
+
+export function contentInPixels(pageDims: PageDims): Dims {
+  const pageDimsPx = pageInPixels(pageDims);
+  if (usingPx(pageDims)) return pageDimsPx;
+
+  const marginPx = pageDims.margin * pageDims.dpi;
+  return dimsMap(pageDimsPx, px => px - 2 * marginPx);
 }
 
 export function defaultPageDims(merge?: Partial<PageDims>): PageDims {
@@ -63,12 +76,39 @@ export function defaultPageDims(merge?: Partial<PageDims>): PageDims {
     paperSize: "A4",
     landscape: false,
     dpi: 300,
-    customSize: [21, 29.7],
-    customUnits: "cm"
+    customSize: [8.5, 11],
+    customUnits: "in",
+    margin: 0.5
   };
   return merge ? { ...defaultDims, ...merge } : defaultDims;
 }
 
 export function dpiOptions() {
   return [100, 150, 200, 250, 300];
+}
+
+export function pdfDoc(pageDims: PageDims, imageDims: Dims, imageUrl: string) {
+  const pagePx = pageInPixels(pageDims);
+  const imageXY = dimsMap(pagePx, (pageDim, i) => (pageDim - imageDims[i]) / 2);
+  const orientation = pagePx[0] > pagePx[1] ? "landscape" : "portrait";
+  const pdf = new jsPDF({ unit: "pt", format: pagePx, orientation }).addImage(
+    imageUrl,
+    "PNG",
+    imageXY[0],
+    imageXY[1],
+    imageDims[0],
+    imageDims[1]
+  );
+  return pdf;
+}
+
+export function dimsMap<T>(
+  dims: Dims,
+  map: (val: number, index: number) => T
+): [T, T] {
+  return dims.map(map) as [T, T];
+}
+
+export function dimsRev(dims: Dims): Dims {
+  return [dims[1], dims[0]];
 }

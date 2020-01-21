@@ -5,7 +5,8 @@ import {
   PaperSize,
   UnitsOfLength,
   UnitOfLength,
-  dpiOptions
+  dpiOptions,
+  usingPx
 } from "./PageDims";
 import Select from "../common/Select";
 import update from "immutability-helper";
@@ -78,7 +79,7 @@ export default function TargetDimsPicker(props: IProps) {
           </label>
         </div>
       )}
-      {(pageDims.paperSize !== "Custom" || pageDims.customUnits !== "px") && (
+      {!usingPx(pageDims) && (
         <div>
           <label>{t("DPI")} </label>
           <Select

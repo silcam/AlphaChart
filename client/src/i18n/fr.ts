@@ -122,7 +122,7 @@ const fr: Strings = {
   Extra_vertical_space: "Plus d'espace verticale",
   Extra_horizontal_space: "Plus d'espace horizontale",
   Transparent: "Transparent",
-  Save_image: "Enregistrer l'image",
+  Save_image: "Enregistrer image",
   Paper_options: "Options du papier",
   Dimensions: "Dimensions",
   Target: "Visées   ",
@@ -132,7 +132,8 @@ const fr: Strings = {
   Custom_size: "Dimensions",
   Units: "Unités",
   DPI: "DPI",
-  Custom: "Autre"
+  Custom: "Autre",
+  Save_pdf: "Enregister PDF"
 };
 
 export default fr;

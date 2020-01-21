@@ -128,7 +128,8 @@ const en = {
   Custom_size: "Custom Size",
   Units: "Units",
   DPI: "DPI",
-  Custom: "Custom"
+  Custom: "Custom",
+  Save_pdf: "Save PDF"
 };
 
 export type Strings = typeof en;
