@@ -99,15 +99,15 @@ describe("Export Chart", () => {
     cy.contains("Export Chart").click();
     cy.acceptA4();
     cy.contains("Save Image").click();
-    cy.contains("button", "Saving...").should("exist");
+    cy.contains("label", "Saving...").should("exist");
     cy.contains("button", "Save Image").should("not.exist");
-    cy.contains("button", "Saving...").should("not.exist");
+    cy.contains("label", "Saving...").should("not.exist");
     cy.contains("button", "Save Image").should("exist");
 
     cy.contains("Save PDF").click();
-    cy.contains("button", "Saving...").should("exist");
+    cy.contains("label", "Saving...").should("exist");
     cy.contains("button", "Save PDF").should("not.exist");
-    cy.contains("button", "Saving...").should("not.exist");
+    cy.contains("label", "Saving...").should("not.exist");
     cy.contains("button", "Save PDF").should("exist");
   });
 });

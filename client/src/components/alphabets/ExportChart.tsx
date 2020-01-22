@@ -11,19 +11,11 @@ import {
 } from "../../models/ChartStyles";
 import ExportChartDims from "./ExportChartDims";
 import ColorInput from "../common/ColorInput";
-import { saveAs } from "file-saver";
-import {
-  defaultPageDims,
-  Dims,
-  contentInPixels,
-  PageDims,
-  pageInPixels
-} from "./PageDims";
+import { defaultPageDims, Dims, contentInPixels } from "./PageDims";
 import TargetDimsPicker from "./TargetDimsPicker";
 import { inTolerance } from "../../util/numberUtils";
 import update from "immutability-helper";
-import { apiPath } from "../../api/Api";
-import Axios from "axios";
+import ExportButtons from "./ExportButtons";
 
 interface IProps {
   alphabet: Alphabet;
@@ -60,19 +52,6 @@ export default function ExportChart(props: IProps) {
       )
     }
   });
-
-  const [exportingImage, setExportingImage] = useState(false);
-  const [exportingPdf, setExportingPdf] = useState(false);
-  const exportImage = async () => {
-    setExportingImage(true);
-    await makeImage(transparentBG);
-    setExportingImage(false);
-  };
-  const exportPdf = async () => {
-    setExportingPdf(true);
-    await makePDF(pageDims, actChartDims);
-    setExportingPdf(false);
-  };
 
   const rescale = () => {
     scale(
@@ -154,24 +133,12 @@ export default function ExportChart(props: IProps) {
               </label>
             </div>
 
-            <button
-              className="big"
-              onClick={exportImage}
-              disabled={exportingImage || exportingPdf}
-            >
-              {exportingImage ? t("Saving") : t("Save_image")}
-            </button>
-            <button
-              className="big"
-              onClick={exportPdf}
-              disabled={exportingImage || exportingPdf}
-            >
-              {exportingPdf ? t("Saving") : t("Save_pdf")}
-            </button>
-
-            <button className="big" onClick={props.done}>
-              {t("Done")}
-            </button>
+            <ExportButtons
+              transparentBG={transparentBG}
+              pageDims={pageDims}
+              actChartDims={actChartDims}
+              done={props.done}
+            />
           </div>
         )}
       </div>
@@ -252,26 +219,4 @@ function needToRescale(
 function nodeDims(id: string): Dims {
   const node = document.getElementById(id);
   return node ? [node.offsetWidth, node.offsetHeight] : [1, 1];
-}
-
-async function makeImage(transparentBG: boolean) {
-  const html = document.getElementById("chartToExport")!.outerHTML;
-  const response = await Axios.post(
-    apiPath("/export/image"),
-    { html, transparentBG },
-    {
-      responseType: "blob"
-    }
-  );
-  saveAs(new Blob([response.data]), "chart.png");
-}
-
-async function makePDF(pageDims: PageDims, imageDims: Dims) {
-  const html = document.getElementById("chartToExport")!.outerHTML;
-  const response = await Axios.post(
-    apiPath("/export/pdf"),
-    { html, pageDims: pageInPixels(pageDims), imageDims },
-    { responseType: "blob" }
-  );
-  saveAs(new Blob([response.data]), "chart.pdf");
 }

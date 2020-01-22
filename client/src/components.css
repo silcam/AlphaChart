@@ -156,6 +156,11 @@ div.compExportChart .controls button:active {
     background-color: #eee;
 }
 
+div.compExportChart .controls button.big {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 div.compExportChart .preview {
     flex-grow: 1;
 }
@@ -296,6 +301,38 @@ div.compOptionButtonSimple div.contextMenu {
     right: 0;
     background-color: white;
     box-shadow: 5px 5px 20px #999;
+}
+
+/* ProgressBar */
+
+div.compProgressBar {
+    width: 100%;
+    background-color: #999;
+    height: 12px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+div.compProgressBar > div {
+    background-color: #fff;
+    height: 100%;
+    border-radius: 4px;
+}
+
+div.compProgressBar > div.indeterminate {
+    width: 20%;
+    animation-duration: 1.5s;
+    animation-name: flyAcross;
+    animation-iteration-count: infinite;
+}
+
+@keyframes flyAcross {
+    from {
+        margin-left: -20%;
+    }
+    to {
+        margin-left: 100%
+    }
 }
 
 /* PublicHomePage */
