@@ -12,12 +12,26 @@ export async function currentUser(req: Request): Promise<StoredUser | null> {
   return null;
 }
 
-export async function verifyLogin(
+export async function currentUserStrict(
   req: Request,
-  expUserId?: ObjectId
-): Promise<StoredUser | null> {
+  idFilter?: ObjectId[]
+): Promise<StoredUser> {
   const user = await currentUser(req);
-  if (!user) return null;
-  if (expUserId && !user._id.equals(expUserId)) return null;
+  if (!user) throw { status: 401 };
+  if (idFilter && !idFilter.some(id => id.equals(user._id)))
+    throw { status: 401 };
   return user;
+}
+
+export async function getById<T>(
+  _id: any,
+  get: (_id: ObjectId) => Promise<T | null> /*, toThrow: any = {status: 404} */
+) {
+  try {
+    const item = await get(new ObjectID(_id));
+    if (!item) throw { status: 404 };
+    return item;
+  } catch (e) {
+    throw { status: 404 };
+  }
 }

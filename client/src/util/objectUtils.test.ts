@@ -1,4 +1,10 @@
-import { unset, validateFields, Field, objKeys } from "./objectUtils";
+import {
+  unset,
+  validateFields,
+  Field,
+  objKeys,
+  filterKeys
+} from "./objectUtils";
 
 test("Unset", () => {
   const obj = { a: 1, b: 2, c: 3 };
@@ -41,4 +47,11 @@ test("Validate: not an object", () => {
 
 test("objKeys", () => {
   expect(objKeys({ a: 1, b: 2 })).toEqual(["a", "b"]);
+});
+
+test("filterKeys", () => {
+  const obj = { a: 1, b: 2, c: undefined };
+  const filtered = filterKeys(obj, ["a", "c", "d"]);
+  expect(filtered).toEqual({ a: 1, c: undefined });
+  expect(Object.keys(filtered)).toEqual(["a", "c"]);
 });

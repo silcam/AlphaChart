@@ -14,6 +14,7 @@ interface Fixtures {
   users: StoredUser[];
   groups: StoredGroup[];
   alphabets: StoredAlphabet[];
+  archivedAlphabets: StoredAlphabet[];
 }
 
 const users = [
@@ -177,7 +178,8 @@ const fixtures: Fixtures = {
         ]
       }
     }
-  ]
+  ],
+  archivedAlphabets: []
 };
 
 export default fixtures;

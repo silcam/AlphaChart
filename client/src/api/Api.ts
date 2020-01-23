@@ -7,6 +7,11 @@ import { LoadAction } from "../state/LoadAction";
 export const API_VERSION = 7;
 export const OLD_API_STATUS_410 = 410;
 
+export enum APIError {
+  EmailInUse = 1001,
+  InvalidInput
+}
+
 export function apiPath(path: string) {
   return `/api/v/${API_VERSION}${path}`;
 }
@@ -26,6 +31,7 @@ export interface APIGet {
     {},
     Pick<ApiPayload, "alphabets" | "groups" | "users">
   ];
+  "/archivedAlphabets/:id": [{ id: string }, {}, Alphabet];
   // "/users": [{}, {}, User[]];
   "/users/current": [
     {},
@@ -55,7 +61,18 @@ export interface APIPost {
   "/alphabets/:id/unshare": [{ id: string }, { userId: string }, Alphabet];
   "/alphabets": [{}, DraftAlphabet, Alphabet];
   "/alphabets/:id/charts": [{ id: string }, AlphabetChart, Alphabet];
+  "/alphabets/:id/update": [
+    { id: string },
+    { name: string },
+    Pick<ApiPayload, "alphabets" | "alphabetListings">
+  ];
+  "/alphabets/:id/archive": [{ id: string }, {}, null];
   "/users": [{}, NewUser, null];
+  "/users/:id/update": [
+    { id: string },
+    { name: string; email: string },
+    Pick<ApiPayload, "users" | "currentUser">
+  ];
   "/users/verify": [{}, { verification: string }, CurrentUser];
   "/users/login": [
     {},
@@ -65,6 +82,11 @@ export interface APIPost {
   "/users/locale": [{}, { locale: Locale }, null];
   "/users/logout": [{}, null, null];
   "/groups": [{}, NewGroup, Group];
+  "/groups/:id/update": [
+    { id: string },
+    { name: string },
+    Pick<ApiPayload, "groups">
+  ];
   "/groups/:id/addUser": [
     { id: string },
     { id: string },

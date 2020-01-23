@@ -88,6 +88,16 @@ async function updateChart(
   return result.value;
 }
 
+async function updateAlphabet(
+  _id: ObjectId,
+  mergeAlphabet: Partial<StoredAlphabet>
+): Promise<StoredAlphabet | null> {
+  log.log(`[Query] UPDATE alphabet ${_id}`);
+  const collection = await alphabetCollection();
+  await collection.updateOne({ _id }, { $set: mergeAlphabet });
+  return collection.findOne({ _id });
+}
+
 async function copyAlphabet(
   alphabet: StoredAlphabet,
   _owner: ObjectId,
@@ -129,8 +139,29 @@ async function unshareAlphabet(
   return collection.findOne({ _id: alphabetId });
 }
 
+async function archive(_id: ObjectId): Promise<void> {
+  log.log(`[Query] DELETE Archive alphabet ${_id}`);
+  const alphabets = await alphabetCollection();
+  const archivedAlphabets = await archivedCollection();
+  const alphabet = await alphabets.findOne({ _id });
+  if (!alphabet) return;
+
+  archivedAlphabets.insertOne(alphabet);
+  alphabets.deleteOne({ _id });
+}
+
+async function getArchived(_id: ObjectId): Promise<StoredAlphabet | null> {
+  log.log(`[Query] READ Archived Alphabet ${_id}`);
+  const collection = await archivedCollection();
+  return collection.findOne({ _id });
+}
+
 async function alphabetCollection(): Promise<Collection<StoredAlphabet>> {
   return (await Data.db()).collection("alphabets");
+}
+
+async function archivedCollection(): Promise<Collection<StoredAlphabet>> {
+  return (await Data.db()).collection("archivedAlphabets");
 }
 
 export default {
@@ -139,8 +170,11 @@ export default {
   alphabetsByGroup,
   alphabetsByUser,
   createAlphabet,
+  updateAlphabet,
   updateChart,
   copyAlphabet,
   shareAlphabet,
-  unshareAlphabet
+  unshareAlphabet,
+  archive,
+  getArchived
 };

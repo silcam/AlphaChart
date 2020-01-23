@@ -44,6 +44,17 @@ export function addPostHandler<T extends PostRoute>(
   });
 }
 
+export async function withErrorResponse(
+  res: Response,
+  cb: () => Promise<void>
+) {
+  try {
+    await cb();
+  } catch (err) {
+    errorResponse(res, err);
+  }
+}
+
 function errorResponse(res: Response, err: any) {
   const status = err.status || 500;
   const response = err.response || {};

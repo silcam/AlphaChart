@@ -1,6 +1,6 @@
 import Data from "../storage/Data";
 import { loggedInAgent, vowellybet, notLoggedInAgent } from "../testHelper";
-import { Alphabet } from "../../../client/src/models/Alphabet";
+import { Alphabet, AlphabetListing } from "../../../client/src/models/Alphabet";
 import { User } from "../../../client/src/models/User";
 import { apiPath } from "../../../client/src/api/Api";
 
@@ -88,6 +88,35 @@ test("Create alphabet for group", async () => {
   expect(alphabet.owner).toEqual("111111111111111111111111");
   expect(alphabet.name).toEqual("Vowelly");
   expect(alphabet.chart.letters).toEqual(vowelly.chart.letters);
+});
+
+test("Update alphabet name", async () => {
+  expect.assertions(3);
+  const agent = await loggedInAgent();
+  const response = await agent
+    .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/update"))
+    .send({ name: "Greekish" });
+  expect(response.status).toBe(200);
+  expect(response.body.alphabets[0].name).toBe("Greekish");
+  expect(response.body.alphabetListings[0].name).toBe("Greekish");
+});
+
+test("Update nonexistant alphabet", async () => {
+  expect.assertions(1);
+  const agent = await loggedInAgent();
+  const response = await agent
+    .post(apiPath("/alphabets/000000000000000000000000/update"))
+    .send({ name: "Greekish" });
+  expect(response.status).toBe(404);
+});
+
+test("Update chart permissions", async () => {
+  expect.assertions(1);
+  const agent = await loggedInAgent();
+  const response = await agent
+    .post(apiPath("/alphabets/123abc123abc123abc123abc/update"))
+    .send({ name: "Greekish" });
+  expect(response.status).toBe(401);
 });
 
 test("Update alphabet chart", async () => {
@@ -279,4 +308,39 @@ test("Unshare alphabet errors", async () => {
     .post(apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/unshare"))
     .send({ userId: "333333333333333333333333" });
   expect(response.status).toBe(401);
+});
+
+test("Archive alphabet", async () => {
+  expect.assertions(3);
+  const agent = await loggedInAgent();
+  let response = await agent.post(
+    apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/archive")
+  );
+  expect(response.status).toBe(200);
+  response = await agent.get(apiPath("/alphabets"));
+  expect(
+    response.body.alphabetListings.map((al: AlphabetListing) => al.id)
+  ).not.toContain("5d4c38e158e6dbb33d7d7b12");
+  response = await agent.get(
+    apiPath("/archivedAlphabets/5d4c38e158e6dbb33d7d7b12")
+  );
+  expect(response.body.name).toBe("Ελληνικα");
+});
+
+test("Archive permission", async () => {
+  expect.assertions(1);
+  const agent = await loggedInAgent("Lucy");
+  let response = await agent.post(
+    apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/archive")
+  );
+  expect(response.status).toBe(401);
+});
+
+test("Archive nonexistant", async () => {
+  expect.assertions(1);
+  const agent = await loggedInAgent();
+  let response = await agent.post(
+    apiPath("/alphabets/000000000000000000000000/archive")
+  );
+  expect(response.status).toBe(404);
 });

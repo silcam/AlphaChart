@@ -48,6 +48,34 @@ test("Must be logged in to create group", async () => {
   expect(response.status).toBe(401);
 });
 
+test("Update Group Name", async () => {
+  expect.assertions(2);
+  const agent = await loggedInAgent();
+  const response = await agent
+    .post(apiPath("/groups/111111111111111111111111/update"))
+    .send({ name: "Pizza Munchers" });
+  expect(response.status).toBe(200);
+  expect(response.body.groups[0].name).toBe("Pizza Munchers");
+});
+
+test("Update nonexistant group", async () => {
+  expect.assertions(1);
+  const agent = await loggedInAgent();
+  const response = await agent
+    .post(apiPath("/groups/111111111111111111111199/update"))
+    .send({ name: "Pizza Munchers" });
+  expect(response.status).toBe(404);
+});
+
+test("Update Group Permissions", async () => {
+  expect.assertions(1);
+  const agent = await loggedInAgent("Lucy");
+  const response = await agent
+    .post(apiPath("/groups/111111111111111111111111/update"))
+    .send({ name: "Pizza Munchers" });
+  expect(response.status).toBe(401);
+});
+
 test("Add Group User", async () => {
   expect.assertions(3);
   const agent = await loggedInAgent();

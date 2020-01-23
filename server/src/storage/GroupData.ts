@@ -29,6 +29,16 @@ async function createGroup(newGroup: NewStoredGroup): Promise<StoredGroup> {
   return result.ops[0];
 }
 
+async function updateGroup(
+  _id: ObjectID,
+  update: Partial<StoredGroup>
+): Promise<StoredGroup | null> {
+  log.log(`[Query] UPDATE group ${_id}`);
+  const collection = await groupCollection();
+  await collection.updateOne({ _id }, { $set: update });
+  return collection.findOne({ _id });
+}
+
 async function addUser(
   groupId: ObjectId,
   userId: ObjectId
@@ -54,6 +64,7 @@ export default {
   group,
   groupsByUser,
   createGroup,
+  updateGroup,
   addUser,
   removeUser
 };

@@ -11,8 +11,7 @@ export default async function verifyUser(
   if (!unverifiedUser)
     throw { status: 422, response: { error: "Invalid_code" } };
 
-  const existing = await UserData.userByEmail(unverifiedUser.email);
-  if (existing)
+  if (!(await verifyUniqueEmail(unverifiedUser.email)))
     throw {
       status: 422,
       response: { error: "User_exists", subs: { email: unverifiedUser.email } }
@@ -23,4 +22,9 @@ export default async function verifyUser(
   UnverifiedUserData.remove(verification);
 
   return user;
+}
+
+export async function verifyUniqueEmail(email: string): Promise<boolean> {
+  const existing = await UserData.userByEmail(email);
+  return existing === null;
 }

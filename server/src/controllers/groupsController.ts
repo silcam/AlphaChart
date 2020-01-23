@@ -7,7 +7,7 @@ import {
   NewStoredGroup,
   StoredGroup
 } from "../../../client/src/models/Group";
-import { currentUser } from "./controllerHelper";
+import { currentUserStrict, getById } from "./controllerHelper";
 import { ObjectID } from "mongodb";
 import UserData from "../storage/UserData";
 import { flat } from "../../../client/src/util/arrayUtils";
@@ -23,22 +23,26 @@ export default function groupsController(app: Express) {
 
   addPostHandler(app, "/groups", async req => {
     const newGroup: NewGroup = req.body;
-    const user = await currentUser(req);
-    if (!user) throw { status: 401 };
-
+    const user = await currentUserStrict(req);
     const newStoredGroup: NewStoredGroup = { ...newGroup, _users: [user._id] };
     const group = await GroupData.createGroup(newStoredGroup);
     return toGroup(group);
   });
 
-  addPostHandler(app, "/groups/:id/addUser", async req => {
-    const user = await currentUser(req);
-    const group = await GroupData.group(new ObjectID(req.params.id));
-    const newUser = await UserData.user(new ObjectID(req.body.id));
+  addPostHandler(app, "/groups/:id/update", async req => {
+    const group = await getById(req.params.id, GroupData.group);
+    await currentUserStrict(req, group._users);
+    const name: string = req.body.name;
+    const grpUpdate = { name };
+    const newStoredGroup = await GroupData.updateGroup(group._id, grpUpdate);
+    if (!newStoredGroup) throw { status: 500 };
+    return { groups: [toGroup(newStoredGroup)] };
+  });
 
-    if (!group || !newUser) throw { status: 404 };
-    if (!user || !group._users.some(id => id.equals(user._id)))
-      throw { status: 401 };
+  addPostHandler(app, "/groups/:id/addUser", async req => {
+    const group = await getById(req.params.id, GroupData.group);
+    const newUser = await getById(req.body.id, UserData.user);
+    await currentUserStrict(req, group._users);
 
     const newGroup = await GroupData.addUser(group._id, newUser._id);
     if (!newGroup) throw { status: 500 };
@@ -46,13 +50,9 @@ export default function groupsController(app: Express) {
   });
 
   addPostHandler(app, "/groups/:id/removeUser", async req => {
-    const user = await currentUser(req);
-    const group = await GroupData.group(new ObjectID(req.params.id));
+    const group = await getById(req.params.id, GroupData.group);
     const removeUserId = new ObjectID(req.body.id);
-
-    if (!group) throw { status: 404 };
-    if (!user || !group._users.some(id => id.equals(user._id)))
-      throw { status: 401 };
+    await currentUserStrict(req, group._users);
 
     const newGroup = await GroupData.removeUser(group._id, removeUserId);
     if (!newGroup) throw { status: 500 };

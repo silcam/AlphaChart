@@ -43,7 +43,7 @@ async function loadFixtures() {
     const collection = await database.createCollection(key);
     if (key == "users") collection.createIndex({ email: "text", name: "text" });
     await collection.deleteMany({});
-    await collection.insertMany(fixtures[key]);
+    if (fixtures[key].length > 0) await collection.insertMany(fixtures[key]);
   }
 }
 

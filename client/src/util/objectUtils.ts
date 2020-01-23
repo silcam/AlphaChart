@@ -26,3 +26,13 @@ export function validateFields<T>(obj: T, fields: Field<T>[]): boolean {
 export function objKeys<T>(t: T): (keyof T)[] {
   return Object.keys(t) as (keyof T)[];
 }
+
+export function filterKeys<T, U extends T>(
+  obj: Partial<U>,
+  keys: (keyof T)[]
+): Partial<T> {
+  const keysOfObj = objKeys(obj);
+  return keys
+    .filter(k => keysOfObj.includes(k))
+    .reduce((filteredObj, key) => ({ ...filteredObj, [key]: obj[key] }), {});
+}

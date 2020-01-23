@@ -2,7 +2,7 @@ import request from "supertest";
 import app from "../app";
 import Data from "../storage/Data";
 import { loggedInAgent, notLoggedInAgent } from "../testHelper";
-import { apiPath } from "../../../client/src/api/Api";
+import { apiPath, APIError } from "../../../client/src/api/Api";
 import { interactsWithMail as iwm } from "nodemailer-stub";
 
 beforeEach(Data.loadFixtures);
@@ -242,6 +242,46 @@ test("Post Locale - Logged in", async () => {
     email: "titus@yahoo.com",
     locale: "fr"
   });
+});
+
+test("Update user name", async () => {
+  expect.assertions(3);
+  const agent = await loggedInAgent();
+  const response = await agent
+    .post(apiPath("/users/777777777777777777777777/update"))
+    .send({ name: "RT!" });
+  expect(response.status).toBe(200);
+  expect(response.body.users[0].name).toBe("RT!");
+  expect(response.body.currentUser.name).toBe("RT!");
+});
+
+test("Update user email", async () => {
+  expect.assertions(2);
+  const agent = await loggedInAgent();
+  const response = await agent
+    .post(apiPath("/users/777777777777777777777777/update"))
+    .send({ email: "rt@yahoo.com" });
+  expect(response.status).toBe(200);
+  expect(response.body.currentUser.email).toBe("rt@yahoo.com");
+});
+
+test("Can't update email to another user's email", async () => {
+  expect.assertions(2);
+  const agent = await loggedInAgent();
+  const response = await agent
+    .post(apiPath("/users/777777777777777777777777/update"))
+    .send({ email: "lucy@me.com" });
+  expect(response.status).toBe(422);
+  expect(response.body.errorCode).toBe(APIError.EmailInUse);
+});
+
+test("Can't update other users", async () => {
+  expect.assertions(1);
+  const agent = await loggedInAgent("Lucy");
+  const response = await agent
+    .post(apiPath("/users/777777777777777777777777/update"))
+    .send({ name: "RT!" });
+  expect(response.status).toBe(401);
 });
 
 async function submitNewUser(agent: request.SuperTest<request.Test>) {

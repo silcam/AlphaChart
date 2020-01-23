@@ -7,9 +7,9 @@ import {
   StoredUser
 } from "../../../client/src/models/User";
 import UserData from "../storage/UserData";
-import { currentUser } from "./controllerHelper";
+import { currentUser, currentUserStrict } from "./controllerHelper";
 import newUnverifiedUser from "../actions/newUnverifiedUser";
-import verifyUser from "../actions/verifyUser";
+import verifyUser, { verifyUniqueEmail } from "../actions/verifyUser";
 import login from "../actions/login";
 import { Locale } from "../../../client/src/i18n/i18n";
 import { addGetHandler, addPostHandler } from "./serverApi";
@@ -17,6 +17,9 @@ import GroupData from "../storage/GroupData";
 import { toGroup } from "../../../client/src/models/Group";
 import AlphabetData from "../storage/AlphabetData";
 import { toAlphabet } from "../../../client/src/models/Alphabet";
+import { ObjectID } from "mongodb";
+import { filterKeys } from "../../../client/src/util/objectUtils";
+import { APIError } from "../../../client/src/api/Api";
 
 export default function usersController(app: Express) {
   // addGetHandler(app, "/users", async req => {
@@ -81,6 +84,23 @@ export default function usersController(app: Express) {
   addPostHandler(app, "/users/logout", async req => {
     req.session!.userId = undefined;
     return null;
+  });
+
+  addPostHandler(app, "/users/:id/update", async req => {
+    const user = await currentUserStrict(req);
+    if (!user._id.equals(new ObjectID(req.params.id))) throw { status: 401 };
+
+    const userUpdate: Partial<StoredUser> = filterKeys(req.body, [
+      "email",
+      "name"
+    ]);
+    if (userUpdate.email && !(await verifyUniqueEmail(userUpdate.email)))
+      throw { status: 422, response: { errorCode: APIError.EmailInUse } };
+
+    Object.assign(user, userUpdate);
+
+    await UserData.update(user);
+    return { users: [toPublicUser(user)], currentUser: toCurrentUser(user) };
   });
 }
 
