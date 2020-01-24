@@ -79,7 +79,8 @@ export default function Chart(props: IProps) {
             >
               {chart.letters.map((letter, index) => (
                 <div key={index} style={chartStyles.alphabetSummaryLetter}>
-                  {letter.forms[alphabetSummaryForm(chartStyles)]}
+                  {letter.forms[alphabetSummaryForm(chartStyles)] ||
+                    letter.forms[letter.forms.length - 1]}
                 </div>
               ))}
             </div>
