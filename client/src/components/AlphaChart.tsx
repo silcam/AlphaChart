@@ -9,12 +9,13 @@ import { useLoad } from "../api/apiRequest";
 import { loadCurrentUser } from "../state/currentUserSlice";
 import AppBanners from "./common/AppBanners";
 import GroupsRoute from "./groups/GroupsRoute";
+import useFullScreen from "./common/useFullScreen";
 
 export default function AlphaChart() {
   const { user, loaded } = useAppSelector(state => state.currentUser);
   useLoad(loadCurrentUser());
-  const fullScreen = useAppSelector(state => state.page.fullScreen);
-  const pageRootStyle = fullScreen ? { maxWidth: "100%" } : {};
+
+  const pageRootStyle = useFullScreen() ? { maxWidth: "100%" } : {};
 
   return (
     <div id="page-root" style={pageRootStyle}>
