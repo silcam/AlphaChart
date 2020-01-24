@@ -66,7 +66,7 @@ export function contentInPixels(pageDims: PageDims): Dims {
   if (usingPx(pageDims)) return pageDimsPx;
 
   const marginPx = pageDims.margin * pageDims.dpi;
-  return dimsMap(pageDimsPx, px => px - 2 * marginPx);
+  return dimsMap(pageDimsPx, px => Math.max(px - 2 * marginPx, 1));
 }
 
 export function defaultPageDims(merge?: Partial<PageDims>): PageDims {

@@ -13,7 +13,7 @@ import ExportChartDims from "./ExportChartDims";
 import ColorInput from "../common/ColorInput";
 import { defaultPageDims, Dims, contentInPixels } from "./PageDims";
 import TargetDimsPicker from "./TargetDimsPicker";
-import { inTolerance } from "../../util/numberUtils";
+import { inTolerance, numberFilter } from "../../util/numberUtils";
 import update from "immutability-helper";
 import ExportButtons from "./ExportButtons";
 
@@ -199,7 +199,9 @@ function scale(
 ) {
   const scale = targetDims[1] / actDims[1];
   const maxScale = targetDims[0] / 800;
-  const finalScale = Math.min(maxScale, scale * currentScale);
+  const finalScale = numberFilter(Math.min(maxScale, scale * currentScale), {
+    min: 0.001
+  });
   if (needToRescale(currentScale, finalScale, targetDims, actDims))
     setScale(finalScale);
 }
