@@ -274,6 +274,9 @@ div.compOptionButton {
 div.compOptionButtonSimple {
     position: relative;
     display: block;
+}
+
+div.compOptionButtonSimple > button {
     margin: 4px;
 }
 

@@ -151,6 +151,15 @@ td {
   border: 1px #ddd solid;
 }
 
+table.padded-cells tr td {
+  padding: 0.5em 1em;
+}
+
+table.menu tr td:hover {
+  cursor: pointer;
+  color: #1892ef;
+}
+
 /*********
     FORM ELEMENTS 
 ********/
