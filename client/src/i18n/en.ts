@@ -129,7 +129,12 @@ const en = {
   Units: "Units",
   DPI: "DPI",
   Custom: "Custom",
-  Save_pdf: "Save PDF"
+  Save_pdf: "Save PDF",
+  Changes_saved: "Changes saved.",
+  Change_name: "Change Name",
+  Change_email: "Change Email",
+  New_name: "New Name",
+  New_email: "New Email"
 };
 
 export type Strings = typeof en;

@@ -84,3 +84,16 @@ export function pushNewUser(user: NewUser) {
     return true;
   };
 }
+
+export function pushUpdateUser(data: {
+  id: string;
+  user?: string;
+  email?: string;
+}) {
+  const { id, ...postData } = data;
+  return async (dispatch: AppDispatch) => {
+    const payload = await webPost("/users/:id/update", { id }, postData);
+    if (payload) dispatch(loadAction(payload));
+    return payload;
+  };
+}

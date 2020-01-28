@@ -255,6 +255,19 @@ test("Update user name", async () => {
   expect(response.body.currentUser.name).toBe("RT!");
 });
 
+// test("Update user password", async () => {
+//   expect.assertions(2);
+//   const agent = await loggedInAgent();
+//   let response = await agent
+//     .post(apiPath("/users/777777777777777777777777/update"))
+//     .send({ password: "winkywonkydonkey" });
+//   expect(response.status).toBe(200);
+//   response = await agent
+//     .post(apiPath("/users/login"))
+//     .send({ email: "titus@yahoo.com", password: "winkywonkydonkey" });
+//   expect(response.status).toBe(200);
+// });
+
 test("Update user email", async () => {
   expect.assertions(2);
   const agent = await loggedInAgent();

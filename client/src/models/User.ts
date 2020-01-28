@@ -60,11 +60,15 @@ export function isCurrentUser(user: any): user is CurrentUser {
 
 export function validationErrors(user: NewUser, passwordCheck?: string) {
   const errors: TKey[] = [];
-  if (user.email.length < 5) errors.push("Invalid_email");
+  if (!validEmail(user.email)) errors.push("Invalid_email");
   if (user.password.length < 10) errors.push("Password_too_short");
   if (passwordCheck !== undefined && passwordCheck !== user.password)
     errors.push("Passwords_do_not_match");
   return errors.length > 0 ? errors : null;
+}
+
+export function validEmail(email: string) {
+  return email.length >= 5;
 }
 
 export function userId(user: CurrentUserOrNot) {

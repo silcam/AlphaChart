@@ -9,6 +9,7 @@ import { pushLogout } from "../../state/currentUserSlice";
 import { useTranslation } from "./useTranslation";
 import Loading from "./Loading";
 import { useAppSelector } from "../../state/appState";
+import { OptionButtonSimple } from "./OptionButton";
 
 interface IProps {
   user: CurrentUser | null;
@@ -34,17 +35,38 @@ export default function NavBar(props: IProps) {
       <div className="flex-row">
         <LocalePicker />
         {props.user && (
-          <ul className="list-row">
-            <li>
-              <b>{props.user.name}</b>
-            </li>
-            <li>
-              <LnkBtn
-                onClick={() => logOut(null).then(() => history.push("/"))}
-                text={t("Log_out")}
-              />
-            </li>
-          </ul>
+          <OptionButtonSimple
+            buttonText={props.user.name}
+            lnkBtn
+            renderContextMenu={({ hideMenu }) => (
+              <table
+                className="padded-cells menu"
+                style={{ width: "max-content" }}
+              >
+                <tbody>
+                  <tr>
+                    <td
+                      onMouseDown={() => {
+                        history.push("/users/me");
+                        hideMenu();
+                      }}
+                    >
+                      {props.user!.name}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      onMouseDown={() =>
+                        logOut(null).then(() => history.push("/"))
+                      }
+                    >
+                      {t("Log_out")}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            )}
+          />
         )}
       </div>
     </div>

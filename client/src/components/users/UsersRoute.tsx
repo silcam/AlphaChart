@@ -1,6 +1,7 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import NewUserVerify from "./NewUserVerify";
+import CurrentUserPage from "./CurrentUserPage";
 
 export default function UsersRoute() {
   return (
@@ -11,7 +12,8 @@ export default function UsersRoute() {
           <NewUserVerify verification={match.params.code} />
         )}
       />
-      <Route render={() => <p>Users Root</p>} />
+      <Route path="/users/me" render={() => <CurrentUserPage />} />
+      <Route render={() => <Redirect to="/" />} />
     </Switch>
   );
 }

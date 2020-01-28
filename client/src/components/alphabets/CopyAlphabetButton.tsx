@@ -48,12 +48,9 @@ export default function CopyAlphabetButton(props: IProps) {
             <tbody>
               {copyToOptions.map(opt => (
                 <tr key={opt.id}>
-                  <td onClick={() => copyAlphabet(opt)}>{opt.name}</td>
+                  <td onMouseDown={() => copyAlphabet(opt)}>{opt.name}</td>
                 </tr>
               ))}
-              <tr>
-                <td onClick={hideMenu}>{t("Cancel")}</td>
-              </tr>
             </tbody>
           </table>
         )}

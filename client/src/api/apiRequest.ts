@@ -78,7 +78,7 @@ function throwAppError(err: any): never {
     error = {
       type: "HTTP",
       status: err.response.status,
-      error: err.response.data && err.response.data.error
+      ...(err.response.data || {})
     };
   else error = { type: "Unknown" };
   throw error;

@@ -2,7 +2,7 @@ import { Strings } from "./en";
 
 const fr: Strings = {
   Home: "Accueil",
-  Email: "Addresse mail",
+  Email: "Adresse mail",
   Password: "Mot de passe",
   Verify_password: "Vérifier mot de passe",
   Display_name: "Nom affiché",
@@ -11,10 +11,10 @@ const fr: Strings = {
   Create_the_account: "Créer",
   Log_in: "Se connecter",
   Log_out: "Se déconnecter",
-  Invalid_login: "Addresse mail ou mot de passe non valide",
+  Invalid_login: "Adresse mail ou mot de passe non valide",
   Account_not_verified:
     "Ce compte n'est pas encore vérifié. Il faut trouver le mail de confirmation de Alphachart et suivre le lien de confirmation.",
-  Invalid_email: "Addresse mail non valide",
+  Invalid_email: "Adresse mail non valide",
   Password_too_short:
     "Veuillez choisir un mot de passe avec au moins 10 caractères",
   Passwords_do_not_match: "Les mots de passe ne se correspondent pas.",
@@ -100,7 +100,7 @@ const fr: Strings = {
   Create: "Créer",
   Add_user: "Ajouter un utilisateur",
   Remove_user: "Enlever un utilisateur",
-  Name_or_email: "Nom ou addresse mail",
+  Name_or_email: "Nom ou adresse mail",
   New_alphabet: "Nouveau alphabet",
   Language: "Langue",
   For_account: "Pour compte",
@@ -133,7 +133,12 @@ const fr: Strings = {
   Units: "Unités",
   DPI: "DPI",
   Custom: "Autre",
-  Save_pdf: "Enregister PDF"
+  Save_pdf: "Enregister PDF",
+  Changes_saved: "Changements enregistrés.",
+  Change_name: "Modifier mon nom",
+  Change_email: "Modifier mon adresse mail",
+  New_name: "Nouveau nom",
+  New_email: "Nouveau mail"
 };
 
 export default fr;
