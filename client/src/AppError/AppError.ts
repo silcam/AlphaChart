@@ -1,9 +1,10 @@
 import { objKeys } from "../util/objectUtils";
 import { TKey } from "../i18n/en";
+import { APIError } from "../api/Api";
 
 export type AppError =
   | { type: "No Connection" }
-  | { type: "HTTP"; status: number; error?: string }
+  | { type: "HTTP"; status: number; error?: string; errorCode?: APIError }
   | { type: "Other"; message: TKey }
   | { type: "Unknown" }
   | { type: "Alphachart"; code: "0" | "1" | "2" }

@@ -1,6 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
-import AlphabetsPage from "./AlphabetsPage";
+import { Switch, Route, Redirect } from "react-router-dom";
 import NewAlphabetPage from "./NewAlphabetPage";
 import ChartPage from "./ChartPage";
 
@@ -19,7 +18,7 @@ export default function AlphabetsRoute() {
           <ChartPage key={match.params.id} id={match.params.id} />
         )}
       />
-      <Route render={() => <AlphabetsPage />} />
+      <Route render={() => <Redirect to="/" />} />
     </Switch>
   );
 }

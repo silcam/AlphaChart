@@ -70,7 +70,7 @@ export interface APIPost {
   "/users": [{}, NewUser, null];
   "/users/:id/update": [
     { id: string },
-    { name: string; email: string },
+    { name?: string; email?: string },
     Pick<ApiPayload, "users" | "currentUser">
   ];
   "/users/verify": [{}, { verification: string }, CurrentUser];
