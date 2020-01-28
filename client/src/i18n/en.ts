@@ -105,7 +105,7 @@ const en = {
   New_group: "New Group",
   Create_group: "Create Group",
   Name: "Name",
-  Manage: "Manage",
+  Manage_users: "Manage Users",
   Confirm_remove_user_from_group: "Remove %{userName} from %{groupName}?",
   Guest_users: "Guest Users",
   Share_explanation: "These users can edit this alphabet chart.",
@@ -134,7 +134,8 @@ const en = {
   Change_name: "Change Name",
   Change_email: "Change Email",
   New_name: "New Name",
-  New_email: "New Email"
+  New_email: "New Email",
+  Add_alphabet: "Add Alphabet"
 };
 
 export type Strings = typeof en;

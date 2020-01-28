@@ -9,6 +9,7 @@ import { pushGroupRemoveUser } from "./groupSlice";
 interface IProps {
   group: GroupInflated;
   user: CurrentUser;
+  done: () => void;
 }
 
 export default function EditingUserList(props: IProps) {
@@ -42,6 +43,7 @@ export default function EditingUserList(props: IProps) {
         ))}
       </ul>
       <AddUserForm group={props.group} done={() => {}} />
+      <button onClick={props.done}>{t("Done")}</button>
     </div>
   );
 }

@@ -108,7 +108,7 @@ const fr: Strings = {
   New_group: "Nouveau groupe",
   Create_group: "Créer un groupe",
   Name: "Nom",
-  Manage: "Gérer",
+  Manage_users: "Gérer des utilisateurs",
   Confirm_remove_user_from_group:
     "Enlever %{userName} du groupe %{groupName} ?",
   Guest_users: "Invités",
@@ -138,7 +138,8 @@ const fr: Strings = {
   Change_name: "Modifier mon nom",
   Change_email: "Modifier mon adresse mail",
   New_name: "Nouveau nom",
-  New_email: "Nouveau mail"
+  New_email: "Nouveau mail",
+  Add_alphabet: "Nouveau alphabet"
 };
 
 export default fr;

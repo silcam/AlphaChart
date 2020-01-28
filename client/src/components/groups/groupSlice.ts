@@ -59,3 +59,12 @@ export function pushGroupRemoveUser(params: {
     if (payload) dispatch(loadAction(payload));
   };
 }
+
+export function pushGroupUpdate(params: { id: string; name: string }) {
+  const { id, name } = params;
+  return async (dispatch: AppDispatch) => {
+    const payload = await webPost("/groups/:id/update", { id }, { name });
+    if (payload) dispatch(loadAction(payload));
+    return payload;
+  };
+}
