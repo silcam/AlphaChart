@@ -5,13 +5,13 @@ import ViewChartHeader from "./ViewChartHeader";
 import ExportChart from "./ExportChart";
 import { useDispatch } from "react-redux";
 import pageSlice from "../../state/pageSlice";
-import { detect } from "detect-browser";
 import { useTranslation } from "../common/useTranslation";
 
 interface IProps {
   id: string;
   alphabet: AlphabetInflated;
   setEditing: (e: boolean) => void;
+  editAlphabet: () => void;
 }
 
 export interface ChartDimens {
@@ -42,6 +42,7 @@ export default function ViewChartPage(props: IProps) {
         setChartDimens={setChartDimens}
         setEditing={() => props.setEditing(true)}
         setExporting={() => setExporting(true)}
+        editAlphabet={props.editAlphabet}
       />
 
       <div

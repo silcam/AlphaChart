@@ -154,7 +154,7 @@ export default function alphabetsController(app: Express) {
     const user = await currentUserStrict(req);
     if (await cannotControlAlphabet(user, alphabet)) throw { status: 401 };
     await AlphabetData.archive(alphabet._id);
-    return null;
+    return { id: alphabet._id.toHexString() };
   });
 }
 

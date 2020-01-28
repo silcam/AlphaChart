@@ -66,7 +66,7 @@ export interface APIPost {
     { name: string },
     Pick<ApiPayload, "alphabets" | "alphabetListings">
   ];
-  "/alphabets/:id/archive": [{ id: string }, {}, null];
+  "/alphabets/:id/archive": [{ id: string }, {}, { id: string }];
   "/users": [{}, NewUser, null];
   "/users/:id/update": [
     { id: string },

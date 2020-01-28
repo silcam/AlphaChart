@@ -311,12 +311,13 @@ test("Unshare alphabet errors", async () => {
 });
 
 test("Archive alphabet", async () => {
-  expect.assertions(3);
+  expect.assertions(4);
   const agent = await loggedInAgent();
   let response = await agent.post(
     apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/archive")
   );
   expect(response.status).toBe(200);
+  expect(response.body).toEqual({ id: "5d4c38e158e6dbb33d7d7b12" });
   response = await agent.get(apiPath("/alphabets"));
   expect(
     response.body.alphabetListings.map((al: AlphabetListing) => al.id)

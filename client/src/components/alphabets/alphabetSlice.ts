@@ -10,6 +10,7 @@ import { AppDispatch } from "../../state/appState";
 import { webGet, webPost, postFile } from "../../api/apiRequest";
 import { LoadAction, loadAction } from "../../state/LoadAction";
 import { modelListMerge } from "../../util/arrayUtils";
+import { unset } from "../../util/objectUtils";
 
 interface AlphabetState {
   listings: AlphabetListing[];
@@ -22,6 +23,10 @@ const alphabetSlice = createSlice({
   reducers: {
     setAlphabet: (state, action: PayloadAction<Alphabet>) => {
       state.alphabets[action.payload.id] = action.payload;
+    },
+    removeAlphabet: (state, action: PayloadAction<string>) => {
+      state.alphabets = unset(state.alphabets, action.payload);
+      state.listings = state.listings.filter(a => a.id !== action.payload);
     }
   },
   extraReducers: {
@@ -115,5 +120,22 @@ export function pushChartImage(params: { alphabetId: string; image: File }) {
       image
     );
     return imagePath && imagePath.path;
+  };
+}
+
+export function pushUpdateAlphabet(params: { id: string; name: string }) {
+  const { id, name } = params;
+  return async (dispatch: AppDispatch) => {
+    const payload = await webPost("/alphabets/:id/update", { id }, { name });
+    if (payload) dispatch(loadAction(payload));
+    return payload;
+  };
+}
+
+export function pushArchiveChart(id: string) {
+  return async (dispatch: AppDispatch) => {
+    const data = await webPost("/alphabets/:id/archive", { id }, {});
+    if (data) dispatch(alphabetSlice.actions.removeAlphabet(id));
+    return data;
   };
 }

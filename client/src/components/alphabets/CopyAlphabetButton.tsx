@@ -7,6 +7,7 @@ import { OptionButtonSimple } from "../common/OptionButton";
 import { Alphabet, isOwner } from "../../models/Alphabet";
 import { User, CurrentUser } from "../../models/User";
 import { Group, isGroup } from "../../models/Group";
+import DropDownMenu from "../common/DropDownMenu";
 
 interface IProps {
   alphabet: Alphabet;
@@ -44,15 +45,12 @@ export default function CopyAlphabetButton(props: IProps) {
       <OptionButtonSimple
         buttonText={t("Copy_to")}
         renderContextMenu={({ hideMenu }) => (
-          <table>
-            <tbody>
-              {copyToOptions.map(opt => (
-                <tr key={opt.id}>
-                  <td onMouseDown={() => copyAlphabet(opt)}>{opt.name}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <DropDownMenu
+            items={copyToOptions.map(opt => [
+              opt.name,
+              () => copyAlphabet(opt)
+            ])}
+          />
         )}
       />
     </div>

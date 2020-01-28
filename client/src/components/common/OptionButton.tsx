@@ -7,6 +7,7 @@ interface IProps {
   onMainClick: () => void;
   renderContextMenu: (props: { hideMenu: () => void }) => ReactNode;
   lnkBtn?: boolean;
+  leftAlignContextMenu?: boolean;
 }
 
 export default function OptionButton(props: IProps) {
@@ -41,7 +42,10 @@ export function OptionButtonSimple(props: Omit<IProps, "onMainClick">) {
         <button onClick={toggleShowMenu}>{`${props.buttonText} ▼`}</button>
       )}
       {showMenu && (
-        <div className="contextMenu">
+        <div
+          className="contextMenu"
+          style={props.leftAlignContextMenu ? {} : { right: 0 }}
+        >
           {props.renderContextMenu({ hideMenu: () => setShowMenu(false) })}
         </div>
       )}

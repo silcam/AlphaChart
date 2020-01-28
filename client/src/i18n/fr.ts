@@ -111,6 +111,7 @@ const fr: Strings = {
   Manage_users: "Gérer des utilisateurs",
   Confirm_remove_user_from_group:
     "Enlever %{userName} du groupe %{groupName} ?",
+  Confirm_archive_chart: "Archiver le tableau alphabétique pour %{name} ?",
   Guest_users: "Invités",
   Share_explanation: "Ces utilisateurs peuvent editer ce tablaeu alphabétique.",
   User_added: "%{name} a été ajouté.",
@@ -139,7 +140,8 @@ const fr: Strings = {
   Change_email: "Modifier mon adresse mail",
   New_name: "Nouveau nom",
   New_email: "Nouveau mail",
-  Add_alphabet: "Nouveau alphabet"
+  Add_alphabet: "Nouveau alphabet",
+  Archive: "Archiver"
 };
 
 export default fr;

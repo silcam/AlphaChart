@@ -1,7 +1,6 @@
 import React from "react";
 import { CurrentUser } from "../../models/User";
 import { Link, useHistory } from "react-router-dom";
-import LnkBtn from "../common/LnkBtn";
 import LocalePicker from "../common/LocalePicker";
 
 import { usePush } from "../../api/apiRequest";
@@ -10,6 +9,7 @@ import { useTranslation } from "./useTranslation";
 import Loading from "./Loading";
 import { useAppSelector } from "../../state/appState";
 import { OptionButtonSimple } from "./OptionButton";
+import DropDownMenu from "./DropDownMenu";
 
 interface IProps {
   user: CurrentUser | null;
@@ -39,32 +39,21 @@ export default function NavBar(props: IProps) {
             buttonText={props.user.name}
             lnkBtn
             renderContextMenu={({ hideMenu }) => (
-              <table
-                className="padded-cells menu"
-                style={{ width: "max-content" }}
-              >
-                <tbody>
-                  <tr>
-                    <td
-                      onMouseDown={() => {
-                        history.push("/users/me");
-                        hideMenu();
-                      }}
-                    >
-                      {props.user!.name}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      onMouseDown={() =>
-                        logOut(null).then(() => history.push("/"))
-                      }
-                    >
-                      {t("Log_out")}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <DropDownMenu
+                items={[
+                  [
+                    props.user!.name,
+                    () => {
+                      history.push("/users/me");
+                      hideMenu();
+                    }
+                  ],
+                  [
+                    t("Log_out"),
+                    () => logOut(null).then(() => history.push("/"))
+                  ]
+                ]}
+              />
             )}
           />
         )}
