@@ -76,6 +76,11 @@ const fr: Strings = {
   Account_confirmation: "Confirmer le compte",
   Confirmation_link_email:
     "Un mail a été envoyé à %{email}. Suivez le lien de confirmation pour terminer l'établissement de votre compte.",
+  Didnt_get_email: "Vous n'avez pas reçu le mail ?",
+  Didnt_get_confirm_email_message:
+    "Veuillez regarder dans le dossier 'Spam' de votre mail et aussi verrifiez que vous avez bien saisi l'adresse [ %{email} ].",
+  Send_email_again: "Envoyer le mail encore",
+  Email_sent: "Mail envoyé.",
   Account_verified: "Compte vérifié !",
   Verifying: "Vérification en cours",
   Invalid_code:

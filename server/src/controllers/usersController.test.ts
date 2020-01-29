@@ -78,6 +78,27 @@ test("Create existing user", async () => {
   expect(response.body.error).toEqual("User_exists");
 });
 
+test("Resend confirmation email", async () => {
+  expect.assertions(4);
+  const agent = request.agent(app);
+  let response = await agent.post(apiPath("/users")).send({
+    email: "madeleine@pm.me",
+    name: "Madeleine",
+    password: "maddymaddymaddy"
+  });
+  expect(response.status).toBe(200);
+  await iwm.flushMails();
+
+  response = await agent
+    .post(apiPath("/users/resendConfirmation"))
+    .send({ email: "madeleine@pm.me" });
+  expect(response.status).toBe(200);
+
+  const mail = iwm.lastMail();
+  expect(mail.subject).toEqual("Confirm your Alphachart account");
+  expect(mail.to).toEqual(["madeleine@pm.me"]);
+});
+
 test("Invalid new users", async () => {
   expect.assertions(4);
   const agent = request.agent(app);

@@ -85,6 +85,13 @@ export function pushNewUser(user: NewUser) {
   };
 }
 
+export function pushResendConfirmation(email: string) {
+  return async () => {
+    const data = await webPost("/users/resendConfirmation", {}, { email });
+    return data;
+  };
+}
+
 export function pushUpdateUser(data: {
   id: string;
   user?: string;

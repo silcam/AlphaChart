@@ -19,6 +19,25 @@ describe("Create Account", () => {
     });
   });
 
+  it("Resends the confirmation email", () => {
+    cy.visit("/");
+    cy.contains("Create Account").click();
+    fillInForm(cy);
+    cy.contains("Create Account").click();
+    cy.contains("Account Confirmation");
+    cy.request("POST", "/test-email/clear-mail");
+    cy.request("/test-email/last-mail").then(response => {
+      expect(response.body).to.eql("");
+    });
+
+    cy.contains("Didn't get the email?").click();
+    cy.contains("Send the email again").click();
+    cy.contains(".banner", "Email sent.").should("exist");
+    cy.request("/test-email/last-mail").then(response => {
+      expect(response.body.subject).to.eql("Confirm your Alphachart account");
+    });
+  });
+
   it("Cancels just fine", () => {
     cy.visit("/");
     cy.contains("Create Account").click();

@@ -73,6 +73,11 @@ const en = {
   Account_confirmation: "Account Confirmation",
   Confirmation_link_email:
     "A confirmation email was sent to %{email}. Click the confirmation link in the email to finish setting up your account.",
+  Didnt_get_email: "Didn't get the email?",
+  Didnt_get_confirm_email_message:
+    "Try checking the spam folder for your email, and double-check that you entered your email address correctly [ %{email} ].",
+  Send_email_again: "Send the email again",
+  Email_sent: "Email sent.",
   Account_verified: "Account Verified!",
   Verifying: "Verifying",
   Invalid_code:

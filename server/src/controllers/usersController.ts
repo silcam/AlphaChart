@@ -20,6 +20,9 @@ import { toAlphabet } from "../../../client/src/models/Alphabet";
 import { ObjectID } from "mongodb";
 import { filterKeys } from "../../../client/src/util/objectUtils";
 import { APIError } from "../../../client/src/api/Api";
+import UnverifiedUserData from "../storage/UnverifiedUserData";
+import sendNewUserMail from "../mail/sendNewUserMail";
+import { last } from "../common/ArrayUtils";
 
 export default function usersController(app: Express) {
   // addGetHandler(app, "/users", async req => {
@@ -39,6 +42,15 @@ export default function usersController(app: Express) {
 
     const unverifiedUser = await newUnverifiedUser(newUser, locale);
     return null;
+  });
+
+  addPostHandler(app, "/users/resendConfirmation", async req => {
+    const email = req.body.email;
+    const locale: Locale = req.session!.locale || "en";
+
+    const unverifiedUser = last(await UnverifiedUserData.findByEmail(email));
+    if (unverifiedUser) await sendNewUserMail(unverifiedUser, locale);
+    return { email };
   });
 
   addPostHandler(app, "/users/verify", async req => {

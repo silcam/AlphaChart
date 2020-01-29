@@ -68,6 +68,7 @@ export interface APIPost {
   ];
   "/alphabets/:id/archive": [{ id: string }, {}, { id: string }];
   "/users": [{}, NewUser, null];
+  "/users/resendConfirmation": [{}, { email: string }, { email: string }];
   "/users/:id/update": [
     { id: string },
     { name?: string; email?: string },

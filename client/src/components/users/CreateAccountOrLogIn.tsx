@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import LoginForm from "./LoginForm";
 import CreateAccountForm from "./CreateAccountForm";
 import { useTranslation } from "../common/useTranslation";
+import AccountCreatedMessage from "./AccountCreatedMessage";
 
 type ViewState = "login" | "createAccount" | "emailConfirmation";
 
@@ -25,11 +26,6 @@ export default function CreateAccountOrLogIn() {
       );
     case "emailConfirmation":
     default:
-      return (
-        <div>
-          <h2>{t("Account_confirmation")}</h2>
-          <p>{t("Confirmation_link_email", { email })}</p>
-        </div>
-      );
+      return <AccountCreatedMessage email={email} />;
   }
 }
