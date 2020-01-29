@@ -20,6 +20,23 @@ test("Get alphabets", async () => {
   expect(response.body.groups.length).toEqual(1);
 });
 
+test("Letter Index", async () => {
+  expect.assertions(2);
+  const agent = notLoggedInAgent();
+  const response = await agent.get(apiPath("/alphabets/letterIndex"));
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual(["B", "G", "Ε"]);
+});
+
+test("Get alphabets by letter", async () => {
+  expect.assertions(3);
+  const agent = notLoggedInAgent();
+  const response = await agent.get(apiPath("/alphabets/byLetter?letter=G"));
+  expect(response.status).toBe(200);
+  expect(response.body.alphabetListings[0].name).toEqual("Gude");
+  expect(response.body.users[0].name).toEqual("Lucy");
+});
+
 test("Get an alphabet", async () => {
   expect.assertions(3);
   const agent = notLoggedInAgent();

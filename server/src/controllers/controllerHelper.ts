@@ -35,3 +35,8 @@ export async function getById<T>(
     throw { status: 404 };
   }
 }
+
+export function validateString(str: string, allowBlank: boolean = false) {
+  if (typeof str !== "string") throw { status: 422 };
+  if (!allowBlank && str.length == 0) throw { status: 422 };
+}

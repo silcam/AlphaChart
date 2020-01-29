@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import Loading from "../common/Loading";
 import { useSelector } from "react-redux";
 import { AppState } from "../../state/appState";
+import { CurrentUser } from "../../models/User";
 
 interface IProps {
   alphabets: AlphabetListingInflated[] | null;
-  hideUser?: boolean;
+  hideUser?: CurrentUser;
 }
 
 export default function AlphabetsList(props: IProps) {
@@ -18,11 +19,12 @@ export default function AlphabetsList(props: IProps) {
       {props.alphabets.map(alphabet => (
         <li key={alphabet.id}>
           <Link to={`/alphabets/view/${alphabet.id}`}>{alphabet.name}</Link>
-          {!props.hideUser && (
-            <span className="username">
-              {alphabetUserName(alphabet, user ? user.id : "")}
-            </span>
-          )}
+          <span className="username">
+            {alphabetUserName(
+              alphabet,
+              props.hideUser ? props.hideUser.id : ""
+            )}
+          </span>
         </li>
       ))}
     </ul>
@@ -31,8 +33,11 @@ export default function AlphabetsList(props: IProps) {
   );
 }
 
-function alphabetUserName(alphabet: AlphabetListingInflated, userId: string) {
-  return alphabet.ownerObj && alphabet.ownerObj.id !== userId
+function alphabetUserName(
+  alphabet: AlphabetListingInflated,
+  hideUserId: string
+) {
+  return alphabet.ownerObj && alphabet.ownerObj.id !== hideUserId
     ? alphabet.ownerObj.name
     : "";
 }

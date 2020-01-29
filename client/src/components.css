@@ -1,3 +1,28 @@
+/* AlphabetsBrowser */
+
+div.compAlphabetsBrowser .letterPicker {
+    border: 1px #999 solid;
+    border-radius: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: fit-content;
+    align-items: baseline;
+    margin-bottom: 12px;
+}
+
+div.compAlphabetsBrowser .letterPicker button {
+    background-color: initial;
+    color: #1892ef;
+    margin: 0;
+    font-size: 1.4em;
+}
+
+div.compAlphabetsBrowser .letterPicker button.selected {
+    color: black;
+    border: 2px #2d9bf0 solid;
+    margin: -2px
+}
+
 /* AlphabetsList */
 
 ul.compAlphabetsList {

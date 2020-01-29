@@ -24,14 +24,14 @@ export function useAlphabet(id: string): AlphabetInflated | null {
   return alphabets.length > 0 ? alphabets[0] : null;
 }
 
-export function useAlphabetListings(ids?: string[]): AlphabetListingInflated[] {
+export function useAlphabetListings(
+  filter: (a: AlphabetListing) => boolean = () => true
+): AlphabetListingInflated[] {
   const alphabets = useAppSelector(state => state.alphabets.listings);
   const users = useAppSelector(state => state.users);
   const groups = useAppSelector(state => state.groups);
 
-  const filteredAlphabets = ids
-    ? alphabets.filter(a => ids.includes(a.id))
-    : alphabets;
+  const filteredAlphabets = alphabets.filter(filter);
   return inflate(filteredAlphabets, users, groups);
 }
 

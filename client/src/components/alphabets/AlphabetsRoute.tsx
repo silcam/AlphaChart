@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import NewAlphabetPage from "./NewAlphabetPage";
 import ChartPage from "./ChartPage";
+import AlphabetsBrowserPage from "./AlphabetsBrowserPage";
 
 export default function AlphabetsRoute() {
   return (
@@ -18,7 +19,7 @@ export default function AlphabetsRoute() {
           <ChartPage key={match.params.id} id={match.params.id} />
         )}
       />
-      <Route render={() => <Redirect to="/" />} />
+      <Route render={() => <AlphabetsBrowserPage />} />
     </Switch>
   );
 }

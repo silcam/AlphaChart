@@ -15,11 +15,16 @@ import { unset } from "../../util/objectUtils";
 interface AlphabetState {
   listings: AlphabetListing[];
   alphabets: { [id: string]: Alphabet | undefined };
+  letterIndex: string[];
 }
 
 const alphabetSlice = createSlice({
   name: "alphabets",
-  initialState: { listings: [], alphabets: {} } as AlphabetState,
+  initialState: {
+    listings: [],
+    alphabets: {},
+    letterIndex: []
+  } as AlphabetState,
   reducers: {
     setAlphabet: (state, action: PayloadAction<Alphabet>) => {
       state.alphabets[action.payload.id] = action.payload;
@@ -27,6 +32,9 @@ const alphabetSlice = createSlice({
     removeAlphabet: (state, action: PayloadAction<string>) => {
       state.alphabets = unset(state.alphabets, action.payload);
       state.listings = state.listings.filter(a => a.id !== action.payload);
+    },
+    setLetterIndex: (state, action: PayloadAction<string[]>) => {
+      state.letterIndex = action.payload;
     }
   },
   extraReducers: {
@@ -51,6 +59,21 @@ export default alphabetSlice;
 export function loadAlphabetListings() {
   return async (dispatch: AppDispatch) => {
     const payload = await webGet("/alphabets");
+    if (payload) dispatch(loadAction(payload));
+  };
+}
+
+export function loadLetterIndex() {
+  return async (dispatch: AppDispatch) => {
+    const letterIndex = await webGet("/alphabets/letterIndex");
+    if (letterIndex)
+      dispatch(alphabetSlice.actions.setLetterIndex(letterIndex));
+  };
+}
+
+export function loadAlphabetsByLetter(letter: string) {
+  return async (dispatch: AppDispatch) => {
+    const payload = await webGet("/alphabets/byLetter", {}, { letter });
     if (payload) dispatch(loadAction(payload));
   };
 }

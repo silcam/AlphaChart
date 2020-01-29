@@ -10,7 +10,12 @@ import {
 import { UploadedFile } from "express-fileupload";
 import fileUpload = require("express-fileupload");
 import Images from "../storage/Images";
-import { currentUser, getById, currentUserStrict } from "./controllerHelper";
+import {
+  currentUser,
+  getById,
+  currentUserStrict,
+  validateString
+} from "./controllerHelper";
 import { apiPath } from "../../../client/src/api/Api";
 import { addGetHandler, addPostHandler, withErrorResponse } from "./serverApi";
 import { ObjectID, ObjectId } from "mongodb";
@@ -22,10 +27,29 @@ import { toPublicUser, User } from "../../../client/src/models/User";
 import { Group, toGroup } from "../../../client/src/models/Group";
 import GroupData from "../storage/GroupData";
 import { unset } from "../../../client/src/util/objectUtils";
+import languageLetterIndex from "../actions/languageLetterIndex";
+import { escapeRegExp } from "../common/StringUtils";
 
 export default function alphabetsController(app: Express) {
   addGetHandler(app, "/alphabets", async req => {
     const listings = await AlphabetData.alphabets();
+    return {
+      alphabetListings: listings.map(toAlphabet),
+      users: await usersForAlphabets(listings),
+      groups: await groupsForAlphabets(listings)
+    };
+  });
+
+  addGetHandler(app, "/alphabets/letterIndex", async req => {
+    return languageLetterIndex();
+  });
+
+  addGetHandler(app, "/alphabets/byLetter", async req => {
+    const letter = req.query.letter;
+    validateString(letter);
+    const listings = await AlphabetData.alphabetsByNamePattern(
+      new RegExp(`^${escapeRegExp(letter)}`, "i")
+    );
     return {
       alphabetListings: listings.map(toAlphabet),
       users: await usersForAlphabets(listings),

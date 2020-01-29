@@ -16,6 +16,25 @@ async function alphabets(): Promise<StoredAlphabetListing[]> {
   return collection.find({}, { projection: { chart: 0 } }).toArray();
 }
 
+async function alphabetNames(): Promise<string[]> {
+  log.log("[Query] READ Alphabet names");
+  const collection = await alphabetCollection();
+  return collection
+    .find({}, { projection: { name: 1 } })
+    .map(alph => alph.name)
+    .toArray();
+}
+
+async function alphabetsByNamePattern(
+  pattern: RegExp
+): Promise<StoredAlphabetListing[]> {
+  log.log("[Query] READ Alphabets");
+  const collection = await alphabetCollection();
+  return collection
+    .find({ name: { $regex: pattern } }, { projection: { chart: 0 } })
+    .toArray();
+}
+
 async function alphabetsByGroup(
   groupIds: ObjectID[]
 ): Promise<StoredAlphabetListing[]> {
@@ -167,6 +186,8 @@ async function archivedCollection(): Promise<Collection<StoredAlphabet>> {
 export default {
   alphabet,
   alphabets,
+  alphabetNames,
+  alphabetsByNamePattern,
   alphabetsByGroup,
   alphabetsByUser,
   createAlphabet,

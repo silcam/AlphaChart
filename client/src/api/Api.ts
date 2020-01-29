@@ -26,6 +26,12 @@ export interface APIGet {
     {},
     Pick<ApiPayload, "alphabetListings" | "users" | "groups">
   ];
+  "/alphabets/letterIndex": [{}, {}, string[]];
+  "/alphabets/byLetter": [
+    {},
+    { letter: string },
+    Pick<ApiPayload, "alphabetListings" | "users" | "groups">
+  ];
   "/alphabets/:id": [
     { id: string },
     {},

@@ -34,7 +34,7 @@ export default function UserHomePage(props: IProps) {
       <div className="flex-row">
         <div>
           <h2>{t("My_alphabets")}</h2>
-          <AlphabetsList alphabets={myAlphabets} />
+          <AlphabetsList alphabets={myAlphabets} hideUser={props.user} />
         </div>
         <div>
           <h2>{t("Other_alphabets")}</h2>
