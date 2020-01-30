@@ -152,6 +152,12 @@ div.compCopyAlphabetButton td:hover {
     color: #1892ef;
 }
 
+/* CurrentUserPage */
+
+div.compCurrentUserPage input {
+    margin-bottom: 8px;
+}
+
 /* ExportChart */
 
 div.compExportChart {

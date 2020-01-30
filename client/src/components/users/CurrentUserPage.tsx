@@ -7,6 +7,7 @@ import { pushUpdateUser } from "../../state/currentUserSlice";
 import { usePush } from "../../api/apiRequest";
 import bannerSlice from "../../banners/bannerSlice";
 import { APIError } from "../../api/Api";
+import ChangePasswordForm from "./ChangePasswordForm";
 
 export default function CurrentUserPage() {
   const t = useTranslation();
@@ -39,7 +40,7 @@ export default function CurrentUserPage() {
   return (
     <RequireLogin>
       {user => (
-        <div className="space-kids">
+        <div className="space-kids compCurrentUserPage">
           <h1>{user.name}</h1>
           <div>
             <h3>{t("Change_name")}</h3>
@@ -75,6 +76,7 @@ export default function CurrentUserPage() {
               {t("Save")}
             </button>
           </div>
+          <ChangePasswordForm user={user} />
         </div>
       )}
     </RequireLogin>

@@ -40,4 +40,31 @@ describe("Update User", () => {
       "A user already exists for that email address"
     ).should("exist");
   });
+
+  it("Updates the password", () => {
+    cy.placeholder("Current Password").type("minecraft");
+    cy.placeholder("New Password").type("Do the Funky Chicken, Mattie");
+    cy.placeholder("Confirm New Password").type("Do the Funky Chicken, Mattie");
+    cy.contains("div", "Change Password")
+      .find("button")
+      .click();
+    cy.contains(".banner", "Password changed").should("exist");
+
+    cy.contains("Titus ▼").click();
+    cy.contains("Log out").click();
+    cy.placeholder("Email").type("titus@yahoo.com");
+    cy.placeholder("Password").type("Do the Funky Chicken, Mattie");
+    cy.contains("button", "Log in").click();
+    cy.contains("Titus ▼").should("exist");
+  });
+
+  it("Handles wrong old password when changing password", () => {
+    cy.placeholder("Current Password").type("wrong");
+    cy.placeholder("New Password").type("Do the Funky Chicken, Mattie");
+    cy.placeholder("Confirm New Password").type("Do the Funky Chicken, Mattie");
+    cy.contains("div", "Change Password")
+      .find("button")
+      .click();
+    cy.contains(".error", "The current password is incorrect.");
+  });
 });

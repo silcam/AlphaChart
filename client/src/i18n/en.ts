@@ -148,7 +148,13 @@ const en = {
   Password_reset_body:
     "A password reset was requested for the Alphachart account for %{email}. If this was you, click this link to set a new password: %{startLink}Set New Password%{endLink}.",
   Password_reset_if_wasnt_you:
-    "If you did not request a password reset, you can safely ignore this email."
+    "If you did not request a password reset, you can safely ignore this email.",
+  Password_changed: "Password changed.",
+  Change_password: "Change Password",
+  Current_password: "Current Password",
+  New_password: "New Password",
+  Confirm_new_password: "Confirm New Password",
+  Current_password_wrong: "The current password is incorrect."
 };
 
 export type Strings = typeof en;
