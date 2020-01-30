@@ -144,7 +144,8 @@ const en = {
   Add_alphabet: "Add Alphabet",
   Archive: "Archive",
   More: "More...",
-  Password_reset: "Alphachart Password Reset",
+  AC_Password_reset: "Alphachart Password Reset",
+  Password_reset: "Password Reset",
   Password_reset_body:
     "A password reset was requested for the Alphachart account for %{email}. If this was you, click this link to set a new password: %{startLink}Set New Password%{endLink}.",
   Password_reset_if_wasnt_you:
@@ -154,7 +155,14 @@ const en = {
   Current_password: "Current Password",
   New_password: "New Password",
   Confirm_new_password: "Confirm New Password",
-  Current_password_wrong: "The current password is incorrect."
+  Current_password_wrong: "The current password is incorrect.",
+  Reset_password: "Reset Password",
+  Reset_password_for: "Reset password for %{name}",
+  Submit: "Submit",
+  No_such_email: "There is no account with that email.",
+  Password_reset_check_email:
+    "An email with a password reset link was sent to %{email}.",
+  Invalid_reset_key: "Invalid reset key."
 };
 
 export type Strings = typeof en;

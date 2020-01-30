@@ -6,6 +6,7 @@ import { TKey, isTKey } from "../../i18n/en";
 import Loading from "../common/Loading";
 import { usePush } from "../../api/apiRequest";
 import { pushLogin } from "../../state/currentUserSlice";
+import ResetPasswordForm from "./ResetPasswordForm";
 
 interface IProps {
   createAccount?: () => void;
@@ -15,6 +16,7 @@ interface IProps {
 
 export default function LoginForm(props: IProps) {
   const t = useTranslation();
+  const [resetPasswordForm, setResetPasswordForm] = useState(false);
   const [email, setEmail] = useState(props.email || "");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -26,6 +28,14 @@ export default function LoginForm(props: IProps) {
     }
     return false;
   });
+
+  if (resetPasswordForm)
+    return (
+      <ResetPasswordForm
+        email={email}
+        cancel={() => setResetPasswordForm(false)}
+      />
+    );
 
   return (
     <div>
@@ -75,6 +85,12 @@ export default function LoginForm(props: IProps) {
               />
             </p>
           )}
+          <p style={{ marginTop: 0 }}>
+            <LnkBtn
+              text={t("Reset_password")}
+              onClick={() => setResetPasswordForm(true)}
+            />
+          </p>
         </div>
       )}
     </div>

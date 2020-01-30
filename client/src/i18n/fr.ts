@@ -148,7 +148,8 @@ const fr: Strings = {
   Add_alphabet: "Nouveau alphabet",
   Archive: "Archiver",
   More: "Plus...",
-  Password_reset: "Alphachart réinitialisation de mot de passe",
+  AC_Password_reset: "Alphachart réinitialisation de mot de passe",
+  Password_reset: "Réinitialisation de mot de passe",
   Password_reset_body:
     "On a demandé une réinitialisation de mot de passe pour le compte Alphachart pour %{email}. Si vous voulez définier un nouveau mot de passe, suivez ce lien : %{startLink}Changer mon mot de passe%{endLink}.",
   Password_reset_if_wasnt_you:
@@ -158,7 +159,14 @@ const fr: Strings = {
   Current_password: "Mot de passe actuel",
   New_password: "Nouveau mot de passe",
   Confirm_new_password: "Confirmer nouveau mot de passe",
-  Current_password_wrong: "Le mot de passe actuel est incorrect."
+  Current_password_wrong: "Le mot de passe actuel est incorrect.",
+  Reset_password: "Réintialiser mon mot de passe",
+  Reset_password_for: "Réinitialiser le mot de passe pour %{name}.",
+  Submit: "Soumettre",
+  No_such_email: "Il n'y a pas de compte pour ce mail.",
+  Password_reset_check_email:
+    "Un mail avec lien pour réinitialiser le mot de passe a été envoyé à %{email}.",
+  Invalid_reset_key: "Code invalide."
 };
 
 export default fr;

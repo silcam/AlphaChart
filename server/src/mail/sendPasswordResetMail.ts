@@ -9,12 +9,12 @@ export default async function sendPasswordResetMail(
 ) {
   const t = tForLocale(locale);
   const body = passwordResetBody(user, t);
-  return sendMail(user.email, t("Password_reset"), body);
+  return sendMail(user.email, t("AC_Password_reset"), body);
 }
 
 function passwordResetBody(user: StoredUser, t: TFunc) {
   return `
-    <h2>${t("Password_reset")}</h2>
+    <h2>${t("AC_Password_reset")}</h2>
     <p>${t("Hi", { name: user.name })},</p>
     <p>
       ${t("Password_reset_body", {
