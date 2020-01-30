@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import loadingSlice from "./loadingSlice";
 import { objKeys } from "../util/objectUtils";
+import { networkConnectionLostAction } from "../state/networkSlice";
 
 const defaultAxios = Axios.create({ timeout: 5000 });
 
@@ -102,19 +103,36 @@ function interpolateParams(
     : path;
 }
 
+function dispatchError(
+  dispatch: AppDispatch,
+  error: AppError,
+  loader?: (dispatch: AppDispatch) => void
+) {
+  if (error.type == "No Connection")
+    dispatch(networkConnectionLostAction(loader));
+  else dispatch(bannerSlice.actions.add({ type: "Error", error }));
+}
+
 export function useLoad<T>(loader: (dispatch: AppDispatch) => Promise<T>) {
   const dispatch: AppDispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadingSlice.actions.addLoading());
-    dispatch(loader)
-      .catch(anyErr => {
-        const err = asAppError(anyErr);
-        dispatch(bannerSlice.actions.add({ type: "Error", error: err }));
-      })
-      .finally(() => {
-        dispatch(loadingSlice.actions.subtractLoading());
-      });
+    doLoad(dispatch, loader);
   }, []);
+}
+
+function doLoad<T>(
+  dispatch: AppDispatch,
+  loader: (dispatch: AppDispatch) => Promise<T>
+) {
+  dispatch(loadingSlice.actions.addLoading());
+  dispatch(loader)
+    .catch(anyErr => {
+      const err = asAppError(anyErr);
+      dispatchError(dispatch, err, dispatch => doLoad(dispatch, loader));
+    })
+    .finally(() => {
+      dispatch(loadingSlice.actions.subtractLoading());
+    });
 }
 
 export function usePush<T, U>(
@@ -132,7 +150,7 @@ export function usePush<T, U>(
     } catch (anyErr) {
       const err = asAppError(anyErr);
       if (!errorHandler(err)) {
-        dispatch(bannerSlice.actions.add({ type: "Error", error: err }));
+        dispatchError(dispatch, err);
       }
     } finally {
       setLoading(false);

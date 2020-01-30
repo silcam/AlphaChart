@@ -8,7 +8,6 @@ import { AppBanner } from "../../banners/Banner";
 import { useTranslation } from "./useTranslation";
 import Loading from "./Loading";
 import { AppError } from "../../AppError/AppError";
-import { webGet } from "../../api/apiRequest";
 import { TFunc } from "../../i18n/i18n";
 
 export default function AppBanners() {
@@ -45,35 +44,18 @@ function AppBannerSuccess(props: { banner: AppBanner }) {
   const t = useTranslation();
   if (props.banner.type != "Success") return null;
 
+  const message = props.banner.networkConnectionRestored
+    ? t("Connection_restored")
+    : props.banner.message;
   return (
     <div className="banner successBanner">
-      <div>{props.banner.message}</div>
+      <div>{message}</div>
     </div>
   );
 }
 
 function AppBannerError(props: { error: AppError; close: () => void }) {
   const t = useTranslation();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (props.error.type == "No Connection") {
-      const timer = setInterval(async () => {
-        try {
-          await webGet("/users/current", {});
-          dispatch(
-            bannerSlice.actions.add({
-              type: "Success",
-              message: t("Connection_restored")
-            })
-          );
-        } catch (err) {
-          // Do nothing
-        }
-      }, 3000);
-      return () => clearInterval(timer);
-    }
-  }, [props.error.type]);
 
   return (
     <div className="banner errorBanner">

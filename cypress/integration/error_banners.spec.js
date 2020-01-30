@@ -23,7 +23,10 @@ describe("Error banners", () => {
     cy.visit("/");
     cy.contains(".compNavBar .compLoading", "...");
     cy.get(".errorBanner", { timeout: 6000 }).contains("No Connection");
+
+    cy.route("**/alphabets/quality"); // Clear mock
     cy.contains(".successBanner", "Connection restored");
+    cy.contains("Ελληνικα").should("exist");
   });
 
   it("Has an old API", () => {

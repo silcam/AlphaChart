@@ -7,6 +7,7 @@ import groupSlice from "../components/groups/groupSlice";
 import userSlice from "./userSlice";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import pageSlice from "./pageSlice";
+import networkSlice from "./networkSlice";
 
 const reducer = combineReducers({
   currentUser: currentUserSlice.reducer,
@@ -15,7 +16,8 @@ const reducer = combineReducers({
   alphabets: alphabetSlice.reducer,
   groups: groupSlice.reducer,
   users: userSlice.reducer,
-  page: pageSlice.reducer
+  page: pageSlice.reducer,
+  network: networkSlice.reducer
 });
 
 const store = configureStore({ reducer });
