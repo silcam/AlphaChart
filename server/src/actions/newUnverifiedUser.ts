@@ -4,7 +4,7 @@ import {
   validationErrors,
   NewUnverifiedUser
 } from "../../../client/src/models/User";
-import { createPassword } from "../common/password";
+import { createPassword, createHash } from "../common/password";
 import UserData from "../storage/UserData";
 import UnverifiedUserData from "../storage/UnverifiedUserData";
 import sendNewUserMail from "../mail/sendNewUserMail";
@@ -32,9 +32,7 @@ export default async function newUnverifiedUser(
 
   if (!user.name) user.name = user.email.replace(/@.*/, "");
   const passwordParams = createPassword(user.password);
-  const { hash: verification } = createPassword(
-    new Date().valueOf().toString()
-  );
+  const verification = createHash();
   const newUnverifiedUser: NewUnverifiedUser = {
     email: user.email,
     name: user.name,

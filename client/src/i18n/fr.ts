@@ -147,7 +147,12 @@ const fr: Strings = {
   New_email: "Nouveau mail",
   Add_alphabet: "Nouveau alphabet",
   Archive: "Archiver",
-  More: "Plus..."
+  More: "Plus...",
+  Password_reset: "Alphachart réinitialisation de mot de passe",
+  Password_reset_body:
+    "On a demandé une réinitialisation de mot de passe pour le compte Alphachart pour %{email}. Si vous voulez définier un nouveau mot de passe, suivez ce lien : %{startLink}Changer mon mot de passe%{endLink}.",
+  Password_reset_if_wasnt_you:
+    "Si vous n'avez pas demandé changer votre mot de passe, vous pouvez simplement ignorer ce mail."
 };
 
 export default fr;

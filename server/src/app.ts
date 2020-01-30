@@ -16,7 +16,8 @@ const app = express();
 // const PORT = process.env.NODE_ENV === "test" ? 3001 : 3001;
 const PORT = 3001;
 app.set("port", PORT);
-const baseURL =
+
+export const BASE_URL =
   process.env.NODE_ENV === "production"
     ? "https://alphachart.gospelcoding.org"
     : "http://localhost:3000";
@@ -46,7 +47,7 @@ if (process.env.NODE_ENV !== "production") {
 alphabetsController(app);
 usersController(app);
 groupsController(app);
-exportController(app, baseURL);
+exportController(app);
 
 // Handle client-side routes
 app.get("*", (req, res) => {

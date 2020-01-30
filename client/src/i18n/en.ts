@@ -143,7 +143,12 @@ const en = {
   New_email: "New Email",
   Add_alphabet: "Add Alphabet",
   Archive: "Archive",
-  More: "More..."
+  More: "More...",
+  Password_reset: "Alphachart Password Reset",
+  Password_reset_body:
+    "A password reset was requested for the Alphachart account for %{email}. If this was you, click this link to set a new password: %{startLink}Set New Password%{endLink}.",
+  Password_reset_if_wasnt_you:
+    "If you did not request a password reset, you can safely ignore this email."
 };
 
 export type Strings = typeof en;

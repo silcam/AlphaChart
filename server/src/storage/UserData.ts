@@ -22,6 +22,12 @@ async function userByEmail(email: string): Promise<StoredUser | null> {
   return collection.findOne({ email });
 }
 
+async function userByPasswordResetKey(key: string): Promise<StoredUser | null> {
+  log.log(`[Query] READ User by Password Reset Key`);
+  const collection = await userCollection();
+  return collection.findOne({ passwordResetKey: key });
+}
+
 async function createUser(user: NewStoredUser): Promise<StoredUser> {
   log.log("[Query] CREATE User");
   const collection = await userCollection();
@@ -49,6 +55,7 @@ export default {
   users,
   user,
   userByEmail,
+  userByPasswordResetKey,
   createUser,
   update,
   search

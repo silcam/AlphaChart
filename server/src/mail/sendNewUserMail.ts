@@ -1,11 +1,7 @@
 import { UnverifiedUser } from "../../../client/src/models/User";
 import sendMail from "./Mailer";
 import { Locale, tForLocale, TFunc } from "../../../client/src/i18n/i18n";
-
-const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://alphachart.gospelcoding.org"
-    : "http://localhost:3000";
+import { BASE_URL } from "../app";
 
 export default async function sendNewUserMail(
   user: UnverifiedUser,

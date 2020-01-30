@@ -9,6 +9,10 @@ export function createPassword(password: string) {
   };
 }
 
+export function createHash() {
+  return createPassword(new Date().valueOf().toString()).hash;
+}
+
 export function checkPassword(password: string, hash: string, salt: string) {
   const checkHash = hashPassword(password, salt);
   return checkHash === hash;

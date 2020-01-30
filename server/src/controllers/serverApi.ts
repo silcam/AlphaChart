@@ -57,6 +57,7 @@ export async function withErrorResponse(
 
 function errorResponse(res: Response, err: any) {
   const status = err.status || 500;
+  if (status == 500) console.error(err);
   const response = err.response || {};
   res.status(status).send(response);
 }

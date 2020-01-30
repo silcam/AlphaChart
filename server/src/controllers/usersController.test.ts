@@ -87,7 +87,7 @@ test("Resend confirmation email", async () => {
     password: "maddymaddymaddy"
   });
   expect(response.status).toBe(200);
-  await iwm.flushMails();
+  iwm.flushMails();
 
   response = await agent
     .post(apiPath("/users/resendConfirmation"))
@@ -329,3 +329,109 @@ async function submitNewUser(agent: request.SuperTest<request.Test>) {
   const verification = /\/users\/verify\/(.+?)"/.exec(mail.content)![1];
   return verification;
 }
+
+test("Change Password", async () => {
+  expect.assertions(2);
+  const agent = await loggedInAgent();
+  let response = await agent
+    .post(apiPath("/users/777777777777777777777777/changePassword"))
+    .send({ password: "minecraft", newPassword: "lego spaceships" });
+  expect(response.status).toBe(200);
+
+  response = await notLoggedInAgent()
+    .post(apiPath("/users/login"))
+    .send({ email: "titus@yahoo.com", password: "lego spaceships" });
+  expect(response.status).toBe(200);
+});
+
+test("Bad Change Password", async () => {
+  expect.assertions(4);
+  const agent = await loggedInAgent();
+  let response = await agent
+    .post(apiPath("/users/777777777777777777777777/changePassword"))
+    .send({ password: "wrong", newPassword: "lego spaceshipts" });
+  expect(response.status).toBe(401);
+  expect(response.body.errorCode).toBe(APIError.BadPassword);
+
+  response = await agent
+    .post(apiPath("/users/555555555555555555555555/changePassword"))
+    .send({ password: "princess", newPassword: "lego spaceships" });
+  expect(response.status).toBe(401);
+
+  response = await agent
+    .post(apiPath("/users/777777777777777777777777/changePassword"))
+    .send({ password: "minecraft", newPassword: "" });
+  expect(response.status).toBe(422);
+});
+
+test("Password Reset", async () => {
+  expect.assertions(8);
+  iwm.flushMails();
+  const agent = notLoggedInAgent();
+  let response = await agent
+    .post(apiPath("/users/resetPassword"))
+    .send({ email: "titus@yahoo.com" });
+  expect(response.status).toBe(200);
+
+  const mail = iwm.lastMail();
+  expect(mail.subject).toEqual("Alphachart Password Reset");
+  expect(mail.to).toEqual(["titus@yahoo.com"]);
+
+  const code = mail.content.match(/passwordReset\/(.+?)"/)![1];
+  response = await agent.get(apiPath(`/users/passwordReset/${code}`));
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual({
+    name: "Titus",
+    id: "777777777777777777777777"
+  });
+
+  response = await agent
+    .post(apiPath("/users/777777777777777777777777/changePassword"))
+    .send({ resetKey: code, newPassword: "Go Harry Kane!" });
+  expect(response.status).toBe(200);
+
+  response = await agent
+    .post(apiPath("/users/login"))
+    .send({ email: "titus@yahoo.com", password: "Go Harry Kane!" });
+  expect(response.status).toBe(200);
+
+  response = await agent.get(apiPath(`/users/passwordReset/${code}`));
+  expect(response.status).toBe(422);
+});
+
+test("Password Reset - Invalid Email", async () => {
+  expect.assertions(2);
+  const agent = notLoggedInAgent();
+  let response = await agent
+    .post(apiPath("/users/resetPassword"))
+    .send({ email: "nobody@nowhere.com" });
+  expect(response.status).toBe(422);
+  expect(response.body.errorCode).toBe(APIError.NoSuchEmail);
+});
+
+test("Password Reset - Get User with Invalid reset key", async () => {
+  expect.assertions(1);
+  const agent = notLoggedInAgent();
+  const response = await agent.get(
+    apiPath("/users/passwordReset/not-a-real-key")
+  );
+  expect(response.status).toBe(422);
+});
+
+test("Password Reset - Post Change with invalid key", async () => {
+  expect.assertions(2);
+  const agent = notLoggedInAgent();
+  let response = await agent
+    .post(apiPath("/users/777777777777777777777777/changePassword"))
+    .send({ resetKey: "not-even-close", newPassword: "Go Harry Kane!" });
+  expect(response.status).toBe(401);
+
+  await agent
+    .post(apiPath("/users/resetPassword"))
+    .send({ email: "lucy@me.com" });
+  const code = iwm.lastMail().content.match(/passwordReset\/(.+?)"/)![1];
+  response = await agent
+    .post(apiPath("/users/777777777777777777777777/changePassword"))
+    .send({ resetKey: code, newPassword: "I'm actually Lucy" });
+  expect(response.status).toBe(401);
+});

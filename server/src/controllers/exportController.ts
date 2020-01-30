@@ -3,14 +3,15 @@ import { apiPath } from "../../../client/src/api/Api";
 import PDFDocument from "pdfkit";
 import puppeteer, { Page } from "puppeteer";
 import fs from "fs";
+import { BASE_URL } from "../app";
 
 const TMP_EXPORT_DIR = "tmp/export";
 
-export default function exportController(app: Express, baseURL: string) {
+export default function exportController(app: Express) {
   app.post(apiPath("/export/image"), async (req, res) => {
     const html: string = req.body.html;
     const transparentBG: boolean = req.body.transparentBG;
-    const imagePath = await saveImage(baseURL, html, transparentBG);
+    const imagePath = await saveImage(BASE_URL, html, transparentBG);
     res.sendFile(imagePath);
 
     cleanTmpExportDir();
@@ -21,7 +22,7 @@ export default function exportController(app: Express, baseURL: string) {
     const pageDims: [number, number] = req.body.pageDims;
     const imageDims: [number, number] = req.body.imageDims;
 
-    const imagePath = await saveImage(baseURL, html);
+    const imagePath = await saveImage(BASE_URL, html);
     const pdfPath = imagePath.replace(/png$/, "pdf");
 
     const doc = new PDFDocument({ size: pageDims });

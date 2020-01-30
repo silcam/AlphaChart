@@ -1,4 +1,4 @@
-import { CurrentUser, NewUser, LoginAttempt } from "../models/User";
+import { CurrentUser, NewUser, LoginAttempt, User } from "../models/User";
 import { Locale } from "../i18n/i18n";
 import { Alphabet, DraftAlphabet, AlphabetChart } from "../models/Alphabet";
 import { Group, NewGroup } from "../models/Group";
@@ -9,7 +9,9 @@ export const OLD_API_STATUS_410 = 410;
 
 export enum APIError {
   EmailInUse = 1001,
-  InvalidInput
+  InvalidInput,
+  BadPassword,
+  NoSuchEmail
 }
 
 export function apiPath(path: string) {
@@ -42,6 +44,7 @@ export interface APIGet {
     {},
     Pick<ApiPayload, "currentUser" | "groups" | "alphabetListings">
   ];
+  "/users/passwordReset/:key": [{ key: string }, {}, User];
   "/users/search": [{}, { q: string }, Pick<ApiPayload, "users">];
   "/groups": [{}, {}, AlphabetPayload];
   // "/users/:id/groups": [{ id: string }, {}, Group[]];
@@ -73,6 +76,15 @@ export interface APIPost {
     { id: string },
     { name?: string; email?: string },
     Pick<ApiPayload, "users" | "currentUser">
+  ];
+  "/users/resetPassword": [{}, { email: string }, { success: boolean }];
+  "/users/:id/changePassword": [
+    { id: string },
+    (
+      | { password: string; newPassword: string }
+      | { resetKey: string; newPassword: string }
+    ),
+    { success: boolean }
   ];
   "/users/verify": [{}, { verification: string }, CurrentUser];
   "/users/login": [

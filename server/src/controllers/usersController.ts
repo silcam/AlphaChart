@@ -4,10 +4,11 @@ import {
   toCurrentUser,
   LoginAttempt,
   toPublicUser,
-  StoredUser
+  StoredUser,
+  validPassword
 } from "../../../client/src/models/User";
 import UserData from "../storage/UserData";
-import { currentUser, currentUserStrict } from "./controllerHelper";
+import { currentUser, currentUserStrict, getById } from "./controllerHelper";
 import newUnverifiedUser from "../actions/newUnverifiedUser";
 import verifyUser, { verifyUniqueEmail } from "../actions/verifyUser";
 import login from "../actions/login";
@@ -23,6 +24,8 @@ import { APIError } from "../../../client/src/api/Api";
 import UnverifiedUserData from "../storage/UnverifiedUserData";
 import sendNewUserMail from "../mail/sendNewUserMail";
 import { last } from "../common/ArrayUtils";
+import { checkPassword, createPassword, createHash } from "../common/password";
+import sendPasswordResetMail from "../mail/sendPasswordResetMail";
 
 export default function usersController(app: Express) {
   // addGetHandler(app, "/users", async req => {
@@ -113,6 +116,59 @@ export default function usersController(app: Express) {
 
     await UserData.update(user);
     return { users: [toPublicUser(user)], currentUser: toCurrentUser(user) };
+  });
+
+  addPostHandler(app, "/users/:id/changePassword", async req => {
+    const user = await getById(req.params.id, UserData.user);
+
+    // Validate Request
+    if (req.body.resetKey) {
+      const userForKey = await UserData.userByPasswordResetKey(
+        req.body.resetKey
+      );
+      if (!userForKey || !userForKey._id.equals(user._id))
+        throw { status: 401 };
+    } else {
+      await currentUserStrict(req, [user._id]);
+      if (
+        !checkPassword(req.body.password, user.passwordHash, user.passwordSalt)
+      )
+        throw { status: 401, response: { errorCode: APIError.BadPassword } };
+    }
+    if (!validPassword(req.body.newPassword)) throw { status: 422 };
+
+    // Change Password
+    const { hash, salt } = createPassword(req.body.newPassword);
+    await UserData.update({
+      ...user,
+      passwordHash: hash,
+      passwordSalt: salt,
+      passwordResetKey: undefined
+    });
+
+    return { success: true };
+  });
+
+  addGetHandler(app, "/users/passwordReset/:key", async req => {
+    const user = await UserData.userByPasswordResetKey(req.params.key);
+    if (!user) throw { status: 422 };
+
+    return toPublicUser(user);
+  });
+
+  addPostHandler(app, "/users/resetPassword", async req => {
+    const user = await UserData.userByEmail(req.body.email);
+    if (!user)
+      throw { status: 422, response: { errorCode: APIError.NoSuchEmail } };
+
+    user.passwordResetKey = createHash();
+    await UserData.update(user);
+    await sendPasswordResetMail(
+      user,
+      user.locale || req.session!.locale || "en"
+    );
+
+    return { success: true };
   });
 }
 
