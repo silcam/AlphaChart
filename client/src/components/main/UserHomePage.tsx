@@ -5,7 +5,13 @@ import AlphabetsList from "../alphabets/AlphabetsList";
 import { useTranslation } from "../common/useTranslation";
 import { CurrentUser } from "../../models/User";
 import useCanEdit from "../alphabets/useCanEdit";
-import { useAlphabetListings } from "../alphabets/useAlphabets";
+import {
+  useAlphabetListings,
+  useFeaturedAlphabetListings
+} from "../alphabets/useAlphabets";
+import { useLoad } from "../../api/apiRequest";
+import { loadMyAlphabetListings } from "../alphabets/alphabetSlice";
+import { useAppSelector } from "../../state/appState";
 
 interface IProps {
   user: CurrentUser;
@@ -13,16 +19,11 @@ interface IProps {
 
 export default function UserHomePage(props: IProps) {
   const t = useTranslation();
-  const alphabets = useAlphabetListings();
   const canEdit = useCanEdit();
+  const myAlphabets = useAlphabetListings(alphabet => canEdit(alphabet));
+  const otherAlphabets = useFeaturedAlphabetListings();
 
-  const myAlphabets: AlphabetListingInflated[] = [];
-  const otherAlphabets: AlphabetListingInflated[] = [];
-  alphabets.forEach(alphabet =>
-    canEdit(alphabet)
-      ? myAlphabets.push(alphabet)
-      : otherAlphabets.push(alphabet)
-  );
+  useLoad(loadMyAlphabetListings());
 
   return (
     <div className="HomePage">
@@ -38,7 +39,7 @@ export default function UserHomePage(props: IProps) {
         </div>
         <div>
           <h2>{t("Other_alphabets")}</h2>
-          <AlphabetsList alphabets={otherAlphabets} />
+          <AlphabetsList alphabets={otherAlphabets} moreLink />
         </div>
       </div>
     </div>

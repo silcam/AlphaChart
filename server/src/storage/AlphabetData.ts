@@ -58,6 +58,42 @@ async function alphabetsByUser(
     .toArray();
 }
 
+async function alphabetsByUserOrGroup(
+  userId: ObjectID,
+  groupIds: ObjectID[]
+): Promise<StoredAlphabetListing[]> {
+  log.log("[Query] READ Alphabets");
+  const collection = await alphabetCollection();
+  return collection
+    .find({
+      $or: [
+        { ownerType: "user", _owner: userId },
+        { _users: userId },
+        { ownerType: "group", _owner: { $in: groupIds } }
+      ]
+    })
+    .toArray();
+}
+
+/*
+  Warning - The filter function must work after being converted to string 
+  and then executed by Mongo! 
+*/
+async function alphabetsByFilter(
+  filter: (this: StoredAlphabet) => boolean
+): Promise<StoredAlphabetListing[]> {
+  log.log("[Query] READ Alphabets");
+  const collection = await alphabetCollection();
+  return collection
+    .find(
+      {
+        $where: filter.toString()
+      },
+      { projection: { chart: 0 } }
+    )
+    .toArray();
+}
+
 async function alphabet(_id: ObjectId): Promise<StoredAlphabet | null> {
   log.log(`[Query] READ Alphabet ${_id}`);
   const collection = await alphabetCollection();
@@ -190,6 +226,8 @@ export default {
   alphabetsByNamePattern,
   alphabetsByGroup,
   alphabetsByUser,
+  alphabetsByUserOrGroup,
+  alphabetsByFilter,
   createAlphabet,
   updateAlphabet,
   updateChart,

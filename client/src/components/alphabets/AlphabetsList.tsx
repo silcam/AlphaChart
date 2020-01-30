@@ -5,13 +5,16 @@ import Loading from "../common/Loading";
 import { useSelector } from "react-redux";
 import { AppState } from "../../state/appState";
 import { CurrentUser } from "../../models/User";
+import { useTranslation } from "../common/useTranslation";
 
 interface IProps {
   alphabets: AlphabetListingInflated[] | null;
   hideUser?: CurrentUser;
+  moreLink?: boolean;
 }
 
 export default function AlphabetsList(props: IProps) {
+  const t = useTranslation();
   const user = useSelector((state: AppState) => state.currentUser.user);
 
   return props.alphabets ? (
@@ -27,6 +30,11 @@ export default function AlphabetsList(props: IProps) {
           </span>
         </li>
       ))}
+      {props.moreLink && (
+        <li style={{ marginTop: "1em" }}>
+          <Link to="/alphabets">{t("More")}</Link>
+        </li>
+      )}
     </ul>
   ) : (
     <Loading />

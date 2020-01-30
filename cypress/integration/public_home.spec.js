@@ -17,4 +17,10 @@ describe("Public Home Page Tests", function() {
     // Reset to english!
     cy.contains("En").click();
   });
+
+  it("Links to alphabet browser", () => {
+    cy.visit("/");
+    cy.contains("a", "More...").click();
+    cy.contains("a", "Bana").should("exist");
+  });
 });

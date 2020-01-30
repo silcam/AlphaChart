@@ -142,7 +142,8 @@ const en = {
   New_name: "New Name",
   New_email: "New Email",
   Add_alphabet: "Add Alphabet",
-  Archive: "Archive"
+  Archive: "Archive",
+  More: "More..."
 };
 
 export type Strings = typeof en;

@@ -2,11 +2,11 @@ import React from "react";
 import CreateAccountOrLogIn from "../users/CreateAccountOrLogIn";
 import AlphabetsList from "../alphabets/AlphabetsList";
 import { useTranslation } from "../common/useTranslation";
-import { useAlphabetListings } from "../alphabets/useAlphabets";
+import { useFeaturedAlphabetListings } from "../alphabets/useAlphabets";
 
 export default function PublicHomePage() {
   const t = useTranslation();
-  const alphabets = useAlphabetListings();
+  const alphabets = useFeaturedAlphabetListings();
 
   return (
     <div className="flex-row compPublicHomePage">
@@ -15,7 +15,7 @@ export default function PublicHomePage() {
       </div>
       <div>
         <h2>{t("Alphabet_charts")}</h2>
-        <AlphabetsList alphabets={alphabets} />
+        <AlphabetsList alphabets={alphabets} moreLink />
       </div>
     </div>
   );

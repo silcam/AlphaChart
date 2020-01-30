@@ -42,27 +42,27 @@ describe("Export Chart", () => {
 
   it("Responds to options", () => {
     cy.acceptA4();
-    cy.contains("2190 x 2852").should("exist");
+    cy.contains("1707 x 3200").should("exist");
 
     cy.withLabel("Columns")
       .contains("button", "+")
       .click();
-    cy.contains("2190 x 2328").should("exist");
+    cy.contains("2190 x 3037").should("exist");
 
     cy.withLabel("Text Size")
       .contains("button", "-")
       .click();
-    cy.contains("2190 x 2234").should("exist");
+    cy.contains("2190 x 2940").should("exist");
 
     cy.withLabel("Vertical Space")
       .contains("+")
       .click();
-    cy.contains("2190 x 2255").should("exist");
+    cy.contains("2190 x 2961").should("exist");
 
     cy.withLabel("Horizontal Space")
       .contains("+")
       .click();
-    cy.contains("2190 x 2243").should("exist");
+    cy.contains("2190 x 2940").should("exist");
 
     cy.get(".color-picker-preview").click();
     cy.get("input[value='#FFFFFF']")

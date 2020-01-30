@@ -13,13 +13,13 @@ describe("Error banners", () => {
     // Banner closes itself on page change
     cy.visit("/alphabets/view/5d4c38e158e6dbb33d7d7b12");
     cy.contains(".errorBanner", "Server Error: 500");
-    cy.contains("Home").click();
+    cy.contains("Groups").click();
     cy.get(".errorBanner").should("not.exist");
   });
 
   it("Takes too long", () => {
     cy.server();
-    cy.route({ url: "**/alphabets", delay: 6000, response: [] });
+    cy.route({ url: "**/alphabets/quality", delay: 6000, response: [] });
     cy.visit("/");
     cy.contains(".compNavBar .compLoading", "...");
     cy.get(".errorBanner", { timeout: 6000 }).contains("No Connection");
@@ -28,12 +28,12 @@ describe("Error banners", () => {
 
   it("Has an old API", () => {
     cy.server();
-    cy.route({ url: "**/alphabets", status: 410, response: "" });
+    cy.route({ url: "**/alphabets/quality", status: 410, response: "" });
     cy.visit("/");
     cy.contains(".errorBanner", "needs to update");
 
     // Reload the page
-    cy.route("**/alphabets"); // Clear mock
+    cy.route("**/alphabets/quality"); // Clear mock
     cy.contains("Reload").click();
     cy.contains("Ελληνικα");
   });

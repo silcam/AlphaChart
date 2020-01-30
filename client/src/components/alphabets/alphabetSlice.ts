@@ -16,6 +16,8 @@ interface AlphabetState {
   listings: AlphabetListing[];
   alphabets: { [id: string]: Alphabet | undefined };
   letterIndex: string[];
+  selectedLetter: string;
+  featuredIds: string[];
 }
 
 const alphabetSlice = createSlice({
@@ -23,7 +25,9 @@ const alphabetSlice = createSlice({
   initialState: {
     listings: [],
     alphabets: {},
-    letterIndex: []
+    letterIndex: [],
+    selectedLetter: "",
+    featuredIds: []
   } as AlphabetState,
   reducers: {
     setAlphabet: (state, action: PayloadAction<Alphabet>) => {
@@ -35,6 +39,13 @@ const alphabetSlice = createSlice({
     },
     setLetterIndex: (state, action: PayloadAction<string[]>) => {
       state.letterIndex = action.payload;
+      if (state.selectedLetter == "") state.selectedLetter = action.payload[0];
+    },
+    setSelectedLetter: (state, action: PayloadAction<string>) => {
+      state.selectedLetter = action.payload;
+    },
+    setFeatured: (state, action: PayloadAction<string[]>) => {
+      state.featuredIds = action.payload;
     }
   },
   extraReducers: {
@@ -58,7 +69,21 @@ export default alphabetSlice;
 
 export function loadAlphabetListings() {
   return async (dispatch: AppDispatch) => {
-    const payload = await webGet("/alphabets");
+    const payload = await webGet("/alphabets/quality");
+    if (payload) {
+      dispatch(loadAction(payload));
+      dispatch(
+        alphabetSlice.actions.setFeatured(
+          payload.alphabetListings.map(a => a.id)
+        )
+      );
+    }
+  };
+}
+
+export function loadMyAlphabetListings() {
+  return async (dispatch: AppDispatch) => {
+    const payload = await webGet("/alphabets/mine");
     if (payload) dispatch(loadAction(payload));
   };
 }

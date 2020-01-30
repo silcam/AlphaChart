@@ -8,6 +8,10 @@ export async function loggedInAgent(name?: string) {
   switch (name) {
     case "Lucy":
       user = { email: "lucy@me.com", password: "princess" };
+      break;
+    case "Joel":
+      user = { email: "joel@aol.com", password: "rockets" };
+      break;
   }
   const agent = request.agent(app);
   await agent.post(apiPath("/users/login")).send(user);

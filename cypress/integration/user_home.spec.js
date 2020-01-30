@@ -14,7 +14,7 @@ describe("User Home Page", () => {
     cy.contains("h2", "Other Alphabets")
       .closest("div")
       .contains("Ελληνικα")
-      .should("not.exist");
+      .should("exist");
   });
 
   it("Looks right for Lucy", () => {

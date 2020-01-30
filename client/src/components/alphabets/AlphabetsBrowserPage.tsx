@@ -1,27 +1,33 @@
 import React, { useState } from "react";
 import { useLoad } from "../../api/apiRequest";
-import { loadLetterIndex, loadAlphabetsByLetter } from "./alphabetSlice";
+import alphabetSlice, {
+  loadLetterIndex,
+  loadAlphabetsByLetter
+} from "./alphabetSlice";
 import { useAppSelector } from "../../state/appState";
 import { useTranslation } from "../common/useTranslation";
 import AlphabetsList from "./AlphabetsList";
 import { useAlphabetListings } from "./useAlphabets";
+import { useDispatch } from "react-redux";
 
 export default function AlphabetsBrowserPage() {
   useLoad(loadLetterIndex());
-  const letterIndex = useAppSelector(state => state.alphabets.letterIndex);
 
-  return letterIndex.length > 0 ? (
-    <AlphabetsBrowser letterIndex={letterIndex} />
-  ) : null;
-}
-
-function AlphabetsBrowser(props: { letterIndex: string[] }) {
   const t = useTranslation();
-  const [selectedLetter, setSelectedLetter] = useState(props.letterIndex[0]);
+  const letterIndex = useAppSelector(state => state.alphabets.letterIndex);
+  const selectedLetter = useAppSelector(
+    state => state.alphabets.selectedLetter
+  );
+  const dispatch = useDispatch();
+  const setSelectedLetter = (letter: string) =>
+    dispatch(alphabetSlice.actions.setSelectedLetter(letter));
+
+  if (letterIndex.length == 0) return null;
+
   return (
     <div className="compAlphabetsBrowser">
       <h1>{t("Alphabet_charts")}</h1>
-      <LetterPicker {...{ ...props, selectedLetter, setSelectedLetter }} />
+      <LetterPicker {...{ letterIndex, selectedLetter, setSelectedLetter }} />
       <AlphaList letter={selectedLetter} key={selectedLetter} />
     </div>
   );

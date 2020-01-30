@@ -99,22 +99,86 @@ const fixtures: Fixtures = {
             exampleWord: "House",
             imagePath: "/images/5d4c38e158e6dbb33d7d7b12/house.jpg"
           },
-          { forms: ["Ι", "ι"], exampleWord: "", imagePath: "" },
-          { forms: ["Κ", "κ"], exampleWord: "", imagePath: "" },
-          { forms: ["Λ", "λ"], exampleWord: "", imagePath: "" },
-          { forms: ["Μ", "μ"], exampleWord: "", imagePath: "" },
-          { forms: ["Ν", "ν"], exampleWord: "", imagePath: "" },
-          { forms: ["Ξ", "ξ"], exampleWord: "", imagePath: "" },
-          { forms: ["Ο", "ο"], exampleWord: "", imagePath: "" },
-          { forms: ["Π", "π"], exampleWord: "", imagePath: "" },
-          { forms: ["Ρ", "ρ"], exampleWord: "", imagePath: "" },
-          { forms: ["Σ", "σ"], exampleWord: "", imagePath: "" },
-          { forms: ["Τ", "τ"], exampleWord: "", imagePath: "" },
-          { forms: ["Υ", "υ"], exampleWord: "", imagePath: "" },
-          { forms: ["Φ", "φ"], exampleWord: "", imagePath: "" },
-          { forms: ["Χ", "χ"], exampleWord: "", imagePath: "" },
-          { forms: ["Ψ", "ψ"], exampleWord: "", imagePath: "" },
-          { forms: ["Ω", "ω"], exampleWord: "", imagePath: "" }
+          {
+            forms: ["Ι", "ι"],
+            exampleWord: "igloo",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Κ", "κ"],
+            exampleWord: "koala",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Λ", "λ"],
+            exampleWord: "lamp",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Μ", "μ"],
+            exampleWord: "mouse",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Ν", "ν"],
+            exampleWord: "necktie",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Ξ", "ξ"],
+            exampleWord: "x-ray",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Ο", "ο"],
+            exampleWord: "olive",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Π", "π"],
+            exampleWord: "pie",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Ρ", "ρ"],
+            exampleWord: "rat",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Σ", "σ"],
+            exampleWord: "swamp",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Τ", "τ"],
+            exampleWord: "tree",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Υ", "υ"],
+            exampleWord: "unicorn",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Φ", "φ"],
+            exampleWord: "fox",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Χ", "χ"],
+            exampleWord: "chorus",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Ψ", "ψ"],
+            exampleWord: "pseudopod",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          },
+          {
+            forms: ["Ω", "ω"],
+            exampleWord: "oregano",
+            imagePath: "/images/5d4c38e158e6dbb33d7d7b12/apple.png"
+          }
         ]
       }
     },

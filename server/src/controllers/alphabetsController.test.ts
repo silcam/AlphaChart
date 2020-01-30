@@ -20,6 +20,38 @@ test("Get alphabets", async () => {
   expect(response.body.groups.length).toEqual(1);
 });
 
+test("Get My Alphabets", async () => {
+  expect.assertions(4);
+  let agent = await loggedInAgent();
+  let response = await agent.get(apiPath("/alphabets/mine"));
+  expect(response.status).toBe(200);
+  expect(response.body.alphabetListings.length).toBe(3);
+
+  agent = await loggedInAgent("Lucy");
+  response = await agent.get(apiPath("/alphabets/mine"));
+  expect(response.body.alphabetListings.length).toBe(1);
+
+  agent = await loggedInAgent("Joel");
+  response = await agent.get(apiPath("/alphabets/mine"));
+  expect(response.body.alphabetListings.length).toBe(1);
+});
+
+test("Get My Alphabets Not Logged In", async () => {
+  expect.assertions(1);
+  const agent = notLoggedInAgent();
+  const response = await agent.get(apiPath("/alphabets/mine"));
+  expect(response.status).toBe(401);
+});
+
+test("Get quality alphabets", async () => {
+  expect.assertions(3);
+  const agent = notLoggedInAgent();
+  const response = await agent.get(apiPath("/alphabets/quality"));
+  expect(response.status).toBe(200);
+  expect(response.body.alphabetListings.length).toBe(1);
+  expect(response.body.alphabetListings[0].name).toBe("Ελληνικα");
+});
+
 test("Letter Index", async () => {
   expect.assertions(2);
   const agent = notLoggedInAgent();

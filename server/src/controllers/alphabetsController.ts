@@ -29,6 +29,7 @@ import GroupData from "../storage/GroupData";
 import { unset } from "../../../client/src/util/objectUtils";
 import languageLetterIndex from "../actions/languageLetterIndex";
 import { escapeRegExp } from "../common/StringUtils";
+import { randomSelection } from "../common/ArrayUtils";
 
 export default function alphabetsController(app: Express) {
   addGetHandler(app, "/alphabets", async req => {
@@ -37,6 +38,40 @@ export default function alphabetsController(app: Express) {
       alphabetListings: listings.map(toAlphabet),
       users: await usersForAlphabets(listings),
       groups: await groupsForAlphabets(listings)
+    };
+  });
+
+  addGetHandler(app, "/alphabets/mine", async req => {
+    const user = await currentUserStrict(req);
+    const groups = await GroupData.groupsByUser(user._id);
+    const listings = await AlphabetData.alphabetsByUserOrGroup(
+      user._id,
+      groups.map(g => g._id)
+    );
+
+    return {
+      alphabetListings: listings.map(toAlphabet),
+      users: await usersForAlphabets(listings),
+      groups: await groupsForAlphabets(listings)
+    };
+  });
+
+  addGetHandler(app, "/alphabets/quality", async req => {
+    const listings = await AlphabetData.alphabetsByFilter(function() {
+      return (
+        this.chart.letters.length > 11 &&
+        this.chart.letters.every(
+          letter => letter.exampleWord.length > 0 && letter.imagePath.length > 0
+        )
+      );
+    });
+
+    const pickedListings = randomSelection(listings, 5);
+
+    return {
+      alphabetListings: pickedListings.map(toAlphabet),
+      users: await usersForAlphabets(pickedListings),
+      groups: await groupsForAlphabets(pickedListings)
     };
   });
 

@@ -21,7 +21,7 @@ describe("User Chart View", () => {
     cy.contains("Gude").click();
     cy.contains("button", "Edit Chart");
     cy.contains("Home").click();
-    cy.contains("Bana").click();
+    cy.visit("/alphabets/view/789def789def789def789def"); // Bana
     cy.contains("button", "Edit Chart").should("not.exist");
   });
 });

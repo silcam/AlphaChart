@@ -19,19 +19,17 @@ export function apiPath(path: string) {
 export type Params = { [key: string]: string | number };
 
 type ApiPayload = Required<LoadAction["payload"]>;
+type AlphabetPayload = Pick<
+  ApiPayload,
+  "alphabetListings" | "users" | "groups"
+>;
 
 export interface APIGet {
-  "/alphabets": [
-    {},
-    {},
-    Pick<ApiPayload, "alphabetListings" | "users" | "groups">
-  ];
+  "/alphabets": [{}, {}, AlphabetPayload];
+  "/alphabets/mine": [{}, {}, AlphabetPayload];
+  "/alphabets/quality": [{}, {}, AlphabetPayload];
   "/alphabets/letterIndex": [{}, {}, string[]];
-  "/alphabets/byLetter": [
-    {},
-    { letter: string },
-    Pick<ApiPayload, "alphabetListings" | "users" | "groups">
-  ];
+  "/alphabets/byLetter": [{}, { letter: string }, AlphabetPayload];
   "/alphabets/:id": [
     { id: string },
     {},
@@ -45,11 +43,7 @@ export interface APIGet {
     Pick<ApiPayload, "currentUser" | "groups" | "alphabetListings">
   ];
   "/users/search": [{}, { q: string }, Pick<ApiPayload, "users">];
-  "/groups": [
-    {},
-    {},
-    Pick<ApiPayload, "alphabetListings" | "users" | "groups">
-  ];
+  "/groups": [{}, {}, AlphabetPayload];
   // "/users/:id/groups": [{ id: string }, {}, Group[]];
 }
 
@@ -94,16 +88,8 @@ export interface APIPost {
     { name: string },
     Pick<ApiPayload, "groups">
   ];
-  "/groups/:id/addUser": [
-    { id: string },
-    { id: string },
-    Pick<ApiPayload, "alphabetListings" | "users" | "groups">
-  ];
-  "/groups/:id/removeUser": [
-    { id: string },
-    { id: string },
-    Pick<ApiPayload, "alphabetListings" | "users" | "groups">
-  ];
+  "/groups/:id/addUser": [{ id: string }, { id: string }, AlphabetPayload];
+  "/groups/:id/removeUser": [{ id: string }, { id: string }, AlphabetPayload];
 }
 
 export type GetRoute = keyof APIGet;

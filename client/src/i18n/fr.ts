@@ -146,7 +146,8 @@ const fr: Strings = {
   New_name: "Nouveau nom",
   New_email: "Nouveau mail",
   Add_alphabet: "Nouveau alphabet",
-  Archive: "Archiver"
+  Archive: "Archiver",
+  More: "Plus..."
 };
 
 export default fr;

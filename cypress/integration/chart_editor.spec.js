@@ -56,20 +56,24 @@ describe("Chart Editor", () => {
   });
 
   it("Adds images", () => {
-    const dropZone = ":nth-child(4) > :first-child .drop-zone-root";
-    const lambdaImage = ":nth-child(4) > :first-child img";
+    const dropZoneSel = ":nth-child(4) > :first-child .drop-zone-root";
+    const imageSel = ":nth-child(4) > :first-child img";
 
-    cy.get(lambdaImage).should("not.exist");
+    // Add letter without image
+    cy.contains("Λ").click();
+    cy.contains("New letter before Λ").click();
+
+    cy.get(imageSel).should("not.exist");
     cy.fixture("apple.png", "base64").then(fileContent => {
-      cy.get(dropZone).upload(
+      cy.get(dropZoneSel).upload(
         { fileContent, fileName: "apple.png", mimeType: "image/png" },
         { subjectType: "drag-n-drop" }
       );
     });
-    cy.get(lambdaImage);
+    cy.get(imageSel);
 
     cy.contains("Done").click();
-    cy.get(lambdaImage);
+    cy.get(imageSel);
 
     cy.request(`/api/v/${API_VERSION}/alphabets/5d4c38e158e6dbb33d7d7b12`).then(
       response => {
