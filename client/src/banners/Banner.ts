@@ -1,4 +1,3 @@
-import { TKey } from "../i18n/en";
 import { AppError } from "../AppError/AppError";
 
 export type AppBanner =

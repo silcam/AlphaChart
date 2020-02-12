@@ -4,7 +4,7 @@ import Loading from "../common/Loading";
 import LoginForm from "./LoginForm";
 import { CurrentUser } from "../../models/User";
 import { Redirect } from "react-router-dom";
-import { TKey, isTKey } from "../../i18n/en";
+import { TKey, isTKey } from "../../i18n/i18n";
 import { useSelector } from "react-redux";
 import { AppState } from "../../state/appState";
 import { usePush } from "../../api/apiRequest";

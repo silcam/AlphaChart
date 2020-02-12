@@ -1,9 +1,15 @@
-import en, { Strings, TKey, isTKey } from "./en";
-import fr from "./fr";
+import en from "./en.json";
+import fr from "./fr.json";
+
+export type Strings = typeof en;
+export type TKey = keyof Strings | "";
+export function isTKey(str: any): str is TKey {
+  return str in en;
+}
 
 const strings = {
   en,
-  fr
+  fr: { ...en, ...fr }
 };
 export type Locale = keyof typeof strings;
 

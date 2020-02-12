@@ -1,4 +1,4 @@
-import { TKey } from "../i18n/en";
+import { TKey } from "../i18n/i18n";
 import { Locale } from "../i18n/i18n";
 import { ObjectId } from "bson";
 

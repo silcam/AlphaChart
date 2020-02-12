@@ -1,5 +1,5 @@
 import { objKeys } from "../util/objectUtils";
-import { TKey } from "../i18n/en";
+import { TKey } from "../i18n/i18n";
 import { APIError } from "../api/Api";
 
 export type AppError =

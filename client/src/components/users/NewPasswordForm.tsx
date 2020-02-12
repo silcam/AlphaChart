@@ -5,7 +5,7 @@ import Loading from "../common/Loading";
 import { webGet, webPost, usePush } from "../../api/apiRequest";
 import bannerSlice from "../../banners/bannerSlice";
 import { useHistory } from "react-router-dom";
-import { TKey } from "../../i18n/en";
+import { TKey } from "../../i18n/i18n";
 
 interface IProps {
   resetKey: string;

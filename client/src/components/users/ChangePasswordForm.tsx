@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "../common/useTranslation";
 import { validPassword, CurrentUser } from "../../models/User";
-import { TKey } from "../../i18n/en";
+import { TKey } from "../../i18n/i18n";
 import { usePush, webPost } from "../../api/apiRequest";
 import { useDispatch } from "react-redux";
 import bannerSlice from "../../banners/bannerSlice";

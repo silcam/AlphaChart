@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NewUser, validationErrors } from "../../models/User";
 import { useTranslation } from "../common/useTranslation";
 import LnkBtn from "../common/LnkBtn";
-import { TKey, isTKey } from "../../i18n/en";
+import { TKey, isTKey } from "../../i18n/i18n";
 import Loading from "../common/Loading";
 import { usePush } from "../../api/apiRequest";
 import { pushNewUser } from "../../state/currentUserSlice";

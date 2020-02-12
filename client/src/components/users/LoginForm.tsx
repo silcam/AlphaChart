@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { LoginAttempt } from "../../models/User";
 import { useTranslation } from "../common/useTranslation";
 import LnkBtn from "../common/LnkBtn";
-import { TKey, isTKey } from "../../i18n/en";
+import { isTKey } from "../../i18n/i18n";
 import Loading from "../common/Loading";
 import { usePush } from "../../api/apiRequest";
 import { pushLogin } from "../../state/currentUserSlice";
