@@ -29,12 +29,16 @@ export default function LetterSideMenu(props: IProps) {
       update(props.letter, { forms: { [index]: { $set: form } } })
     );
 
-  const clearEmptyForms = () =>
-    props.setLetter(
-      update(props.letter, {
-        forms: { $set: props.letter.forms.filter(f => f.length > 0) }
-      })
-    );
+  const clearEmptyForms = () => {
+    const withoutEmptyForms = props.letter.forms.filter(f => f.length > 0);
+    if (withoutEmptyForms.length < props.letter.forms.length) {
+      props.setLetter(
+        update(props.letter, {
+          forms: { $set: withoutEmptyForms }
+        })
+      );
+    }
+  };
 
   return (
     <div className="side-menu letter-side-menu">
