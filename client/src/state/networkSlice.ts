@@ -34,16 +34,20 @@ type NetworkConnectionLostAction = {
   payload: Loader | undefined;
 };
 export function networkConnectionLostAction(loader?: Loader) {
-  return async (dispatch: AppDispatch) => {
+  return async (dispatch: AppDispatch, getState: () => AppState) => {
+    const wasConnected = getState().network.connected;
+
     const action: NetworkConnectionLostAction = {
       type: "NetworkConnectionLost",
       payload: loader
     };
     dispatch(action);
 
-    tryToReconnect(() => {
-      dispatch(networkConnectionRestoredAction());
-    });
+    if (wasConnected) {
+      tryToReconnect(() => {
+        dispatch(networkConnectionRestoredAction());
+      });
+    }
   };
 }
 
