@@ -53,7 +53,7 @@ export async function webPost<T extends PostRoute>(
 
 export async function postFile(route: string, name: string, file: File) {
   try {
-    logRequest("GET", apiPath(route));
+    logRequest("POST", apiPath(route));
     const formData = new FormData();
     formData.append(name, file);
     const response = await defaultAxios.post(apiPath(route), formData, {
