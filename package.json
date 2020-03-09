@@ -36,7 +36,7 @@
     "start-client": "node start-client.js",
     "test": "NODE_ENV=test jest --watchAll",
     "start-test": "yarn reset-cypress-images && NODE_ENV=test-cypress yarn start",
-    "deploy": "cd deploy && ./deploy.sh",
+    "deploy": "bundle exec cap production deploy",
     "reset-cypress-images": "node reset-cypress-images.js"
   },
   "devDependencies": {

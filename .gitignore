@@ -33,3 +33,5 @@ yarn-error.log*
 # Export png/pdf files
 /tmp/export/*.pdf
 /tmp/export/*.png
+
+/log/capistrano.log
