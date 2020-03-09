@@ -1,5 +1,6 @@
 import React from "react";
 import WithLineBreaks from "../common/WithLineBreaks";
+import { useTranslation } from "../common/useTranslation";
 
 interface IProps {
   edit?: boolean;
@@ -9,6 +10,7 @@ interface IProps {
 }
 
 export default function AlphaFooter(props: IProps) {
+  const t = useTranslation();
   return (
     <div className="alpharow">
       <div className="alphacell alphafooter" style={props.styles}>
@@ -16,7 +18,7 @@ export default function AlphaFooter(props: IProps) {
           <textarea
             value={props.text}
             onChange={e => props.setText(e.target.value)}
-            placeholder="Optional Footer"
+            placeholder={t("Optional_footer")}
             rows={props.text ? props.text.split("\n").length * 2 : 1}
           />
         ) : (

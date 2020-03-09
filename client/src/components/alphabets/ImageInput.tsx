@@ -7,6 +7,7 @@ import { usePush } from "../../api/apiRequest";
 import { pushChartImage } from "./alphabetSlice";
 import { useDispatch } from "react-redux";
 import bannerSlice from "../../banners/bannerSlice";
+import { useTranslation } from "../common/useTranslation";
 
 interface IProps {
   alphabet: Alphabet;
@@ -16,6 +17,7 @@ interface IProps {
 }
 
 export default function ImageInput(props: IProps) {
+  const t = useTranslation();
   const dispatch = useDispatch();
   const [saveImage, loading] = usePush(pushChartImage, err => {
     if (err.type === "HTTP" && err.status === 413) {
@@ -41,7 +43,9 @@ export default function ImageInput(props: IProps) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const dropZoneLabel = props.letter.imagePath ? "Change image" : "Add Image";
+  const dropZoneLabel = props.letter.imagePath
+    ? t("Change_image")
+    : t("Add_image");
 
   if (loading) {
     return (
@@ -58,7 +62,7 @@ export default function ImageInput(props: IProps) {
       <div {...getRootProps()} className="drop-zone-root">
         <input {...getInputProps()} />
         {isDragActive ? (
-          <p className="drop-zone drop-zone-active">Drop here</p>
+          <p className="drop-zone drop-zone-active">{t("Drop_here")}</p>
         ) : (
           <div
             className="edit-alpha-image"

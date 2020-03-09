@@ -164,5 +164,12 @@
     "No_such_email": "Il n'y a pas de compte pour ce mail.",
     "Password_reset_check_email":
       "Un mail avec lien pour réinitialiser le mot de passe a été envoyé à %{email}.",
-    "Invalid_reset_key": "Code invalide."
+    "Invalid_reset_key": "Code invalide.",
+    "Change_image": "Changer l'image",
+    "Add_image": "Ajouter une image",
+    "Drop_here": "Déposer ici",
+    "Example_word": "Mot modèle",
+    "Title": "Titre",
+    "Subtitle": "Sous-titre",
+    "Optional_footer": "Pied de page facultatif"
   }

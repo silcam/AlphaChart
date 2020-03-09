@@ -162,5 +162,12 @@
     "No_such_email": "There is no account with that email.",
     "Password_reset_check_email":
       "An email with a password reset link was sent to %{email}.",
-    "Invalid_reset_key": "Invalid reset key."
+    "Invalid_reset_key": "Invalid reset key.",
+    "Change_image": "Change Image",
+    "Add_image": "Add Image",
+    "Drop_here": "Drop here",
+    "Example_word": "Example Word",
+    "Title": "Title",
+    "Subtitle": "Subtitle",
+    "Optional_footer": "Optional Footer"
   }

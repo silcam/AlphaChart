@@ -10,6 +10,7 @@ import {
   completeStyles,
   stylesForImage
 } from "../../models/ChartStyles";
+import { useTranslation } from "../common/useTranslation";
 
 interface IProps {
   alphabet: Alphabet;
@@ -21,6 +22,7 @@ interface IProps {
 }
 
 export default function Chart(props: IProps) {
+  const t = useTranslation();
   const chart = props.chart;
   const chartStyles = completeStyles(props.chart.styles);
   const alphabetTable = clump(chart.letters, Math.max(chart.cols, 1));
@@ -39,7 +41,7 @@ export default function Chart(props: IProps) {
             type="text"
             value={chart.meta.title || ""}
             onChange={e => updateMeta({ title: e.target.value })}
-            placeholder="Title"
+            placeholder={t("Title")}
           />
         ) : (
           chart.meta.title
@@ -52,7 +54,7 @@ export default function Chart(props: IProps) {
               type="text"
               value={chart.meta.subtitle || ""}
               onChange={e => updateMeta({ subtitle: e.target.value })}
-              placeholder="Subtitle"
+              placeholder={t("Subtitle")}
             />
           ) : (
             chart.meta.subtitle
@@ -157,7 +159,7 @@ export default function Chart(props: IProps) {
                       {props.edit ? (
                         <input
                           type="text"
-                          placeholder="Example Word"
+                          placeholder={t("Example_word")}
                           value={abletter.exampleWord}
                           onChange={e =>
                             updateLetter(index, {
@@ -192,7 +194,7 @@ export default function Chart(props: IProps) {
                       onChange={e =>
                         updateMeta({ lastRowFiller: e.target.value })
                       }
-                      placeholder="Optional Footer"
+                      placeholder={t("Optional_footer")}
                     />
                   ) : (
                     <WithLineBreaks text={chart.meta.lastRowFiller || ""} />
