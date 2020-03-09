@@ -4,7 +4,11 @@ import update from "immutability-helper";
 import LnkBtn from "../common/LnkBtn";
 import NumberPicker from "../common/NumberPicker";
 import { useTranslation } from "../common/useTranslation";
-import { ImageStyles } from "../../models/ChartStyles";
+import {
+  ImageStyles,
+  rotationValue,
+  setRotationValue
+} from "../../models/ChartStyles";
 
 interface IProps {
   letter: AlphabetLetter;
@@ -72,7 +76,7 @@ export default function LetterSideMenu(props: IProps) {
       </div>
       {props.letter.imagePath && (
         <React.Fragment>
-          <h4>Image</h4>
+          <h4>{t("Image")}</h4>
           <div className="flex-row" style={{ marginBottom: "12px" }}>
             <label>{t("Size")}:</label>
             <NumberPicker
@@ -83,7 +87,6 @@ export default function LetterSideMenu(props: IProps) {
                 )
               }
               maximum={100}
-              noType
             />
           </div>
           <div className="flex-row" style={{ marginBottom: "12px" }}>
@@ -100,7 +103,17 @@ export default function LetterSideMenu(props: IProps) {
                 )
               }
               minimum={0}
-              noType
+            />
+          </div>
+          <div className="flex-row" style={{ marginBottom: "12px" }}>
+            <label>{t("Rotation")}:</label>
+            <NumberPicker
+              value={rotationValue(props.imageStyles)}
+              setValue={v =>
+                props.setImageStyles(setRotationValue(props.imageStyles, v))
+              }
+              increment={5}
+              minimum={-180}
             />
           </div>
         </React.Fragment>

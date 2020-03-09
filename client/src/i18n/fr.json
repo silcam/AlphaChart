@@ -171,5 +171,7 @@
     "Example_word": "Mot modèle",
     "Title": "Titre",
     "Subtitle": "Sous-titre",
-    "Optional_footer": "Pied de page facultatif"
+    "Optional_footer": "Pied de page facultatif",
+    "Image": "Image",
+    "Rotation": "Rotation"
   }

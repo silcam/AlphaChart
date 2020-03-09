@@ -11,6 +11,7 @@ export type TextAlign = "left" | "right" | "center";
 export interface ImageStyles {
   width: string;
   paddingBottom: string;
+  transform?: string;
 }
 export interface ChartStylesStrict {
   chart: {
@@ -257,4 +258,26 @@ export function setBorderColor(styles: ChartStylesStrict, borderColor: string) {
       inner: { borderColor: { $set: borderColor } }
     }
   });
+}
+
+export function rotationValue(imgStyles: ImageStyles): number {
+  const pattern = /(-?\d+)deg/;
+  if (!imgStyles.transform) return 0;
+
+  const match = pattern.exec(imgStyles.transform);
+  return (match && parseInt(match[1])) || 0;
+}
+
+export function setRotationValue(
+  imgStyles: ImageStyles,
+  rotation: number
+): ImageStyles {
+  if (rotation == 0) {
+    const { transform, ...rest } = imgStyles;
+    return rest;
+  }
+  return {
+    ...imgStyles,
+    transform: `rotate(${rotation}deg)`
+  };
 }

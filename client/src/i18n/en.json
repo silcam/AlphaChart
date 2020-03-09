@@ -169,5 +169,7 @@
     "Example_word": "Example Word",
     "Title": "Title",
     "Subtitle": "Subtitle",
-    "Optional_footer": "Optional Footer"
+    "Optional_footer": "Optional Footer",
+    "Image": "Image",
+    "Rotation": "Rotation"
   }

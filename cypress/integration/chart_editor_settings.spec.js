@@ -179,7 +179,7 @@ describe("Chart Editor Settings", () => {
     });
   });
 
-  it("Adjusts image size and position", () => {
+  it("Adjusts image size, position and rotation", () => {
     cy.contains(".letter", "β").click();
     cy.withLabel("Size")
       .contains("button", "+")
@@ -194,6 +194,11 @@ describe("Chart Editor Settings", () => {
       .click()
       .click();
     cy.get("img[alt='Boat']").should("have.css", "padding-bottom", "6px");
+
+    cy.withLabel("Rotation")
+      .contains("button", "-")
+      .click();
+    cy.get("img[alt='Boat']").then(styleChecker("transform", "rotate(-5deg)"));
   });
 
   it("Switches to Right-to-Left", () => {
