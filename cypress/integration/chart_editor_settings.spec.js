@@ -193,7 +193,7 @@ describe("Chart Editor Settings", () => {
       .click()
       .click()
       .click();
-    cy.get("img[alt='Boat']").should("have.css", "padding-bottom", "6px");
+    cy.get("img[alt='Boat']").should("have.css", "margin-bottom", "6px");
 
     cy.withLabel("Rotation")
       .contains("button", "-")

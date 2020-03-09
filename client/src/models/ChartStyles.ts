@@ -1,5 +1,6 @@
 import update from "immutability-helper";
 import { stripExt } from "../util/stringUtils";
+import { unset } from "../util/objectUtils";
 
 export const defaultFonts = [
   "Andika",
@@ -10,9 +11,17 @@ export const defaultFonts = [
 export type TextAlign = "left" | "right" | "center";
 export interface ImageStyles {
   width: string;
-  paddingBottom: string;
+  marginBottom: string;
   transform?: string;
 }
+
+interface PossibleImageStyles {
+  width: string;
+  paddingBottom?: string;
+  marginBottom?: string;
+  transform?: string;
+}
+
 export interface ChartStylesStrict {
   chart: {
     fontFamily: string;
@@ -46,7 +55,7 @@ export interface ChartStylesStrict {
     justifyContent: "flex-start" | "flex-end" | "space-between" | "center";
   };
   images: {
-    [imagePath: string]: ImageStyles;
+    [imagePath: string]: PossibleImageStyles;
   };
   imageContainer: { margin: string; padding: string };
   alphabetSummary: {
@@ -120,7 +129,7 @@ export function defaultChartStyles(): ChartStylesStrict {
 export function defaultImageStyles(): ImageStyles {
   return {
     width: "80%",
-    paddingBottom: "0px"
+    marginBottom: "0px"
   };
 }
 
@@ -128,10 +137,17 @@ export function stylesForImage(
   styles: ChartStyles,
   imagePath: string
 ): ImageStyles {
-  return (
-    (styles.images && styles.images[stripExt(imagePath)]) ||
-    defaultImageStyles()
-  );
+  const setStyles = styles.images && styles.images[stripExt(imagePath)];
+  return setStyles
+    ? unset(
+        {
+          ...setStyles,
+          marginBottom:
+            setStyles.marginBottom || setStyles.paddingBottom || "0px"
+        },
+        "paddingBottom"
+      )
+    : defaultImageStyles();
 }
 
 export function setStylesForImages(
