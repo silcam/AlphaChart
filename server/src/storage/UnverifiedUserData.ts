@@ -4,6 +4,7 @@ import {
   NewUnverifiedUser
 } from "../../../client/src/models/User";
 import log from "../common/log";
+import { ObjectId } from "mongodb";
 
 async function create(user: NewUnverifiedUser): Promise<UnverifiedUser> {
   log.log(`[Query] CREATE Unverified User ${user.email}`);
@@ -24,11 +25,17 @@ async function findByEmail(email: string): Promise<UnverifiedUser[]> {
   return collection.find({ email }).toArray();
 }
 
-async function remove(verification: string) {
-  log.log(`[Query] DELETE Unverified User verification: ${verification}`);
+async function markVerified(_id: ObjectId): Promise<void> {
+  log.log(`[Query] UPDATE mark verified: ${_id}`);
   const collection = await unverfiedUserCollection();
-  collection.deleteOne({ verification });
+  collection.updateOne({ _id }, { $set: { verified: true } });
 }
+
+// async function remove(verification: string) {
+//   log.log(`[Query] DELETE Unverified User verification: ${verification}`);
+//   const collection = await unverfiedUserCollection();
+//   collection.deleteOne({ verification });
+// }
 
 async function removeOld(timestamp: number) {
   log.log(`[Query] DELETE Unverified Users older than: ${timestamp}`);
@@ -44,6 +51,7 @@ export default {
   create,
   find,
   findByEmail,
-  remove,
+  markVerified,
+  // remove,
   removeOld
 };

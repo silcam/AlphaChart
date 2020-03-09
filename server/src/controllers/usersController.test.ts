@@ -165,8 +165,7 @@ test("Duplicate User Verify", async () => {
   expect(response.body.error).toEqual("User_exists");
 });
 
-test("Verify with invalid (already used) code", async () => {
-  expect.assertions(3);
+test("Verify with already used code", async () => {
   const agent = await notLoggedInAgent();
   const verification = await submitNewUser(agent);
   let response = await agent
@@ -174,8 +173,22 @@ test("Verify with invalid (already used) code", async () => {
     .send({ verification });
   expect(response.status).toBe(200);
   response = await agent.post(apiPath("/users/verify")).send({ verification });
+  expect(response.status).toBe(200);
+  expect(response.body.name).toEqual("Madeleine");
+
+  // Make sure we didn't duplicate users
+  response = await agent.get(apiPath("/users/search?q=Madeleine"));
+  expect(response.status).toBe(200);
+  expect(response.body.users.length).toBe(1);
+});
+
+test("Verify with invalid code", async () => {
+  const agent = notLoggedInAgent();
+  const response = await agent
+    .post(apiPath("/users/verify"))
+    .send({ verification: "123abc" });
   expect(response.status).toBe(422);
-  expect(response.body.error).toEqual("Invalid_code");
+  expect(response.body.error).toBe("Invalid_code");
 });
 
 test("Current User - Not logged in", async () => {

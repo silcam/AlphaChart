@@ -10,13 +10,23 @@ describe("Create Account", () => {
     cy.request("/test-email/last-mail").then(response => {
       const url = verificationUrl(response);
       cy.visit(url);
-      cy.contains("Verifying");
-      cy.contains("Account Verified");
-      cy.placeholder("Password").type("I'm a dinosaur");
-      cy.contains("button", "Log in").click();
-      cy.contains("My Alphabets");
-      cy.contains("Joel");
     });
+    cy.contains("Verifying");
+    cy.contains("Account Verified");
+    cy.placeholder("Password").type("I'm a dinosaur");
+    cy.contains("button", "Log in").click();
+    cy.contains("My Alphabets");
+    cy.contains("Joel");
+
+    // Re-verifying should be safe
+    cy.contains("Joel").click();
+    cy.contains("Log out").click();
+    cy.request("/test-email/last-mail").then(response => {
+      const url = verificationUrl(response);
+      cy.visit(url);
+    });
+    cy.contains("Verifying");
+    cy.contains("Account Verified");
   });
 
   it("Resends the confirmation email", () => {

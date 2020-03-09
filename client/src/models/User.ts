@@ -36,6 +36,7 @@ export interface LoginAttempt {
 export interface UnverifiedUser extends StoredUser {
   verification: string;
   created: number;
+  verified?: boolean;
 }
 export type NewUnverifiedUser = Omit<UnverifiedUser, "_id">;
 

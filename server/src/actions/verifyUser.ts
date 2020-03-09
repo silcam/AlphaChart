@@ -11,6 +11,12 @@ export default async function verifyUser(
   if (!unverifiedUser)
     throw { status: 422, response: { error: "Invalid_code" } };
 
+  if (unverifiedUser.verified) {
+    const user = await UserData.userByEmail(unverifiedUser.email);
+    if (!user) throw { status: 422 };
+    return user;
+  }
+
   if (!(await verifyUniqueEmail(unverifiedUser.email)))
     throw {
       status: 422,
@@ -19,7 +25,7 @@ export default async function verifyUser(
 
   const { verification: _v, created, _id, ...newUser } = unverifiedUser;
   const user = await UserData.createUser(newUser);
-  UnverifiedUserData.remove(verification);
+  UnverifiedUserData.markVerified(unverifiedUser._id);
 
   return user;
 }
