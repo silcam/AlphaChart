@@ -23,10 +23,10 @@ if (fs.existsSync(SECRETS_FILEPATH)) {
     cookieSecret: "abc123",
     userIdSalt: "salt",
     emailFromAddress: "alphachart@example.com",
-    mgDomain: "example.com"
-    mgSMTPusername: "username"
-    mgSMTPpassword: "password"
-    smtpServer: "smtp.example.com"
+    mgDomain: "example.com",
+    mgSMTPusername: "username",
+    mgSMTPpassword: "password",
+    smtpServer: "smtp.example.com",
     smtpPort: 587
   };
 }
