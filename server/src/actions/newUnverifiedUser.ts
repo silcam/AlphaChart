@@ -43,6 +43,6 @@ export default async function newUnverifiedUser(
   };
 
   const unverifiedUser = await UnverifiedUserData.create(newUnverifiedUser);
-  await sendNewUserMail(unverifiedUser, locale);
+  sendNewUserMail(unverifiedUser, locale);
   return unverifiedUser;
 }

@@ -7,6 +7,11 @@ interface ISecrets {
   cookieSecret: string;
   userIdSalt: string;
   emailFromAddress: string;
+  mgDomain: string;
+  mgSMTPusername: string;
+  mgSMTPpassword: string;
+  smtpServer: string;
+  smtpPort: number;
 }
 
 let secrets: ISecrets;
@@ -17,7 +22,12 @@ if (fs.existsSync(SECRETS_FILEPATH)) {
   secrets = {
     cookieSecret: "abc123",
     userIdSalt: "salt",
-    emailFromAddress: "admin@alphachart.com"
+    emailFromAddress: "alphachart@example.com",
+    mgDomain: "example.com",
+    mgSMTPusername: "username",
+    mgSMTPpassword: "password",
+    smtpServer: "smtp.example.com",
+    smtpPort: 587
   };
 }
 
