@@ -19,7 +19,7 @@ app.set("port", PORT);
 
 export const BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://alphachart.yaounde.ddns.info"
+    ? "https://alphachart.silcam.org"
     : "http://localhost:3000";
 
 app.use(bodyParser.json());

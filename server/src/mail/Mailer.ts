@@ -58,7 +58,7 @@ function emailLayout(body: string) {
       <style type="text/css">
         @font-face {
           font-family: 'AndikaNewBasic';
-          src: local('AndikaNewBasic'), url(https://alphachart.yaounde.ddns.info/fonts/AndikaNewBasic-R.ttf);
+          src: local('AndikaNewBasic'), url(https://alphachart.silcam.org/fonts/AndikaNewBasic-R.ttf);
         }
         body {
           font-family: "AndikaNewBasic", "Helvetica Neue", Sans-Serif;
