@@ -17,7 +17,7 @@ import loadingSlice from "./loadingSlice";
 import { objKeys } from "../util/objectUtils";
 import { networkConnectionLostAction } from "../state/networkSlice";
 
-const defaultAxios = Axios.create({ timeout: 5000 });
+const defaultAxios = Axios.create({ timeout: 15000 });
 
 export async function webGet<T extends GetRoute>(
   route: T,
