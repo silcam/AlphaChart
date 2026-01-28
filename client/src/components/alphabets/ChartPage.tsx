@@ -13,7 +13,8 @@ interface IProps {
 
 export default function ChartPage(props: IProps) {
   const location = useLocation();
-  const [editing, setEditing] = useState(location.state && location.state.edit);
+  const state = location.state as {edit?: boolean} | undefined;
+  const [editing, setEditing] = useState(state?.edit);
   const [editingAlphabet, setEditingAlphabet] = useState(false);
 
   const alphabet = useAlphabet(props.id);

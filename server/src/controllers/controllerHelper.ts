@@ -1,12 +1,12 @@
 import { Request } from "express";
 import UserData from "../storage/UserData";
 import { StoredUser } from "../../../client/src/models/User";
-import { ObjectId, ObjectID } from "mongodb";
+import { ObjectId } from "mongodb";
 
 export async function currentUser(req: Request): Promise<StoredUser | null> {
   const currentUserId: string | undefined = req.session!.userId;
   if (currentUserId) {
-    const user = await UserData.user(new ObjectID(currentUserId));
+    const user = await UserData.user(new ObjectId(currentUserId));
     return user;
   }
   return null;
@@ -28,7 +28,7 @@ export async function getById<T>(
   get: (_id: ObjectId) => Promise<T | null> /*, toThrow: any = {status: 404} */
 ) {
   try {
-    const item = await get(new ObjectID(_id));
+    const item = await get(new ObjectId(_id));
     if (!item) throw { status: 404 };
     return item;
   } catch (e) {

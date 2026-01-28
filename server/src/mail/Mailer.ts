@@ -16,8 +16,8 @@ export default async function sendMail(
   subject: string,
   body: string
 ) {
-  //const mailer = getMailer();
-  const mailer = getMailGunMailer();
+  const mailer = getMailer();
+  //console.log(`sending mail to ${to}`)
   return mailer.sendMail({
     to,
     from: emailFromAddress,
@@ -27,17 +27,11 @@ export default async function sendMail(
 }
 
 function getMailer() {
-  return process.env.NODE_ENV === "production"
-    ? getMailGunMailer()
-    : nodemailer.createTransport(stubTransport);
-}
-
-function getMailTrapMailer() {
-  return nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    auth: JSON.parse(fs.readFileSync(`./mailTrapAuth.json`).toString())
-  });
+  if (process.env.NODE_ENV === "production") {
+    return getMailGunMailer();
+  } else {
+    return nodemailer.createTransport(stubTransport);
+  }
 }
 
 function getMailGunMailer() {

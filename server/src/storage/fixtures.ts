@@ -1,14 +1,14 @@
 import { createPassword } from "../common/password";
-import { ObjectID } from "bson";
+import { ObjectId } from "bson";
 import { StoredUser } from "../../../client/src/models/User";
 import { StoredAlphabet } from "../../../client/src/models/Alphabet";
 import { StoredGroup } from "../../../client/src/models/Group";
 
 const ids = {
-  titus: new ObjectID("777777777777777777777777"),
-  lucy: new ObjectID("555555555555555555555555"),
-  joel: new ObjectID("333333333333333333333333"),
-  boys: new ObjectID("111111111111111111111111")
+  titus: new ObjectId("777777777777777777777777"),
+  lucy: new ObjectId("555555555555555555555555"),
+  joel: new ObjectId("333333333333333333333333"),
+  boys: new ObjectId("111111111111111111111111")
 };
 interface Fixtures {
   users: StoredUser[];
@@ -48,7 +48,7 @@ const fixtures: Fixtures = {
   groups: [{ _id: ids.boys, name: "Boys Team", _users: [ids.titus, ids.joel] }],
   alphabets: [
     {
-      _id: new ObjectID("5d4c38e158e6dbb33d7d7b12"),
+      _id: new ObjectId("5d4c38e158e6dbb33d7d7b12"),
       name: "Ελληνικα",
       _owner: ids.titus,
       _users: [],
@@ -183,7 +183,7 @@ const fixtures: Fixtures = {
       }
     },
     {
-      _id: new ObjectID("123abc123abc123abc123abc"),
+      _id: new ObjectId("123abc123abc123abc123abc"),
       name: "Gude",
       _owner: ids.lucy,
       ownerType: "user",
@@ -213,7 +213,7 @@ const fixtures: Fixtures = {
       }
     },
     {
-      _id: new ObjectID("789def789def789def789def"),
+      _id: new ObjectId("789def789def789def789def"),
       name: "Bana",
       _owner: ids.boys,
       ownerType: "group",

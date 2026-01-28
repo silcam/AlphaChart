@@ -18,7 +18,7 @@ import GroupData from "../storage/GroupData";
 import { toGroup } from "../../../client/src/models/Group";
 import AlphabetData from "../storage/AlphabetData";
 import { toAlphabet } from "../../../client/src/models/Alphabet";
-import { ObjectID } from "mongodb";
+import { ObjectId } from "mongodb";
 import { filterKeys } from "../../../client/src/util/objectUtils";
 import { APIError } from "../../../client/src/api/Api";
 import UnverifiedUserData from "../storage/UnverifiedUserData";
@@ -34,7 +34,7 @@ export default function usersController(app: Express) {
   // });
 
   addGetHandler(app, "/users/search", async req => {
-    const query = req.query.q;
+    const query = req.query.q as string;
     const users = await UserData.search(query);
     return { users: users.map(u => toPublicUser(u)) };
   });
@@ -103,7 +103,7 @@ export default function usersController(app: Express) {
 
   addPostHandler(app, "/users/:id/update", async req => {
     const user = await currentUserStrict(req);
-    if (!user._id.equals(new ObjectID(req.params.id))) throw { status: 401 };
+    if (!user._id.equals(new ObjectId(req.params.id))) throw { status: 401 };
 
     const userUpdate: Partial<StoredUser> = filterKeys(req.body, [
       "email",

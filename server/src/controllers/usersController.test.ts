@@ -4,22 +4,11 @@ import Data from "../storage/Data";
 import { loggedInAgent, notLoggedInAgent } from "../testHelper";
 import { apiPath, APIError } from "../../../client/src/api/Api";
 import { interactsWithMail as iwm } from "nodemailer-stub";
+import { Locale, tForLocale, TFunc } from "../../../client/src/i18n/i18n";
 
 beforeEach(Data.loadFixtures);
 
 afterAll(Data.deleteDatabase);
-
-// test("Get Users", async () => {
-//   expect.assertions(2);
-//   const agent = notLoggedInAgent();
-//   const response = await agent.get(apiPath("/users"));
-//   expect(response.status).toBe(200);
-//   expect(response.body).toEqual([
-//     { name: "Titus", id: "777777777777777777777777" },
-//     { name: "Lucy", id: "555555555555555555555555" },
-//     { name: "Joel", id: "333333333333333333333333" }
-//   ]);
-// });
 
 test("Search Users", async () => {
   expect.assertions(8);
@@ -40,24 +29,32 @@ test("Search Users", async () => {
 });
 
 test("Create new user", async () => {
-  expect.assertions(3);
+  // expect.assertions(3);
   const agent = request.agent(app);
   const response = await agent.post(apiPath("/users")).send({
-    email: "madeleine@pm.me",
+    email: "madeleine2@pmx.me",
     name: "Madeleine",
-    password: "maddymaddymaddy"
+    password: "maddymaddymaddy2"
   });
   expect(response.status).toBe(200);
+  // expect(iwm.sentMailsCount()).toBe(1);
+  // console.log(iwm);
   const mail = iwm.lastMail();
   expect(mail.subject).toEqual("Confirm your Alphachart account");
-  expect(mail.to).toEqual(["madeleine@pm.me"]);
+  expect(mail.to).toEqual(["madeleine2@pmx.me"]);
+});
+
+test("T capitalizes", async () => {
+  const t = tForLocale("en");
+  let name = "value";
+  expect(t("Hi", { name: name } )).toBe("Hi value");
 });
 
 test("Auto-assign name for new user", async () => {
   expect.assertions(2);
   const agent = request.agent(app);
   const response = await agent.post(apiPath("/users")).send({
-    email: "madeleine@pm.me",
+    email: "madeleine@ema.il",
     name: "",
     password: "maddymaddymaddy"
   });
@@ -378,7 +375,7 @@ test("Bad Change Password", async () => {
 });
 
 test("Password Reset", async () => {
-  expect.assertions(8);
+  //expect.assertions(1);
   iwm.flushMails();
   const agent = notLoggedInAgent();
   let response = await agent

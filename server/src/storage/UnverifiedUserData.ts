@@ -10,7 +10,7 @@ async function create(user: NewUnverifiedUser): Promise<UnverifiedUser> {
   log.log(`[Query] CREATE Unverified User ${user.email}`);
   const collection = await unverfiedUserCollection();
   const result = await collection.insertOne(user as UnverifiedUser);
-  return result.ops[0];
+  return { ...user, _id: result.insertedId } as UnverifiedUser;
 }
 
 async function find(verification: string) {

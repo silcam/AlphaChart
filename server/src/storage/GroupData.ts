@@ -1,22 +1,22 @@
 import { StoredGroup, NewStoredGroup } from "../../../client/src/models/Group";
 import Data from "./Data";
 import log from "../common/log";
-import { ObjectId, ObjectID } from "bson";
+import { ObjectId } from "bson";
 
-async function groups(_ids?: ObjectID[]): Promise<StoredGroup[]> {
+async function groups(_ids?: ObjectId[]): Promise<StoredGroup[]> {
   log.log(`[Query] READ groups`);
   const collection = await groupCollection();
   const query = _ids ? { _id: { $in: _ids } } : {};
   return collection.find(query).toArray();
 }
 
-async function group(_id: ObjectID): Promise<StoredGroup | null> {
+async function group(_id: ObjectId): Promise<StoredGroup | null> {
   log.log(`[Query] READ Group ${_id}`);
   const collection = await groupCollection();
   return collection.findOne({ _id });
 }
 
-async function groupsByUser(_id: ObjectID): Promise<StoredGroup[]> {
+async function groupsByUser(_id: ObjectId): Promise<StoredGroup[]> {
   log.log(`[Query] READ Groups for User ${_id}`);
   const collection = await groupCollection();
   return collection.find({ _users: _id }).toArray();
@@ -26,11 +26,11 @@ async function createGroup(newGroup: NewStoredGroup): Promise<StoredGroup> {
   log.log(`[Query] CREATE Group ${newGroup.name}`);
   const collection = await groupCollection();
   const result = await collection.insertOne(newGroup as StoredGroup);
-  return result.ops[0];
+  return { ...newGroup, _id: result.insertedId } as StoredGroup;
 }
 
 async function updateGroup(
-  _id: ObjectID,
+  _id: ObjectId,
   update: Partial<StoredGroup>
 ): Promise<StoredGroup | null> {
   log.log(`[Query] UPDATE group ${_id}`);

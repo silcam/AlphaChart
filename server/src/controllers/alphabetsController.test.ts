@@ -12,6 +12,7 @@ test("Get alphabets", async () => {
   expect.assertions(3);
   const agent = notLoggedInAgent();
   const response = await agent.get(apiPath("/alphabets"));
+  console.log(response.body)
   expect(response.body.alphabetListings[0]).toMatchObject({
     name: "Ελληνικα",
     id: "5d4c38e158e6dbb33d7d7b12"
@@ -360,9 +361,13 @@ test("Unshare alphabet errors", async () => {
 });
 
 test("Archive alphabet", async () => {
-  expect.assertions(4);
+  expect.assertions(5);
   const agent = await loggedInAgent();
-  let response = await agent.post(
+  let response = await agent.get(
+    apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12")
+  );
+  expect(response.body.name).toBe("Ελληνικα");
+  response = await agent.post(
     apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/archive")
   );
   expect(response.status).toBe(200);

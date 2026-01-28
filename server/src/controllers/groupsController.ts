@@ -8,7 +8,7 @@ import {
   StoredGroup
 } from "../../../client/src/models/Group";
 import { currentUserStrict, getById } from "./controllerHelper";
-import { ObjectID } from "mongodb";
+import { ObjectId } from "mongodb";
 import UserData from "../storage/UserData";
 import { flat } from "../../../client/src/util/arrayUtils";
 import AlphabetData from "../storage/AlphabetData";
@@ -51,7 +51,7 @@ export default function groupsController(app: Express) {
 
   addPostHandler(app, "/groups/:id/removeUser", async req => {
     const group = await getById(req.params.id, GroupData.group);
-    const removeUserId = new ObjectID(req.body.id);
+    const removeUserId = new ObjectId(req.body.id);
     await currentUserStrict(req, group._users);
 
     const newGroup = await GroupData.removeUser(group._id, removeUserId);

@@ -3,36 +3,34 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.29.0",
     "@types/cookie-session": "^2.0.37",
     "@types/express": "^4.17.0",
     "@types/express-fileupload": "^1.1.0",
-    "@types/jest": "^24.0.18",
-    "@types/mongodb": "^3.1.31",
+    "@types/jest": "^27.4.1",
     "@types/node-cleanup": "^2.1.1",
     "@types/nodemailer": "^6.2.2",
     "@types/pdfkit": "^0.10.5",
-    "@types/puppeteer": "^2.0.0",
     "@types/supertest": "^2.0.8",
-    "babel-core": "6.14.0",
     "body-parser": "^1.19.0",
-    "cookie-session": "^1.3.3",
+    "cookie-session": "^2.1.1",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.5",
-    "immutability-helper": "^3.0.1",
-    "memfs": "^2.15.5",
+    "immutability-helper": "^3.1.1",
+    "memfs": "^3.5.3",
     "migrate": "^1.6.2",
-    "mongodb": "^3.3.0-beta2",
-    "node-cleanup": "^2.1.2",
+    "mongodb": "^5.9.2",
     "nodemailer": "^6.3.1",
     "nodemailer-stub": "^1.2.1",
-    "pdfkit": "^0.11.0",
-    "puppeteer": "^2.0.0",
-    "supertest": "^4.0.2",
-    "typescript": "^3.5.3"
+    "pdfkit": "^0.13.0",
+    "puppeteer": "^14.0.0",
+    "signal-exit": "^4.1.0",
+    "supertest": "^7.1.3",
+    "typescript": "^4.9.5"
   },
   "scripts": {
     "start": "concurrently -p \"[{name}]\" -n \"TS,Server,Client\"  -c yellow,green,magenta \"tsc -w\" \"yarn start-server\" \"yarn start-client\"",
-    "start-server": "nodemon server/dist/server/src/server.js --watch server/dist/",
+    "start-server": "nodemon server/dist/server/src/server.js --watch server/dist/ --delay 2",
     "start-client": "node start-client.js",
     "test": "NODE_ENV=test jest --watchAll",
     "start-test": "yarn reset-cypress-images && NODE_ENV=test-cypress yarn start",
@@ -40,11 +38,17 @@
     "reset-cypress-images": "node reset-cypress-images.js"
   },
   "devDependencies": {
-    "concurrently": "3.1.0",
-    "cypress": "^3.5.0",
+    "concurrently": "^7.6.0",
+    "cypress": "^10.11.0",
     "cypress-file-upload": "^3.4.0",
-    "jest": "24.9.0",
-    "nodemon": "^1.19.1",
-    "ts-jest": "^24.1.0"
-  }
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.22",
+    "ts-jest": "^27.1.4"
+  },
+  "resolutions": {
+    "bson": "^5.0.0",
+    "@types/express": "4.17.21",
+    "@types/express-serve-static-core": "4.17.33"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

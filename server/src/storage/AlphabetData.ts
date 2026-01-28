@@ -6,7 +6,7 @@ import {
   StoredAlphabetListing
 } from "../../../client/src/models/Alphabet";
 import { Collection } from "mongodb";
-import { ObjectID, ObjectId } from "bson";
+import { ObjectId } from "bson";
 import update from "immutability-helper";
 import log from "../common/log";
 
@@ -36,7 +36,7 @@ async function alphabetsByNamePattern(
 }
 
 async function alphabetsByGroup(
-  groupIds: ObjectID[]
+  groupIds: ObjectId[]
 ): Promise<StoredAlphabetListing[]> {
   log.log("[Query] READ Alphabets");
   const collection = await alphabetCollection();
@@ -49,7 +49,7 @@ async function alphabetsByGroup(
 }
 
 async function alphabetsByUser(
-  userId: ObjectID
+  userId: ObjectId
 ): Promise<StoredAlphabetListing[]> {
   log.log("[Query] READ Alphabets");
   const collection = await alphabetCollection();
@@ -59,8 +59,8 @@ async function alphabetsByUser(
 }
 
 async function alphabetsByUserOrGroup(
-  userId: ObjectID,
-  groupIds: ObjectID[]
+  userId: ObjectId,
+  groupIds: ObjectId[]
 ): Promise<StoredAlphabetListing[]> {
   log.log("[Query] READ Alphabets");
   const collection = await alphabetCollection();
@@ -111,7 +111,7 @@ async function createAlphabet(
   const { owner, ...draft } = draftAlphabet;
   const alphabet: Omit<StoredAlphabet, "_id"> = {
     ...draft,
-    _owner: new ObjectID(owner),
+    _owner: new ObjectId(owner),
     _users: [],
     chart: update(draftAlphabet.chart, {
       timestamp: { $set: Date.now().valueOf() }
@@ -119,7 +119,7 @@ async function createAlphabet(
   };
   const collection = await alphabetCollection();
   const result = await collection.insertOne(alphabet as StoredAlphabet);
-  return result.ops[0];
+  return { ...alphabet, _id: result.insertedId } as StoredAlphabet;
 }
 
 async function updateChart(
@@ -132,15 +132,16 @@ async function updateChart(
   });
   const collection = await alphabetCollection();
   const result = await collection.findOneAndUpdate(
-    { _id: new ObjectID(abId) },
+    { _id: new ObjectId(abId) },
     {
       $set: {
         chart: finalChart
       }
     },
-    { returnOriginal: false }
+    { returnDocument: "after" }
   );
-  return result.value;
+  return result.value ?? undefined;
+
 }
 
 async function updateAlphabet(
@@ -165,7 +166,7 @@ async function copyAlphabet(
   });
   const collection = await alphabetCollection();
   const result = await collection.insertOne(newAlphabet as StoredAlphabet);
-  return result.ops[0];
+  return { ... newAlphabet, _id: result.insertedId } as StoredAlphabet;
 }
 
 async function shareAlphabet(

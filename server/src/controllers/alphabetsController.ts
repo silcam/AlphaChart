@@ -18,7 +18,7 @@ import {
 } from "./controllerHelper";
 import { apiPath } from "../../../client/src/api/Api";
 import { addGetHandler, addPostHandler, withErrorResponse } from "./serverApi";
-import { ObjectID, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 import cannotEditAlphabet, {
   cannotControlAlphabet
 } from "../actions/cannotEditAlphabet";
@@ -80,7 +80,7 @@ export default function alphabetsController(app: Express) {
   });
 
   addGetHandler(app, "/alphabets/byLetter", async req => {
-    const letter = req.query.letter;
+    const letter = req.query.letter as string;
     validateString(letter);
     const listings = await AlphabetData.alphabetsByNamePattern(
       new RegExp(`^${escapeRegExp(letter)}`, "i")
@@ -119,7 +119,7 @@ export default function alphabetsController(app: Express) {
 
     const newAlphabet = await AlphabetData.copyAlphabet(
       alphabet,
-      new ObjectID(ownerData.owner),
+      new ObjectId(ownerData.owner),
       ownerData.ownerType
     );
     return { id: `${newAlphabet._id}` };
@@ -145,7 +145,7 @@ export default function alphabetsController(app: Express) {
   });
 
   addPostHandler(app, "/alphabets/:id/unshare", async req => {
-    const unshareUserId: ObjectId = new ObjectID(req.body.userId);
+    const unshareUserId: ObjectId = new ObjectId(req.body.userId);
     const user = await currentUser(req);
     const alphabet = await getById(req.params.id, AlphabetData.alphabet);
     if (await cannotControlAlphabet(user, alphabet)) throw { status: 401 };
@@ -195,7 +195,7 @@ export default function alphabetsController(app: Express) {
     return toAlphabet(newAlphabet);
   });
 
-  app.post(apiPath("/alphabets/:id/images"), fileUpload(), async (req, res) => {
+  app.post(apiPath("/alphabets/:id/images"), fileUpload() as any, async (req, res) => {
     withErrorResponse(res, async () => {
       const imageFile = req.files!.image as UploadedFile;
       const alphabet = await getById(req.params.id, AlphabetData.alphabet);
@@ -203,7 +203,7 @@ export default function alphabetsController(app: Express) {
       const user = await currentUserStrict(req);
       if (await cannotEditAlphabet(user, alphabet)) throw { status: 401 };
 
-      const imagePath = await Images.save(req.params.id, imageFile);
+      const imagePath = await Images.save(req.params.id as string, imageFile);
       res.json({ path: imagePath });
     });
   });
@@ -225,7 +225,7 @@ async function usersForAlphabets(
       alphabet.ownerType == "group"
         ? [...ids, ...alphabet._users]
         : [...ids, ...alphabet._users, alphabet._owner],
-    [] as ObjectID[]
+    [] as ObjectId[]
   );
   return (await UserData.users(ids)).map(toPublicUser);
 }
@@ -247,6 +247,6 @@ async function validateOwnership(
     const group = await getById(owner.owner, GroupData.group);
     await currentUserStrict(req, group._users);
   } else {
-    await currentUserStrict(req, [new ObjectID(owner.owner)]);
+    await currentUserStrict(req, [new ObjectId(owner.owner)]);
   }
 }

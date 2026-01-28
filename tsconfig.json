@@ -3,6 +3,7 @@
         "module": "commonjs",
         "esModuleInterop": true,
         "resolveJsonModule": true,
+        "skipLibCheck": true,
         "target": "es2017",
         "noImplicitAny": true,
         "moduleResolution": "node",

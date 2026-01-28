@@ -32,7 +32,7 @@ async function createUser(user: NewStoredUser): Promise<StoredUser> {
   log.log("[Query] CREATE User");
   const collection = await userCollection();
   const result = await collection.insertOne(user as StoredUser);
-  return result.ops[0];
+  return { ...user, _id: result.insertedId } as StoredUser;
 }
 
 async function update(user: StoredUser) {

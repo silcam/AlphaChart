@@ -1,5 +1,5 @@
 import { MongoClient, Db } from "mongodb";
-import nodeCleanup from "node-cleanup";
+import { onExit } from "signal-exit";
 import fixtures from "./fixtures";
 import log from "../common/log";
 
@@ -12,10 +12,21 @@ async function db(): Promise<Db> {
   if (!DB) {
     const dbName = databaseName();
     log.log(`Connecting to Mongo db: ${dbName}`);
-    CLIENT = await MongoClient.connect(URL, { useNewUrlParser: true });
+    CLIENT = await MongoClient.connect(URL, {
+      serverSelectionTimeoutMS: 2500,
+      connectTimeoutMS: 2500,
+    });
     DB = await CLIENT.db(dbName);
+    await ensureIndexes(DB);
   }
   return DB;
+}
+
+async function ensureIndexes(db: Db): Promise<void> {
+  await db.collection("users").createIndex(
+    { email: "text", name: "text" },
+    { background: true }
+  )
 }
 
 function databaseName() {
@@ -31,7 +42,7 @@ function databaseName() {
   }
 }
 
-nodeCleanup(() => {
+onExit(() => {
   if (CLIENT) CLIENT.close();
 });
 
@@ -40,8 +51,8 @@ async function loadFixtures() {
   const collections = Object.keys(fixtures) as (keyof typeof fixtures)[];
   for (let i = 0; i < collections.length; ++i) {
     const key = collections[i];
-    const collection = await database.createCollection(key);
-    if (key == "users") collection.createIndex({ email: "text", name: "text" });
+    const collection = await database.collection(key);
+    if (key == "users") await collection.createIndex({ email: "text", name: "text" });
     await collection.deleteMany({});
     if (fixtures[key].length > 0) await collection.insertMany(fixtures[key]);
   }

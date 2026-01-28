@@ -23,7 +23,7 @@ export const BASE_URL =
     : "http://localhost:3000";
 
 app.use(bodyParser.json());
-app.use(cookieSession({ secret: secrets.cookieSecret }));
+app.use(cookieSession({ secret: secrets.cookieSecret }) as any);
 app.use(apiVersion);
 
 app.use((req, res, next) => {

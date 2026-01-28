@@ -1,4 +1,4 @@
-export function unset<T, F extends keyof T>(obj: T, field: F): Omit<T, F> {
+export function unset<T extends object, F extends keyof T>(obj: T, field: F): Omit<T, F> {
   return (Object.keys(obj) as (keyof T)[]).reduce((newObj, key) => {
     if (key === field) return newObj;
     newObj[key] = obj[key];
@@ -23,7 +23,7 @@ export function validateFields<T>(obj: T, fields: Field<T>[]): boolean {
   return true;
 }
 
-export function objKeys<T>(t: T): (keyof T)[] {
+export function objKeys<T extends object>(t: T): (keyof T)[] {
   return Object.keys(t) as (keyof T)[];
 }
 

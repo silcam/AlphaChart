@@ -43,7 +43,8 @@ export default function NewAlphabetPage(props: IProps) {
     })),
     { id: user.id, type: "user", name: user.name }
   ];
-  const locationOwner = props.location.state && props.location.state.owner;
+  const state = props.location.state as { owner?: Owner } | undefined;
+  const locationOwner = state?.owner;
   const initialIndex = locationOwner
     ? ownerOptions.findIndex(
         opt => opt.id == locationOwner.id && opt.type == locationOwner.type
