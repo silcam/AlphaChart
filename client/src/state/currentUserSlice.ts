@@ -28,15 +28,15 @@ const currentUserSlice = createSlice({
       state.user = null;
     }
   },
-  extraReducers: {
-    ACLoad: (state, action: LoadAction) => {
+  extraReducers: (builder) => {
+    builder.addCase("ACLoad", (state, action: LoadAction) => {
       const user = action.payload.currentUser;
       if (user) {
         if (isCurrentUser(user)) state.user = user;
         if (user.locale) state.locale = user.locale;
         state.loaded = true;
       }
-    }
+    });
   }
 });
 

@@ -23,22 +23,22 @@ const bannerSlice = createSlice({
     remove: (state, action: PayloadAction<AppBanner>) =>
       state.filter(banner => original(banner) !== action.payload)
   },
-  extraReducers: {
-    NetworkConnectionLost: () => {
+  extraReducers: (builder) => {
+    builder.addCase("NetworkConnectionLost", () => {
       const banner: AppBanner = {
         type: "Error",
         error: { type: "No Connection" }
       };
       return [banner];
-    },
-    NetworkConnectionRestored: () => {
+    })
+    .addCase("NetworkConnectionRestored", () => {
       const banner: AppBanner = {
         type: "Success",
         message: "",
         networkConnectionRestored: true
       };
       return [banner];
-    }
+    });
   }
 });
 

@@ -16,15 +16,15 @@ const networkSlice = createSlice({
     queuedLoaders: []
   } as NetworkState,
   reducers: {},
-  extraReducers: {
-    NetworkConnectionLost: (state, action: NetworkConnectionLostAction) => {
+  extraReducers: (builder) => {
+    builder.addCase("NetworkConnectionLost", (state, action: NetworkConnectionLostAction) => {
       state.connected = false;
       if (action.payload) state.queuedLoaders.push(action.payload);
-    },
-    NetworkConnectionRestored: state => {
+    })
+    .addCase("NetworkConnectionRestored", state => {
       state.connected = true;
       state.queuedLoaders = [];
-    }
+    });
   }
 });
 export default networkSlice;

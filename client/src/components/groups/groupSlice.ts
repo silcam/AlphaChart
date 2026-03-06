@@ -12,9 +12,10 @@ const groupSlice = createSlice({
     addGroup: (state, action: PayloadAction<Group>) =>
       [...state, action.payload].sort(groupCompare)
   },
-  extraReducers: {
-    ACLoad: (state, action: LoadAction) =>
+  extraReducers: (builder) => {
+    builder.addCase("ACLoad", (state, action: LoadAction) => {
       modelListMerge(state, action.payload.groups, groupCompare)
+    });
   }
 });
 

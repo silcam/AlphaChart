@@ -48,8 +48,8 @@ const alphabetSlice = createSlice({
       state.featuredIds = action.payload;
     }
   },
-  extraReducers: {
-    ACLoad: (state, action: LoadAction) => {
+  extraReducers: (builder) => {
+    builder.addCase("ACLoad", (state, action: LoadAction) => {
       if (action.payload.alphabets) {
         action.payload.alphabets.reduce((alphabetsById, alphabet) => {
           alphabetsById[alphabet.id] = alphabet;
@@ -61,7 +61,7 @@ const alphabetSlice = createSlice({
         action.payload.alphabetListings,
         alphabetCompare
       );
-    }
+    });
   }
 });
 

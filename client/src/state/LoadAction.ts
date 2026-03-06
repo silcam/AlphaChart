@@ -12,6 +12,7 @@ export interface LoadAction {
     groups?: Group[];
     currentUser?: CurrentUser | { locale: Locale };
   };
+  [key: string]: unknown;
 }
 
 export function loadAction(payload: LoadAction["payload"]): LoadAction {

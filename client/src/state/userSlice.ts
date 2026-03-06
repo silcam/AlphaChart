@@ -11,9 +11,10 @@ const userSlice = createSlice({
   reducers: {
     addUser: (state, action: PayloadAction<User>) => [...state, action.payload]
   },
-  extraReducers: {
-    ACLoad: (state, action: LoadAction) =>
+  extraReducers: (builder) => {
+    builder.addCase("ACLoad", (state, action: LoadAction) =>
       modelListMerge(state, action.payload.users)
+    );
   }
 });
 
