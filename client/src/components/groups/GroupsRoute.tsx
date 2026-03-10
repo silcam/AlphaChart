@@ -1,21 +1,22 @@
 import React from "react";
 import { useLoad } from "../../api/apiRequest";
 import { loadGroups } from "./groupSlice";
-import { Switch, Route } from "react-router";
+import { Routes, Route, useParams } from "react-router";
 import GroupsIndex from "./GroupsIndex";
 import NewGroupPage from "./NewGroupPage";
 
+function GroupsIndexRoute() {
+  let { id } = useParams<{ id: string }>();
+  return <GroupsIndex id={id} />;
+}
 export default function GroupsRoute() {
   useLoad(loadGroups());
 
   return (
-    <Switch>
-      <Route path="/groups/new" render={() => <NewGroupPage />} />
-      <Route
-        path="/groups/:id"
-        render={({ match }) => <GroupsIndex id={match.params.id} />}
-      />
-      <Route render={() => <GroupsIndex />} />
-    </Switch>
+    <Routes>
+      <Route path="new" element={<NewGroupPage />} />
+      <Route path=":id" element={<GroupsIndexRoute />} />
+      <Route path="*" element={<GroupsIndex />} />
+    </Routes>
   );
 }

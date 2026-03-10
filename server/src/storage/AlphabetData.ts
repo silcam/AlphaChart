@@ -140,7 +140,7 @@ async function updateChart(
     },
     { returnDocument: "after" }
   );
-  return result.value ?? undefined;
+  return ( result as StoredAlphabet | null ) ?? undefined;
 
 }
 
@@ -202,8 +202,8 @@ async function archive(_id: ObjectId): Promise<void> {
   const alphabet = await alphabets.findOne({ _id });
   if (!alphabet) return;
 
-  archivedAlphabets.insertOne(alphabet);
-  alphabets.deleteOne({ _id });
+  await archivedAlphabets.insertOne(alphabet);
+  await alphabets.deleteOne({ _id });
 }
 
 async function getArchived(_id: ObjectId): Promise<StoredAlphabet | null> {

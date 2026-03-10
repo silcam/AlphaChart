@@ -1,25 +1,20 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route, useParams } from "react-router-dom";
 import NewAlphabetPage from "./NewAlphabetPage";
 import ChartPage from "./ChartPage";
 import AlphabetsBrowserPage from "./AlphabetsBrowserPage";
 
+function ChartPageRoute() {
+  const { id } = useParams<{ id: string }>();
+  return <ChartPage key={id} id={id!} />;
+}
+
 export default function AlphabetsRoute() {
   return (
-    <Switch>
-      <Route
-        path="/alphabets/new"
-        render={({ history, location }) => (
-          <NewAlphabetPage history={history} location={location} />
-        )}
-      />
-      <Route
-        path="/alphabets/view/:id"
-        render={({ match }) => (
-          <ChartPage key={match.params.id} id={match.params.id} />
-        )}
-      />
-      <Route render={() => <AlphabetsBrowserPage />} />
-    </Switch>
+    <Routes>
+      <Route path="new" element={<NewAlphabetPage />} />
+      <Route path="view/:id" element={<ChartPageRoute />} />
+      <Route path="*" element={<AlphabetsBrowserPage />} />
+    </Routes>
   );
 }

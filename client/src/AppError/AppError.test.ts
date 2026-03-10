@@ -1,4 +1,5 @@
 import { isAppError, asAppError } from "./AppError";
+import { test, expect } from 'vitest';
 
 test("isAppError", () => {
   expect(isAppError({ type: "HTTP", status: 500 })).toBe(true);

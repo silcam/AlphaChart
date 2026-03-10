@@ -4,7 +4,7 @@ import DropDownMenu from "../common/DropDownMenu";
 import { useTranslation } from "../common/useTranslation";
 import { usePush } from "../../api/apiRequest";
 import { pushArchiveChart } from "./alphabetSlice";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   alphabet: Alphabet;
@@ -13,7 +13,7 @@ interface IProps {
 
 export default function ChartMenu(props: IProps) {
   const t = useTranslation();
-  const history = useHistory();
+  const history = useNavigate();
 
   const [sendArchive] = usePush(pushArchiveChart);
   const archiveChart = async () => {
@@ -21,7 +21,7 @@ export default function ChartMenu(props: IProps) {
       window.confirm(t("Confirm_archive_chart", { name: props.alphabet.name }))
     ) {
       const success = await sendArchive(props.alphabet.id);
-      if (success) history.push("/");
+      if (success) history("/");
     }
   };
 

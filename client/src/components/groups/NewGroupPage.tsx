@@ -3,11 +3,11 @@ import { useTranslation } from "../common/useTranslation";
 import { enterHandler } from "../common/KeyHandler";
 import { usePush } from "../../api/apiRequest";
 import { pushNewGroup } from "./groupSlice";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function NewGroupPage() {
   const t = useTranslation();
-  const history = useHistory();
+  const history = useNavigate();
   const [name, setName] = useState("");
   const valid = name.length > 0;
   const [saveGroup] = usePush(pushNewGroup);
@@ -15,7 +15,7 @@ export default function NewGroupPage() {
   const save = () => {
     if (valid) {
       saveGroup({ name }).then(group => {
-        if (group) history.push(`/groups/${group.id}`);
+        if (group) history(`/groups/${group.id}`);
       });
     }
   };

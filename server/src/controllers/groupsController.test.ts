@@ -2,6 +2,7 @@ import { loggedInAgent, notLoggedInAgent } from "../testHelper";
 import { apiPath } from "../../../client/src/api/Api";
 import Data from "../storage/Data";
 import { User } from "../../../client/src/models/User";
+import { expect, test, beforeEach, afterAll} from 'vitest'
 
 beforeEach(Data.loadFixtures);
 

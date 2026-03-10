@@ -1,5 +1,6 @@
 import { Group, isGroup } from "./Group";
 import { User } from "./User";
+import { test, expect } from 'vitest'
 
 test("isGroup true for valid group", () => {
   const group: Group = { id: "Id", name: "Group", users: ["userId"] };

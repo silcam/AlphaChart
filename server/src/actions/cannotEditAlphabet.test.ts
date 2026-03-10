@@ -5,6 +5,7 @@ import cannotEditAlphabet, {
   cannotControlAlphabet
 } from "./cannotEditAlphabet";
 import Data from "../storage/Data";
+import { expect, test, beforeAll, afterAll } from 'vitest'
 
 beforeAll(Data.loadFixtures);
 afterAll(Data.deleteDatabase);

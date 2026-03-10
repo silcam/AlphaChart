@@ -4,7 +4,7 @@ import { useTranslation } from "../common/useTranslation";
 import Loading from "../common/Loading";
 import { webGet, webPost, usePush } from "../../api/apiRequest";
 import bannerSlice from "../../banners/bannerSlice";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { TKey } from "../../i18n/i18n";
 
 interface IProps {
@@ -13,7 +13,7 @@ interface IProps {
 
 export default function NewPasswordForm(props: IProps) {
   const t = useTranslation();
-  const history = useHistory();
+  const history = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -43,7 +43,7 @@ export default function NewPasswordForm(props: IProps) {
         reset
       );
       if (success) {
-        history.push("/");
+        history("/");
         dispatch(
           bannerSlice.actions.add({
             type: "Success",

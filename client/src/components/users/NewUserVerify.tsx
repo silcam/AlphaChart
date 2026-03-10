@@ -3,7 +3,7 @@ import { useTranslation } from "../common/useTranslation";
 import Loading from "../common/Loading";
 import LoginForm from "./LoginForm";
 import { CurrentUser } from "../../models/User";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { TKey, isTKey } from "../../i18n/i18n";
 import { useSelector } from "react-redux";
 import { AppState } from "../../state/appState";
@@ -36,7 +36,7 @@ export default function NewUserVerify(props: IProps) {
     verify(props.verification).then(vUser => setVerifiedUser(vUser || null));
   }, []);
 
-  if (user) return <Redirect to="/" />;
+  if (user) return <Navigate to="/" />;
 
   return verifiedUser ? (
     <div>

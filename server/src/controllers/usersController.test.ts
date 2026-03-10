@@ -1,10 +1,12 @@
 import request from "supertest";
 import app from "../app";
 import Data from "../storage/Data";
+import UnverifiedUserData from "../storage/UnverifiedUserData";
 import { loggedInAgent, notLoggedInAgent } from "../testHelper";
 import { apiPath, APIError } from "../../../client/src/api/Api";
 import { interactsWithMail as iwm } from "nodemailer-stub";
-import { Locale, tForLocale, TFunc } from "../../../client/src/i18n/i18n";
+import { tForLocale } from "../../../client/src/i18n/i18n";
+import { expect, test, beforeEach, afterAll} from 'vitest'
 
 beforeEach(Data.loadFixtures);
 
@@ -29,7 +31,7 @@ test("Search Users", async () => {
 });
 
 test("Create new user", async () => {
-  // expect.assertions(3);
+  expect.assertions(4);
   const agent = request.agent(app);
   const response = await agent.post(apiPath("/users")).send({
     email: "madeleine2@pmx.me",
@@ -37,11 +39,39 @@ test("Create new user", async () => {
     password: "maddymaddymaddy2"
   });
   expect(response.status).toBe(200);
-  // expect(iwm.sentMailsCount()).toBe(1);
-  // console.log(iwm);
+  expect(iwm.sentMailsCount()).toBe(1);
   const mail = iwm.lastMail();
   expect(mail.subject).toEqual("Confirm your Alphachart account");
   expect(mail.to).toEqual(["madeleine2@pmx.me"]);
+});
+
+test("Verify Cleanup of old verifications", async () => {
+  expect.assertions(8);
+  const currentTimestamp: number = Date.now();
+
+  // check number before doing anything.
+  const initalResults = await UnverifiedUserData.findByEmail("newUserToAlphaChart@pmx.me");
+  expect(initalResults.length).toBe(0);
+  expect(iwm.sentMailsCount()).toBe(1);
+
+  const agent = request.agent(app);
+  const response = await agent.post(apiPath("/users")).send({
+    email: "newUserToAlphaChart@pmx.me",
+    name: "NewUser",
+    password: "neverhadanaccountbefore"
+  });
+  expect(response.status).toBe(200);
+  expect(iwm.sentMailsCount()).toBe(2);
+  const mail = iwm.lastMail();
+  expect(mail.subject).toEqual("Confirm your Alphachart account");
+  expect(mail.to).toEqual(["newUserToAlphaChart@pmx.me"]);
+  const results = await UnverifiedUserData.findByEmail("newUserToAlphaChart@pmx.me");
+  expect(results.length).toBe(1);
+
+  // cleanup old, should remove the one we just found.
+  UnverifiedUserData.removeOld(currentTimestamp + 1000);
+  const postRemoveOldResults = await UnverifiedUserData.findByEmail("newUserToAlphaChart@pmx.me");
+  expect(postRemoveOldResults.length).toBe(0);
 });
 
 test("T capitalizes", async () => {

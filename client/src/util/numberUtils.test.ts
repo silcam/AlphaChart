@@ -1,4 +1,5 @@
 import { inTolerance, numberFilter } from "./numberUtils";
+import { test, expect } from 'vitest';
 
 test("In Tolerance", () => {
   expect(inTolerance(100, 95, 0.1)).toBe(true);

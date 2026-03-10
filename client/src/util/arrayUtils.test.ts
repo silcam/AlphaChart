@@ -1,4 +1,5 @@
 import { arrayOf, arrayResize, modelListMerge, flat } from "./arrayUtils";
+import { test, expect } from 'vitest';
 
 test("arrayOf", () => {
   expect(arrayOf(0, 4)).toEqual([0, 0, 0, 0]);

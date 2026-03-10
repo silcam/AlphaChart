@@ -1,3 +1,9 @@
+Run tests from the root.
+Run start from the root.
+You do need to yarn install here.
+
+(old info follows)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -3,16 +3,19 @@ import { loggedInAgent, vowellybet, notLoggedInAgent } from "../testHelper";
 import { Alphabet, AlphabetListing } from "../../../client/src/models/Alphabet";
 import { User } from "../../../client/src/models/User";
 import { apiPath } from "../../../client/src/api/Api";
+import { expect, test, beforeEach, afterAll, afterEach} from 'vitest'
+import AlphabetData from "../storage/AlphabetData";
+import { Db, MongoClient } from "mongodb";
 
 beforeEach(Data.loadFixtures);
 
-afterAll(Data.deleteDatabase);
+afterEach(Data.deleteDatabase);
 
 test("Get alphabets", async () => {
   expect.assertions(3);
   const agent = notLoggedInAgent();
   const response = await agent.get(apiPath("/alphabets"));
-  console.log(response.body)
+  //console.log(response.body)
   expect(response.body.alphabetListings[0]).toMatchObject({
     name: "Ελληνικα",
     id: "5d4c38e158e6dbb33d7d7b12"
@@ -366,7 +369,7 @@ test("Archive alphabet", async () => {
   let response = await agent.get(
     apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12")
   );
-  expect(response.body.name).toBe("Ελληνικα");
+  expect(response.body.alphabets[0].name).toBe("Ελληνικα");
   response = await agent.post(
     apiPath("/alphabets/5d4c38e158e6dbb33d7d7b12/archive")
   );

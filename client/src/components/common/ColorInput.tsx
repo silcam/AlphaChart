@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChromePicker } from "react-color";
+import { HexColorPicker } from "react-colorful";
 
 interface IProps {
   color: string;
@@ -13,7 +13,15 @@ export default function ColorInput(props: IProps) {
   const toggleExpanded = () => setExpanded(!expanded);
 
   return (
-    <div className="compColorInput" onBlur={() => setExpanded(false)}>
+    <div
+        className="compColorInput"
+        //onBlur={() => setExpanded(false)}
+        onBlur={e => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+          setExpanded(false);
+        }
+      }}
+    >
       <div
         className="color-picker-preview"
         style={{ backgroundColor: props.color }}
@@ -21,9 +29,9 @@ export default function ColorInput(props: IProps) {
       />
       {expanded && (
         <div className="color-picker">
-          <ChromePicker
+          <HexColorPicker
             color={props.color}
-            onChange={color => props.setColor(color.hex)}
+            onChange={props.setColor}
           />
         </div>
       )}
@@ -32,7 +40,7 @@ export default function ColorInput(props: IProps) {
 }
 
 export function SimpleColorInput(props: IProps) {
-  const [text, setText] = useState(props.color.replace(/^#/, ""));
+  const [text, setText] = useState(props.color);
   const inputValid = validColor(text);
 
   useEffect(() => {

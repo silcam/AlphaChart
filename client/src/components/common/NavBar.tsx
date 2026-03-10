@@ -1,6 +1,6 @@
 import React from "react";
 import { CurrentUser } from "../../models/User";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LocalePicker from "../common/LocalePicker";
 
 import { usePush } from "../../api/apiRequest";
@@ -17,7 +17,7 @@ interface IProps {
 
 export default function NavBar(props: IProps) {
   const t = useTranslation();
-  const history = useHistory();
+  const history = useNavigate();
   const [logOut] = usePush(pushLogout);
   const loadingCount = useAppSelector(state => state.loading);
   const loading = loadingCount > 0;
@@ -44,13 +44,13 @@ export default function NavBar(props: IProps) {
                   [
                     props.user!.name,
                     () => {
-                      history.push("/users/me");
+                      history("/users/me");
                       hideMenu();
                     }
                   ],
                   [
                     t("Log_out"),
-                    () => logOut(null).then(() => history.push("/"))
+                    () => logOut(null).then(() => history("/"))
                   ]
                 ]}
               />

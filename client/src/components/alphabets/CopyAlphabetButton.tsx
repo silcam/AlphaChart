@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "../common/useTranslation";
 import { usePush } from "../../api/apiRequest";
 import { pushCopyAlphabet } from "./alphabetSlice";
@@ -17,7 +17,7 @@ interface IProps {
 
 export default function CopyAlphabetButton(props: IProps) {
   const t = useTranslation();
-  const history = useHistory();
+  const history = useNavigate();
   const [copy] = usePush(pushCopyAlphabet);
   const user = props.user;
   const myGroups = props.myGroups;
@@ -36,7 +36,7 @@ export default function CopyAlphabetButton(props: IProps) {
       ownerType: isGroup(to) ? "group" : "user"
     });
     if (newId) {
-      history.push(`/alphabets/view/${newId}`);
+      history(`/alphabets/view/${newId}`);
     }
   };
 

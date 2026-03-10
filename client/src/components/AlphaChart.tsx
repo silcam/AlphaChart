@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import HomePage from "./main/HomePage";
 import AlphabetsRoute from "./alphabets/AlphabetsRoute";
 import UsersRoute from "./users/UsersRoute";
@@ -22,12 +22,12 @@ export default function AlphaChart() {
       <NavBar user={user} />
       <AppBanners />
       {loaded && (
-        <Switch>
-          <Route path="/alphabets" render={() => <AlphabetsRoute />} />
-          <Route path="/users" render={() => <UsersRoute />} />
-          <Route path="/groups" render={() => <GroupsRoute />} />
-          <Route render={() => <HomePage />} />
-        </Switch>
+        <Routes>
+          <Route path="/alphabets/*" element={<AlphabetsRoute />} />
+          <Route path="/users/*" element={<UsersRoute />} />
+          <Route path="/groups/*" element={<GroupsRoute />} />
+          <Route path="*" element={<HomePage />} />
+        </Routes>
       )}
     </div>
   );

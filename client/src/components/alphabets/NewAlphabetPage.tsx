@@ -4,7 +4,6 @@ import {
   DraftAlphabet,
   AlphOwnerType
 } from "../../models/Alphabet";
-import { History, Location } from "history";
 import keyHandler from "../common/KeyHandler";
 import { usePush, useLoad } from "../../api/apiRequest";
 import { pushDraftAlphabet } from "./alphabetSlice";
@@ -14,11 +13,7 @@ import { useTranslation } from "../common/useTranslation";
 import { loadGroups } from "../groups/groupSlice";
 import useMyGroups from "../groups/useMyGroups";
 import RadioSelect from "../common/RadioSelect";
-
-interface IProps {
-  history: History;
-  location: Location;
-}
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface OwnerOption {
   id: string;
@@ -26,8 +21,11 @@ interface OwnerOption {
   name: string;
 }
 
-export default function NewAlphabetPage(props: IProps) {
+export default function NewAlphabetPage() {
   const t = useTranslation();
+  const history = useNavigate();
+  const location = useLocation();
+
   const [name, setName] = useState("");
   const formIsValid = name.length > 0;
   const [saveAlphabet, loading] = usePush(pushDraftAlphabet);
@@ -43,7 +41,7 @@ export default function NewAlphabetPage(props: IProps) {
     })),
     { id: user.id, type: "user", name: user.name }
   ];
-  const state = props.location.state as { owner?: Owner } | undefined;
+  const state = location.state as { owner?: Owner } | undefined;
   const locationOwner = state?.owner;
   const initialIndex = locationOwner
     ? ownerOptions.findIndex(
@@ -61,7 +59,7 @@ export default function NewAlphabetPage(props: IProps) {
       const alphabet = await saveAlphabet(draft);
       if (alphabet) {
         const id = alphabet.id;
-        props.history.push(`/alphabets/view/${id}`, { edit: true });
+        history(`/alphabets/view/${id}`, { state: { edit: true }});
       }
     }
   };

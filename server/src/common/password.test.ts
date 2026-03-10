@@ -1,4 +1,5 @@
 import { createPassword, checkPassword } from "./password";
+import { expect, test } from 'vitest'
 
 test("password", () => {
   const password = "password";

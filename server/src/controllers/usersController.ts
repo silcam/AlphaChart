@@ -52,7 +52,7 @@ export default function usersController(app: Express) {
     const locale: Locale = req.session!.locale || "en";
 
     const unverifiedUser = last(await UnverifiedUserData.findByEmail(email));
-    if (unverifiedUser) sendNewUserMail(unverifiedUser, locale);
+    if (unverifiedUser) await sendNewUserMail(unverifiedUser, locale);
     return { email };
   });
 
@@ -163,7 +163,7 @@ export default function usersController(app: Express) {
 
     user.passwordResetKey = createHash();
     await UserData.update(user);
-    sendPasswordResetMail(
+    await sendPasswordResetMail(
       user,
       user.locale || req.session!.locale || "en"
     );

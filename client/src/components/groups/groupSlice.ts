@@ -13,9 +13,9 @@ const groupSlice = createSlice({
       [...state, action.payload].sort(groupCompare)
   },
   extraReducers: (builder) => {
-    builder.addCase("ACLoad", (state, action: LoadAction) => {
+    builder.addCase("ACLoad", (state, action: LoadAction) =>
       modelListMerge(state, action.payload.groups, groupCompare)
-    });
+    );
   }
 });
 

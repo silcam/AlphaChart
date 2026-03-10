@@ -22,7 +22,7 @@ export default function GroupsIndex(props: IProps) {
   groups.forEach(g =>
     g.users.includes(userId) ? myGroups.push(g) : otherGroups.push(g)
   );
-  const group = groups.find(g => g.id === props.id);
+  const group = groups.find(g => g.id === props.id);  
 
   return (
     <div className="compGroupsIndex">

@@ -34,10 +34,8 @@ export default function GroupView(props: IProps) {
           <LnkBtn text={t("Manage_users")} onClick={toggleManageUsers} />
           {" | "}
           <Link
-            to={{
-              pathname: "/alphabets/new",
-              state: { owner: { id: props.group.id, type: "group" } }
-            }}
+            to="/alphabets/new"
+            state={{ owner: { id: props.group.id, type: "group" } }}
           >
             {t("Add_alphabet")}
           </Link>

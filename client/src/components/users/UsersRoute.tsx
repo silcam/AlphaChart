@@ -1,26 +1,26 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import NewUserVerify from "./NewUserVerify";
 import CurrentUserPage from "./CurrentUserPage";
 import NewPasswordForm from "./NewPasswordForm";
 
+function NewUsersVerifyRoute() {
+  const { code } = useParams< { code: string }>();
+  return <NewUserVerify verification={code!} />;
+}
+
+function NewPasswordFormRoute() {
+  const { resetKey } = useParams<{ resetKey: string }>();
+  return <NewPasswordForm resetKey={resetKey!} />;
+}
+
 export default function UsersRoute() {
   return (
-    <Switch>
-      <Route
-        path="/users/verify/:code"
-        render={({ match }) => (
-          <NewUserVerify verification={match.params.code} />
-        )}
-      />
-      <Route
-        path="/users/passwordReset/:resetKey"
-        render={({ match }) => (
-          <NewPasswordForm resetKey={match.params.resetKey} />
-        )}
-      />
-      <Route path="/users/me" render={() => <CurrentUserPage />} />
-      <Route render={() => <Redirect to="/" />} />
-    </Switch>
+    <Routes>
+      <Route path="verify/:code" element={<NewUsersVerifyRoute />} />
+      <Route path="passwordReset/:resetKey" element={<NewPasswordFormRoute />} />
+      <Route path="me" element={<CurrentUserPage />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }
