@@ -1,7 +1,6 @@
 
 import { loadAction } from '../../state/LoadAction'
 import groupsSlice from './groupSlice'
-import { Group } from '../../models/Group'
 import { describe, it, expect } from 'vitest'
 
 const reducer = groupsSlice.reducer
@@ -31,7 +30,6 @@ describe('groupsSlice', () => {
 
   it('loads groups from ACLoad', () => {
     const nextState = reducer([], loadAction({ groups: [groupAllSquid, groupTopOfTheCharts] }))
-    console.log('nextState:', JSON.stringify(nextState, null, 2))
     expect(nextState).toHaveLength(2)
     expect(nextState[0].name).toBe('AllSquid')
     expect(nextState[1].name).toBe('Top of the Charts')

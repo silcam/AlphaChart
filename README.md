@@ -4,7 +4,9 @@ Notes on getting running:
 
 After cloning:
 
-Note: needs mongo.
+You need mongodb
+Use yarn berry, not classic yarn
+Works with Node24
 
 1. `yarn install` in root dir
 1. `yarn install` in `./client` dir.
