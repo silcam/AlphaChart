@@ -1,13 +1,20 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { AppState } from "../../state/appState";
 import { useTranslation } from "../common/useTranslation";
 import { enterHandler } from "../common/KeyHandler";
 import { usePush } from "../../api/apiRequest";
 import { pushNewGroup } from "./groupSlice";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function NewGroupPage() {
   const t = useTranslation();
   const history = useNavigate();
+  const user = useSelector((state: AppState) => state.currentUser.user);
+
+  // we shouldn't be here if we're not logged in.
+  if (!user) return <Navigate to="/" replace />
+  
   const [name, setName] = useState("");
   const valid = name.length > 0;
   const [saveGroup] = usePush(pushNewGroup);

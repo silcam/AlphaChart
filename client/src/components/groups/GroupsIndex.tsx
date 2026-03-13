@@ -6,7 +6,7 @@ import { Group } from "../../models/Group";
 import { useTranslation } from "../common/useTranslation";
 import GroupView from "./GroupView";
 import useGroups from "./useGroups";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 interface IProps {
   id?: string;
@@ -26,9 +26,11 @@ export default function GroupsIndex(props: IProps) {
 
   return (
     <div className="compGroupsIndex">
+      {user && (
       <Link to="/groups/new">
         <button>{t("Create_group")}</button>
       </Link>
+      )}
       <div className="rowDiv">
         <div>
           {myGroups.length > 0 && (
