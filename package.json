@@ -21,7 +21,7 @@
     "memfs": "^4.x",
     "migrate": "^1.8.0",
     "mongodb": "^6.0.0",
-    "nodemailer": "^7.0.11",
+    "nodemailer": "^8.0.4",
     "nodemailer-stub": "^1.2.1",
     "pdfkit": "^0.15.0",
     "puppeteer": "^24.x",
