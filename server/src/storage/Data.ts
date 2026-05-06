@@ -61,7 +61,7 @@ async function loadFixtures() {
 async function deleteDatabase() {
   if (!(process.env.NODE_ENV === "test")) return;
   if (!DB) return;
-  DB.dropDatabase();
+  await DB.dropDatabase();
 }
 
 export default {
