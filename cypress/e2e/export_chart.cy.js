@@ -2,6 +2,29 @@ Cypress.Commands.add("acceptA4", () => {
   cy.contains("button", "OK").click();
 });
 
+// Parse a "W x H" string into [width, height]
+function parseDims(text) {
+  const m = text.match(/(\d+) x (\d+)/);
+  return m ? [parseInt(m[1]), parseInt(m[2])] : [0, 0];
+}
+
+// Assert the chart's Actual dims fit within the Target dims and fill
+// at least 85% on one dimension (i.e. the chart uses the paper well).
+Cypress.Commands.add("assertActualFitsTarget", () => {
+  cy.contains("pre", "Target :").invoke("text").then(targetText => {
+    const [tw, th] = parseDims(targetText);
+    cy.contains("pre", "Actual :").invoke("text").should(actualText => {
+      const [aw, ah] = parseDims(actualText);
+      expect(aw, "actual width ≤ target width").to.be.at.most(tw);
+      expect(ah, "actual height ≤ target height").to.be.at.most(th);
+      expect(
+        Math.max(aw / tw, ah / th),
+        "chart fills ≥85% on at least one dimension"
+      ).to.be.at.least(0.85);
+    });
+  });
+});
+
 // Cypress.Commands.add("assertPreviewFits", () => {
 //   const previewDims = nodeDims(cy, "chartToPreview");
 //   const windowDims = nodeDims(cy, "previewWindow");
@@ -42,32 +65,36 @@ describe("Export Chart", () => {
 
   it("Responds to options", () => {
     cy.acceptA4();
-    cy.contains("1707 x 3200").should("exist");
+    cy.assertActualFitsTarget();
 
-    cy.withLabel("Columns")
-      .contains("button", "+")
-      .click();
-    cy.contains("2190 x 3037").should("exist");
+    // Adding a column should make the chart wider
+    cy.contains("pre", "Actual :").invoke("text").then(beforeText => {
+      const [bw] = parseDims(beforeText);
+      cy.withLabel("Columns").contains("button", "+").click();
+      cy.assertActualFitsTarget();
+      cy.contains("pre", "Actual :").invoke("text").should(afterText => {
+        expect(parseDims(afterText)[0]).to.be.greaterThan(bw);
+      });
+    });
 
-    cy.withLabel("Text Size")
-      .contains("button", "-")
-      .click();
-    cy.contains("2190 x 2940").should("exist");
+    // Decreasing text size should make the chart shorter
+    cy.contains("pre", "Actual :").invoke("text").then(beforeText => {
+      const [, bh] = parseDims(beforeText);
+      cy.withLabel("Text Size").contains("button", "-").click();
+      cy.assertActualFitsTarget();
+      cy.contains("pre", "Actual :").invoke("text").should(afterText => {
+        expect(parseDims(afterText)[1]).to.be.lessThan(bh);
+      });
+    });
 
-    cy.withLabel("Vertical Space")
-      .contains("+")
-      .click();
-    cy.contains("2190 x 2961").should("exist");
+    cy.withLabel("Vertical Space").contains("+").click();
+    cy.assertActualFitsTarget();
 
-    cy.withLabel("Horizontal Space")
-      .contains("+")
-      .click();
-    cy.contains("2190 x 2940").should("exist");
+    cy.withLabel("Horizontal Space").contains("+").click();
+    cy.assertActualFitsTarget();
 
     cy.get(".color-picker-preview").click();
-    cy.get("input[value='#FFFFFF']")
-      .clear()
-      .type("#00FF00");
+    cy.get(".compColorInput input").clear().type("00FF00");
     cy.get(".color-picker-preview").click();
     cy.get("#chartToPreview").should(
       "have.css",

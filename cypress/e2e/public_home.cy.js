@@ -7,6 +7,7 @@ describe("Public Home Page Tests", function() {
   });
 
   it("Can change the language", function() {
+    cy.visit("/");
     cy.contains("Fr").click();
     cy.contains("Se connecter");
 

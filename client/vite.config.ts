@@ -6,10 +6,18 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      '/api': { // maybe fix.
-        target: 'http://localhost:3001', // maybe fix.
-        changeOrigin: true, // maybe fix.
-      }
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/test-db': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/test-email': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
     }
   },
   build: {

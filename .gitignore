@@ -28,7 +28,11 @@ yarn-error.log*
 
 # migrations
 /.migrate
+
+# Cypress e2e tests
 /cypress/videos
+/cypress/downloads
+/cypress/screenshots
 
 # Export png/pdf files
 /tmp/export/*.pdf

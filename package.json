@@ -36,6 +36,8 @@
     "test": "NODE_ENV=test vitest",
     "coverage": "NODE_ENV=test vitest --coverage",
     "start-test": "yarn reset-cypress-images && NODE_ENV=test-cypress yarn start",
+    "cypress:run": "yarn reset-cypress-images && NODE_ENV=test-cypress concurrently --hide 1 -p \"[{name}]\" -n \"TS,Client,Cypress\"  -c yellow,green,magenta,orange \"tsc -w\" \"yarn start-test\" \"cypress run\"",
+    "cypress:open": "yarn reset-cypress-images && NODE_ENV=test-cypress concurrently -p \"[{name}]\" -n \"TS,Client,Cypress\"  -c yellow,green,magenta,orange \"tsc -w\" \"yarn start-test\" \"cypress open --e2e --browser=chrome\"",
     "deploy": "bundle exec cap production deploy",
     "reset-cypress-images": "node reset-cypress-images.js"
   },

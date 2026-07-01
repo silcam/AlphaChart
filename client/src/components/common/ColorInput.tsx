@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { HexColorPicker } from "react-colorful";
+import { HexColorPicker, HexColorInput } from "react-colorful";
 
 interface IProps {
   color: string;
@@ -30,6 +30,11 @@ export default function ColorInput(props: IProps) {
       {expanded && (
         <div className="color-picker">
           <HexColorPicker
+            color={props.color}
+            onChange={props.setColor}
+          />
+          <HexColorInput
+            prefixed
             color={props.color}
             onChange={props.setColor}
           />

@@ -17,7 +17,9 @@ import loadingSlice from "./loadingSlice";
 import { objKeys } from "../util/objectUtils";
 import { networkConnectionLostAction } from "../state/networkSlice";
 
-const defaultAxios = Axios.create({ timeout: 15000 });
+const defaultAxios = Axios.create({
+  timeout: (globalThis as any).__CYPRESS_AXIOS_TIMEOUT__ || 15000
+});
 
 export async function webGet<T extends GetRoute>(
   route: T,

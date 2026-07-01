@@ -11,7 +11,14 @@ const bannerSlice = createSlice({
     // },
     // FOR THE MOMENT, LET's LIMIT IT TO ONE BANNER
     add: (_, action: PayloadAction<AppBanner>) => [action.payload],
-    reset: () => [],
+    reset: (state) => {
+      return (original(state) as AppBanner[])
+        .filter(b => b.type === "Success" && b.persist)
+        .map(b => {
+          const { persist, ...rest } = b as Extract<AppBanner, { type: "Success" }>;
+          return rest;
+        });
+    },
     // remove: (state, action: PayloadAction<[string, any][]>) =>
     //   state.filter(banner =>
     //     action.payload.some(

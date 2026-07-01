@@ -171,9 +171,9 @@ describe("Chart Editor Settings", () => {
     );
 
     cy.withLabel("Border Color").click();
-    cy.get("input[value='#DDDDDD']")
+    cy.get(".compColorInput input")
       .clear()
-      .type("#0000FF");
+      .type("0000FF");
     [...selectors, ".alphatable"].forEach(selector => {
       cy.get(selector).should("have.css", "border-color", "rgb(0, 0, 255)");
     });

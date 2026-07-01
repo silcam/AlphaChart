@@ -1,4 +1,4 @@
-import { API_VERSION } from "../../server/dist/client/src/Api/Api";
+import { API_VERSION } from "../../server/dist/client/src/api/Api";
 
 describe("Create Account", () => {
   it("Creates accounts", () => {

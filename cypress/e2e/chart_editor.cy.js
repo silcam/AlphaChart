@@ -1,4 +1,4 @@
-import { API_VERSION } from "../../server/dist/client/src/Api/Api";
+import { API_VERSION } from "../../server/dist/client/src/api/Api";
 
 describe("Chart Editor", () => {
   beforeEach(() => {
@@ -64,11 +64,8 @@ describe("Chart Editor", () => {
     cy.contains("New letter before Λ").click();
 
     cy.get(imageSel).should("not.exist");
-    cy.fixture("apple.png", "base64").then(fileContent => {
-      cy.get(dropZoneSel).upload(
-        { fileContent, fileName: "apple.png", mimeType: "image/png" },
-        { subjectType: "drag-n-drop" }
-      );
+    cy.get(dropZoneSel).find("input").selectFile("cypress/fixtures/apple.png", {
+      force: true
     });
     cy.get(imageSel);
 
@@ -160,38 +157,31 @@ describe("Chart Editor", () => {
     cy.contains(".letter", "Β").click();
     cy.get(".letter-side-menu").should("be.visible");
     cy.contains(".side-menu a", "Close").click();
-    cy.get(".letter-side-menu").should("not.be.visible");
+    cy.get(".letter-side-menu").should("not.exist");
     cy.contains(".letter", "Β").click();
     cy.get(".letter-side-menu").should("be.visible");
     cy.contains(".letter", "Β").click();
-    cy.get(".letter-side-menu").should("not.be.visible");
+    cy.get(".letter-side-menu").should("not.exist");
 
     // Settings side menu
     cy.contains("Chart Settings").click();
     cy.get(".settings-side-menu").should("be.visible");
     cy.contains(".side-menu a", "Close").click();
-    cy.get(".settings-side-menu").should("not.be.visible");
+    cy.get(".settings-side-menu").should("not.exist");
     cy.contains("Chart Settings").click();
     cy.get(".settings-side-menu").should("be.visible");
     cy.contains("Chart Settings").click({ force: true }); // With cypress resolution, the link is covered by the menu, but I still want to test it
-    cy.get(".settings-side-menu").should("not.be.visible");
+    cy.get(".settings-side-menu").should("not.exist");
 
     // They close each other
     cy.contains("Chart Settings").click();
     cy.get(".settings-side-menu").should("be.visible");
     cy.contains(".letter", "Β").click();
     cy.get(".letter-side-menu").should("be.visible");
-    cy.get(".settings-side-menu").should("not.be.visible");
+    cy.get(".settings-side-menu").should("not.exist");
     cy.contains("Chart Settings").click();
-    cy.get(".letter-side-menu").should("not.be.visible");
+    cy.get(".letter-side-menu").should("not.exist");
     cy.get(".settings-side-menu").should("be.visible");
   });
 });
 
-function waitForSave(cy) {
-  cy.server();
-  cy.route("POST", "**/alphabets/5d4c38e158e6dbb33d7d7b12/charts").as(
-    "postChart"
-  );
-  cy.wait("@postChart");
-}

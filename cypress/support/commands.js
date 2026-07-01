@@ -24,7 +24,7 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import { API_VERSION } from "../../server/dist/client/src/Api/Api";
+import { API_VERSION } from "../../server/dist/client/src/api/Api";
 
 // Libraries
 // require("@cypress/snapshot").register();

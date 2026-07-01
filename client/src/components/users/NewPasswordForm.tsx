@@ -28,6 +28,7 @@ export default function NewPasswordForm(props: IProps) {
       .then(user => {
         if (user) setUser(user);
       })
+      .catch(() => {})
       .finally(() => setLoaded(true));
   }, []);
 
@@ -43,13 +44,14 @@ export default function NewPasswordForm(props: IProps) {
         reset
       );
       if (success) {
-        history("/");
         dispatch(
           bannerSlice.actions.add({
             type: "Success",
-            message: t("Password_changed")
+            message: t("Password_changed"),
+            persist: true
           })
         );
+        history("/");
       }
     }
   )[0];

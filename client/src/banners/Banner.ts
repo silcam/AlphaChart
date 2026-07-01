@@ -5,4 +5,4 @@ export type AppBanner =
       type: "Error";
       error: AppError;
     }
-  | { type: "Success"; message: string; networkConnectionRestored?: boolean };
+  | { type: "Success"; message: string; networkConnectionRestored?: boolean; persist?: true };
