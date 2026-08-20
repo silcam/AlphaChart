@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# Superseded runs on the same ref are pointless; cancel them. Runs on master
+# are kept (github.run_id makes each one its own group) so the history of what
+# passed on the default branch stays intact.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref == 'refs/heads/master' && github.run_id || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      # Nothing here needs a browser, and these two postinstall steps pull
+      # ~350MB between them. Types come from the npm packages, not the
+      # binaries, so skipping the downloads is safe for this job.
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+      CYPRESS_INSTALL_BINARY: "0"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      # After setup-node, so the shims land in the Node version we just
+      # installed. Corepack reads packageManager from package.json (yarn 4).
+      - name: Enable Corepack
+        run: corepack enable
+
+      # Yarn 4 uses a global cache; `yarn config get cacheFolder` reports this
+      # path. Cached deliberately instead of node_modules, and a miss only
+      # costs time, never correctness.
+      - name: Cache Yarn downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.yarn/berry/cache
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+
+      # --immutable fails on a manifest/lockfile mismatch, which is what we
+      # want: Dependabot updates the lockfile, so a mismatch is a real problem.
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Typecheck server (including tests)
+        run: yarn typecheck:server
+
+      # Runs even when the server check fails, so one run reports all type
+      # breakage rather than only the first project to go red.
+      - name: Typecheck client (including tests)
+        if: ${{ !cancelled() }}
+        run: yarn typecheck:client
