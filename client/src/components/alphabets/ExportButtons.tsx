@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PageDims, Dims, pageInPixels } from "./PageDims";
 import { useTranslation } from "../common/useTranslation";
-import Axios from "axios";
+import Axios, { AxiosProgressEvent } from "axios";
 import { apiPath } from "../../api/Api";
 import { saveAs } from "file-saver";
 import ProgressBar from "../common/ProgressBar";
@@ -13,7 +13,7 @@ interface IProps {
   done: () => void;
 }
 
-type UpdateProgress = (progressEvent: ProgressEvent) => void;
+type UpdateProgress = (progressEvent: AxiosProgressEvent) => void;
 
 export default function ExportButtons(props: IProps) {
   const t = useTranslation();
@@ -22,7 +22,10 @@ export default function ExportButtons(props: IProps) {
   const [progress, setProgress] = useState(0);
 
   const updateProgress: UpdateProgress = e => {
-    if (!e.lengthComputable) setProgress(0);
+    if (!e.lengthComputable || !e.total) {
+      setProgress(0);
+      return;
+    }
     setProgress((100 * e.loaded) / e.total);
   };
 

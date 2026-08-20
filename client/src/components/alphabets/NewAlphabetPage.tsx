@@ -15,9 +15,12 @@ import useMyGroups from "../groups/useMyGroups";
 import RadioSelect from "../common/RadioSelect";
 import { useNavigate, useLocation } from "react-router-dom";
 
-interface OwnerOption {
+interface Owner {
   id: string;
   type: AlphOwnerType;
+}
+
+interface OwnerOption extends Owner {
   name: string;
 }
 

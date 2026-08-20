@@ -358,7 +358,7 @@ test("Can't update other users", async () => {
   expect(response.status).toBe(401);
 });
 
-async function submitNewUser(agent: request.SuperTest<request.Test>) {
+async function submitNewUser(agent: request.Agent) {
   const response = await agent.post(apiPath("/users")).send({
     email: "madeleine@pm.me",
     name: "Madeleine",
