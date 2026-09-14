@@ -1,13 +1,14 @@
 // Typecheck-only project: same settings as the build, but it also covers the
-// *.test.ts files that tsconfig.json excludes (those are run by vitest, which
-// strips types rather than checking them).
+// *.test.ts files (unit and *.int.test.ts) that tsconfig.json excludes, plus
+// the vitest setup files under test/ (vitest strips types rather than checking them).
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "noEmit": true
     },
     "include": [
-        "server/src/**/*"
+        "server/src/**/*",
+        "test/**/*"
     ],
     "exclude": []
 }

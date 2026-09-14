@@ -61,3 +61,38 @@ jobs:
       - name: Typecheck client (including tests)
         if: ${{ !cancelled() }}
         run: yarn typecheck:client
+
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      # Same reasoning as the typecheck job: neither binary is used here. The
+      # unit project never starts a browser, and the Cypress suite is separate.
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+      CYPRESS_INSTALL_BINARY: "0"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Cache Yarn downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.yarn/berry/cache
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      # `yarn test` is the `unit` vitest project only: no Mongo, no network.
+      # The *.int.test.ts suites need a live mongod and are not run here.
+      # `vitest run` (not `vitest`) so it exits instead of entering watch mode.
+      - name: Run unit tests
+        run: yarn test --run
