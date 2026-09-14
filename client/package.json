@@ -18,7 +18,7 @@
     "react-dom": "^18.0.0",
     "react-dropzone": "^14.0.0",
     "react-redux": "^9.x",
-    "react-router-dom": "^6.26.0",
+    "react-router-dom": "^6.30.6",
     "react-switch": "^6.0.0"
   },
   "scripts": {
