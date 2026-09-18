@@ -24,7 +24,7 @@
     "nodemailer": "^9.1.1",
     "nodemailer-stub": "^1.2.1",
     "pdfkit": "^0.15.0",
-    "puppeteer": "^24.x",
+    "puppeteer": "~25.11",
     "signal-exit": "^4.1.0",
     "supertest": "^7.0.0",
     "typescript": "^5.6.0"
