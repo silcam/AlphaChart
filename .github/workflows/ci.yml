@@ -96,3 +96,48 @@ jobs:
       # `vitest run` (not `vitest`) so it exits instead of entering watch mode.
       - name: Run unit tests
         run: yarn test --run
+
+  browser-tests:
+    name: Browser tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Deliberately NOT skipping the puppeteer download: this job exists to
+      # run the export path against a real Chrome. Cypress is still skipped —
+      # the e2e suite is separate and its binary is not used here.
+      CYPRESS_INSTALL_BINARY: "0"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Cache Yarn downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.yarn/berry/cache
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-${{ runner.os }}-
+
+      # Chrome for Testing is ~400MB. Keyed on the lockfile because that is
+      # what pins the puppeteer version, and the version is what decides which
+      # Chrome build the postinstall fetches. A miss just re-downloads.
+      - name: Cache Chrome for Testing
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/puppeteer
+          key: puppeteer-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      # The `browser` vitest project: needs the Chrome above, but no Mongo.
+      # Renders a chart through the real export endpoints and checks the bytes
+      # coming back are a usable PNG/PDF, which is what catches a Chrome roll
+      # that breaks rendering.
+      - name: Run browser tests
+        run: yarn test:browser --run

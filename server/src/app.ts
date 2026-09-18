@@ -17,10 +17,15 @@ const app = express();
 const PORT = 3001;
 app.set("port", PORT);
 
+// BASE_URL is where exportController points the headless browser to resolve
+// the chart's relative assets (/fonts/*, /images/*). The env override lets the
+// browser test suite serve those from a port of its own choosing rather than
+// racing whatever else is on 3000.
 export const BASE_URL =
-  process.env.NODE_ENV === "production"
+  process.env.BASE_URL ||
+  (process.env.NODE_ENV === "production"
     ? "https://alphachart.silcam.org"
-    : "http://localhost:3000";
+    : "http://localhost:3000");
 
 app.use(bodyParser.json());
 app.use(cookieSession({ secret: secrets.cookieSecret }) as any);

@@ -4,6 +4,7 @@ import PDFDocument from "pdfkit";
 import puppeteer, { Page } from "puppeteer";
 import fs from "fs";
 import { BASE_URL } from "../app";
+import Log from "../common/log";
 
 const TMP_EXPORT_DIR = "tmp/export";
 
@@ -11,8 +12,15 @@ export default function exportController(app: Express) {
   app.post(apiPath("/export/image"), async (req, res) => {
     const html: string = req.body.html;
     const transparentBG: boolean = req.body.transparentBG;
-    const imagePath = await saveImage(BASE_URL, html, transparentBG);
-    res.sendFile(imagePath);
+    try {
+      const imagePath = await saveImage(BASE_URL, html, transparentBG);
+      res.sendFile(imagePath);
+    } catch (error) {
+      // Without this the rejection is unhandled, express never replies, and
+      // the client sits on "Saving..." until it gives up.
+      Log.error(`[Export] image export failed: ${error}`);
+      res.status(500).send("Export failed");
+    }
 
     cleanTmpExportDir();
   });
@@ -22,19 +30,24 @@ export default function exportController(app: Express) {
     const pageDims: [number, number] = req.body.pageDims;
     const imageDims: [number, number] = req.body.imageDims;
 
-    const imagePath = await saveImage(BASE_URL, html);
-    const pdfPath = imagePath.replace(/png$/, "pdf");
+    try {
+      const imagePath = await saveImage(BASE_URL, html);
+      const pdfPath = imagePath.replace(/png$/, "pdf");
 
-    const doc = new PDFDocument({ size: pageDims });
-    const stream = doc.pipe(fs.createWriteStream(pdfPath));
+      const doc = new PDFDocument({ size: pageDims });
+      const stream = doc.pipe(fs.createWriteStream(pdfPath));
 
-    const imageXY = [0, 1].map(i => (pageDims[i] - imageDims[i]) / 2);
-    doc.image(imagePath, imageXY[0], imageXY[1]);
-    doc.end();
+      const imageXY = [0, 1].map(i => (pageDims[i] - imageDims[i]) / 2);
+      doc.image(imagePath, imageXY[0], imageXY[1]);
+      doc.end();
 
-    stream.on("close", () => {
-      res.sendFile(pdfPath);
-    });
+      stream.on("close", () => {
+        res.sendFile(pdfPath);
+      });
+    } catch (error) {
+      Log.error(`[Export] pdf export failed: ${error}`);
+      res.status(500).send("Export failed");
+    }
 
     cleanTmpExportDir();
   });
@@ -48,7 +61,7 @@ async function saveImage(
   const outfile = `${TMP_EXPORT_DIR}/${new Date().valueOf()}.png`;
   await chartBrowserPage(baseURL, html, async page => {
     const element = await page.$("#chartToExport");
-    if (!element) throw "Failed to find chart node in submitted html!";
+    if (!element) throw new Error("Failed to find chart node in submitted html!");
     await element.screenshot({ path: outfile, omitBackground: transparentBG });
   });
   const absPath = `${process.cwd()}/${outfile}`;
@@ -61,14 +74,18 @@ async function chartBrowserPage(
   cb: (page: Page) => Promise<void>
 ) {
   const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  // finally, so a render failure cannot strand a Chrome process on a
+  // long-running server: the close() below used to be unreachable on throw.
+  try {
+    const page = await browser.newPage();
 
-  await page.goto(`${baseURL}/shell.html`);
-  await page.setContent(wrapHtml(html));
+    await page.goto(`${baseURL}/shell.html`);
+    await page.setContent(wrapHtml(html));
 
-  await cb(page);
-
-  browser.close();
+    await cb(page);
+  } finally {
+    await browser.close();
+  }
 }
 
 function wrapHtml(html: string) {
