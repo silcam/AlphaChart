@@ -135,6 +135,18 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      # ubuntu-latest is >=24.04, which defaults
+      # kernel.apparmor_restrict_unprivileged_userns=1. Chrome's sandbox needs
+      # unprivileged user namespaces, and unlike the production host there is
+      # no AppArmor profile here granting them, so `puppeteer.launch()` fails.
+      # Lifted rather than launching with --no-sandbox: that would have CI
+      # exercising a different launch path than production uses.
+      - name: Allow unprivileged user namespaces (Chrome sandbox)
+        run: |
+          if [ -e /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          fi
+
       # The `browser` vitest project: needs the Chrome above, but no Mongo.
       # Renders a chart through the real export endpoints and checks the bytes
       # coming back are a usable PNG/PDF, which is what catches a Chrome roll
