@@ -13,6 +13,7 @@ import request from "supertest";
 import express from "express";
 import http from "http";
 import fs from "fs";
+import puppeteer from "puppeteer";
 import { expect, test, describe, beforeAll, afterAll } from "vitest";
 import app from "../app";
 import { apiPath } from "../../../client/src/api/Api";
@@ -54,6 +55,20 @@ function readPng(buffer: Buffer) {
 }
 
 beforeAll(async () => {
+  // Preflight: launch Chrome directly so an environment that cannot start a
+  // browser fails here, with puppeteer's own error text, instead of making
+  // every render test report an opaque 500. The controller logs through Log,
+  // which is silenced when NODE_ENV=test, so without this the real reason
+  // never reaches the CI output.
+  //
+  // The usual culprit is a host that forbids unprivileged user namespaces
+  // (Ubuntu >=24.04 sets kernel.apparmor_restrict_unprivileged_userns=1),
+  // which Chrome's sandbox needs. Grant it rather than launching with
+  // --no-sandbox, so this suite exercises the same sandboxed launch that
+  // production does.
+  const browser = await puppeteer.launch();
+  await browser.close();
+
   const staticApp = express();
   staticApp.use(express.static("client/public"));
   staticServer = http.createServer(staticApp);
