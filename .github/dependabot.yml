@@ -1,19 +1,23 @@
 version: 2
 updates:
+  # Minor and patch bumps arrive as one weekly PR. Majors are left out of the
+  # group, so each one gets its own PR to be planned and tested on its own.
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
     groups:
-      npm-dependencies:
-        patterns:
-          - "*"
+      npm-minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "bundler"
     directory: "/"
     schedule:
       interval: "weekly"
     groups:
-      bundler-dependencies:
-        patterns:
-          - "*"
+      bundler-minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
