@@ -1839,7 +1839,7 @@ __metadata:
     memfs: "npm:^4.x"
     migrate: "npm:^1.8.0"
     mongodb: "npm:^6.0.0"
-    nodemailer: "npm:^9.1.1"
+    nodemailer: "npm:^10.0.14"
     nodemailer-stub: "npm:^1.2.1"
     nodemon: "npm:^3.1.0"
     pdfkit: "npm:^0.15.0"
@@ -4967,10 +4967,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:^9.1.1":
-  version: 9.1.1
-  resolution: "nodemailer@npm:9.1.1"
-  checksum: 10c0/b213a2a906697a735f6eb21103629b7a77aeac297b6d843efd4588157999bf6d19381853ac1224e472f5a34aec2e2412444151a2c6ec6e8c52150afa3055039c
+"nodemailer@npm:^10.0.14":
+  version: 10.0.14
+  resolution: "nodemailer@npm:10.0.14"
+  checksum: 10c0/8965d6ccd0a69f5b439d2bf5efc67cc4bac34f4893749c7b6b6290d5541beaf03174a169546739f370e989fd0f050221eec25aa6b017544d5b16fc23be374937
   languageName: node
   linkType: hard
 
