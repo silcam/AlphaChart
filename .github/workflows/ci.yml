@@ -27,11 +27,14 @@ jobs:
       PUPPETEER_SKIP_DOWNLOAD: "true"
       CYPRESS_INSTALL_BINARY: "0"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
+          # setup-node >=v5 auto-caches when package.json sets packageManager,
+          # which would shadow the explicit yarn cache step below. One owner.
+          package-manager-cache: false
 
       # After setup-node, so the shims land in the Node version we just
       # installed. Corepack reads packageManager from package.json (yarn 4).
@@ -42,7 +45,7 @@ jobs:
       # path. Cached deliberately instead of node_modules, and a miss only
       # costs time, never correctness.
       - name: Cache Yarn downloads
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
@@ -72,17 +75,20 @@ jobs:
       PUPPETEER_SKIP_DOWNLOAD: "true"
       CYPRESS_INSTALL_BINARY: "0"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
+          # setup-node >=v5 auto-caches when package.json sets packageManager,
+          # which would shadow the explicit yarn cache step below. One owner.
+          package-manager-cache: false
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Cache Yarn downloads
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
@@ -107,17 +113,20 @@ jobs:
       # the e2e suite is separate and its binary is not used here.
       CYPRESS_INSTALL_BINARY: "0"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
+          # setup-node >=v5 auto-caches when package.json sets packageManager,
+          # which would shadow the explicit yarn cache step below. One owner.
+          package-manager-cache: false
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Cache Yarn downloads
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.yarn/berry/cache
           key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
@@ -127,7 +136,7 @@ jobs:
       # what pins the puppeteer version, and the version is what decides which
       # Chrome build the postinstall fetches. A miss just re-downloads.
       - name: Cache Chrome for Testing
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/puppeteer
           key: puppeteer-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
