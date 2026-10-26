@@ -42,7 +42,7 @@ append :linked_files, "secrets.json", ".migrate"
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-set :nvm_node, 'v24.14.0'
+set :nvm_node, 'v24.22.1'
 
 namespace :deploy do
   before 'deploy:symlink:release', "custom:yarn_build"
